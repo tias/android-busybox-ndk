@@ -1,5 +1,5 @@
 Building busybox with the standard android NDK
-----------------------------------------------
+==============================================
 
 The aim is to gather information and patches on how to build busybox using the compiler shipped with the android NDK.
 
@@ -17,3 +17,8 @@ I recently discovered that a number [[1](http://lists.busybox.net/pipermail/busy
     
     # build it!
     make
+
+
+Bigger config
+-------------
+* File *android\_ndk\_defconfigPlus* contains all the options of upstream configs/android\_ndk\_defconfig PLUS the options of 'make defconfig' that can be built.
