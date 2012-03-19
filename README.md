@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, udhcpd, umount, watchdog
+> adjtimex, arping, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, udhcpd, umount, watchdog
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -37,7 +37,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
 
 * All of *Login/Password Management Utilities*  --  error: 'struct passwd' has no member named 'pw\_gecos'
  * disables CONFIG\_ADD\_SHELL, CONFIG\_REMOVE\_SHELL, CONFIG\_ADDUSER, CONFIG\_ADDGROUP, CONFIG\_DELUSER, CONFIG\_DELGROUP, CONFIG\_GETTY, CONFIG\_LOGIN, CONFIG\_PASSWD, CONFIG\_CRYPTPW, CONFIG\_CHPASSWD, CONFIG\_SU, CONFIG\_SULOGIN, CONFIG\_VLOCK
-* CONFIG\_ARPING  --  networking/arping.c:96: error: invalid use of undefined type 'struct arphdr'
+* CONFIG\_ARPING  --  **has patch**  --  networking/arping.c:96: error: invalid use of undefined type 'struct arphdr'
 * CONFIG\_BRCTL  --  networking/brctl.c:70: error: conflicting types for 'strtotimeval'
 * CONFIG\_ETHER\_WAKE  --  networking/ether-wake.c:275: error: 'ETH_ALEN' undeclared (first use in this function)
 * CONFIG\_FEATURE\_IPV6  --  networking/ifconfig.c:82: error: redefinition of 'struct in6\_ifreq'
