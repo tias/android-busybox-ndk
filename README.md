@@ -80,7 +80,7 @@ Config options that give a linking error
 ----------------------------------------
 Androids libc implementation claims to implement the methods in the error, but surprisingly does not.
 
-* mntent
+* mntent -- **has patch**
  * CONFIG\_DF  --  undefined reference to 'setmntent', 'endmntent'
  * CONFIG\_FSCK  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
  * CONFIG\_MKFS\_EXT2  --  undefined reference to 'setmntent', 'endmntent'
