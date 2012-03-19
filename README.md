@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, umount, watchdog
+> adjtimex, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, umount, watchdog
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -79,7 +79,7 @@ These errors indicate that the library is missing from androids libc implementat
  * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
  * CONFIG\_SETARCH  --  util-linux/setarch.c:23:29: error: sys/personality.h: No such file or directory
  * CONFIG\_WATCHDOG  --  **has patch**  --  miscutils/watchdog.c:24:28: error: linux/watchdog.h: No such file or directory
- * CONFIG\_UBI* -- miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
+ * CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
   * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL
 
 Config options that give a linking error
