@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, umount, watchdog
+> adjtimex, bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, udhcpd, umount, watchdog
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -115,4 +115,4 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_NAMEIF  --  undefined reference to 'ether\_aton\_r'
  * CONFIG\_PIVOT\_ROOT  --  **has patch**  --  undefined reference to 'pivot\_root'
  * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
- * CONFIG\_UDHCPD  --  undefined reference to 'ether\_aton\_r'
+ * CONFIG\_UDHCPD  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
