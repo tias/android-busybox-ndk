@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> bbconfig, date, df, fsck, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pkill, stat, umount
+> bbconfig, date, df, fsck, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pkill, rdate, stat, umount
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -101,8 +101,8 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_PGREP  --  undefined reference to 'getsid'
  * CONFIG\_PKILL  --  undefined reference to 'getsid'
 
-* stime
- * CONFIG\_DATE  --  **has patch** -- undefined reference to 'stime'
+* stime -- **has patch**
+ * CONFIG\_DATE  --  undefined reference to 'stime'
  * CONFIG\_RDATE  --  undefined reference to 'stime'
 
 * others
