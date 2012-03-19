@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> bbconfig, date, df, fsck, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pkill, rdate, stat, umount
+> bbconfig, date, df, fsck, hostname, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, umount
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -109,10 +109,10 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_ADJTIMEX  --  undefined reference to 'adjtimex'
  * CONFIG\_FEATURE\_HTTPD\_AUTH\_MD5  --  undefined reference to 'crypt'
  * CONFIG\_HOSTID  --  undefined reference to 'gethostid'
- * CONFIG\_HOSTNAME  --  undefined reference to 'sethostname'
+ * CONFIG\_HOSTNAME  --  **has patch**  --  undefined reference to 'sethostname'
  * CONFIG\_LOGNAME  --  undefined reference to 'getlogin\_r'
  * CONFIG\_MICROCOM  --  undefined reference to 'cfsetspeed'
  * CONFIG\_NAMEIF  --  undefined reference to 'ether\_aton\_r'
- * CONFIG\_PIVOT\_ROOT  --  undefined reference to 'pivot\_root'
+ * CONFIG\_PIVOT\_ROOT  --  **has patch**  --  undefined reference to 'pivot\_root'
  * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
  * CONFIG\_UDHCPD  --  undefined reference to 'ether\_aton\_r'
