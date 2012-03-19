@@ -1,7 +1,9 @@
+The aim is to gather information and patches on how to build busybox using the compiler shipped with the android NDK.
+
+Patches and relevant pointers more than welcome, fork me or mail me: tias-@-ulyssis.org
+
 Building busybox with the standard android NDK
 ==============================================
-
-The aim is to gather information and patches on how to build busybox using the compiler shipped with the android NDK.
 
 I recently discovered that a number [[1](http://lists.busybox.net/pipermail/busybox/2012-March/077486.html),[2](http://lists.busybox.net/pipermail/busybox/2012-March/077505.html)] of upstream changes make it possible to build the latest git version of busybox, __without requiring any patches__:
 
@@ -18,12 +20,16 @@ I recently discovered that a number [[1](http://lists.busybox.net/pipermail/busy
     # build it!
     make
 
-However, a fair number of options are disabled in that config, because they give an error when building. See below for an overview.
+This creates a busybox with the following applets:
+> [, [[, ar, arp, awk, base64, basename, beep, blkid, blockdev, bootchartd, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, gunzip, gzip, halt, hd, hdparm, head, hexdump, httpd, hwclock, ifconfig, ifdown, ifup, init, inotifyd, insmod, install, iostat, ip, ipaddr, ipcalc, iplink, iproute, iprule, iptunnel, klogd, less, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mdev, mesg, mkdir, mkfifo, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nmeter, nohup, od, openvt, patch, pidof, ping, pipe\_progress, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setserial, setsid, setuidgid, sha1sum, sha256sum, sha512sum, showkey, sleep, smemcap, softlimit, sort, split, start-stop-daemon, strings, stty, sum, sv, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, telnet, telnetd, test, tftp, tftpd, time, timeout, top, touch, tr, traceroute, true, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xz, xzcat, yes, zcat
 
-Bigger config
--------------
-* File *android\_ndk\_defconfigPlus* contains all the options of upstream configs/android\_ndk\_defconfig PLUS the options of 'make defconfig' that can be built.
+Using file *android\_ndk\_defconfigPlus* you additionally get following applets that are by default enabled for 'make defconfig':
+> acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
+By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
+> bbconfig, date, df, fsck, ionice, kbd\_mode, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, stat, umount
+
+The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
 Config options that do not build, code error
 --------------------------------------------
