@@ -40,7 +40,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
  * disables CONFIG\_WHO, CONFIG\_USERS, CONFIG\_LAST, CONFIG\_RUNLEVEL, CONFIG\_WALL
 * CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  util-linux/fsck\_minix.c:111: error: 'INODE\_SIZE1' undeclared here (not in a function)
 * CONFIG\_INETD  --  /opt/android-ndk/platforms/android-9/arch-arm/usr/include/linux/un.h:18: error: expected specifier-qualifier-list before 'sa\_family\_t' and networking/inetd.c:562: error: 'struct sockaddr\_un' has no member named 'sun\_path'
-* CONFIG\_IONICE  --  miscutils/ionice.c:23: error: 'SYS\_ioprio\_set' undeclared (first use in this function)
+* CONFIG\_IONICE  --  **has patch** -- miscutils/ionice.c:23: error: 'SYS\_ioprio\_set' undeclared (first use in this function)
 * CONFIG\_LFS  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
 * CONFIG\_NSLOOKUP  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
@@ -96,7 +96,7 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_PKILL  --  undefined reference to 'getsid'
 
 * stime
- * CONFIG\_DATE  --  undefined reference to 'stime'
+ * CONFIG\_DATE  --  **has patch** -- undefined reference to 'stime'
  * CONFIG\_RDATE  --  undefined reference to 'stime'
 
 * others
@@ -108,5 +108,5 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_MICROCOM  --  undefined reference to 'cfsetspeed'
  * CONFIG\_NAMEIF  --  undefined reference to 'ether\_aton\_r'
  * CONFIG\_PIVOT\_ROOT  --  undefined reference to 'pivot\_root'
- * CONFIG\_STAT  --  undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
+ * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
  * CONFIG\_UDHCPD  --  undefined reference to 'ether\_aton\_r'
