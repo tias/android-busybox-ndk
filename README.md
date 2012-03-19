@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, fsck, hostname, inetd, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, udhcpd, umount, watchdog
+> adjtimex, arping, bbconfig, brctl, date, df, fsck, hostname, inetd, ionice, kbd\_mode, kill, killall, killall5, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, ubi*, udhcpd, umount, watchdog, zcip
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -51,7 +51,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
 * CONFIG\_NSLOOKUP  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
 * CONFIG\_SWAPONOFF  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
-* CONFIG\_ZCIP  --  networking/zcip.c:51: error: field 'arp' has incomplete type
+* CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
 Config options that do not build, missing library
 -------------------------------------------------
