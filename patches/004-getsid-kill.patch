@@ -1,29 +1,27 @@
 From: Tias Guns <tias@ulyssis.org>
 Date: Mon, 19 Mar 2012 12:26:32 +0000
-Subject: add the simple 'getsid' syscall, fixes kill and friends
+Subject: [PATCH] add the simple 'getsid' syscall, fixes kill and friends
 
 patch modified from 'misc-syscalls' by Dan Drown:
 http://dan.drown.org/android/src/busybox/
 ---
- libbb/Kbuild.src |    3 +++
+ libbb/Kbuild.src |    1 +
  libbb/getsid.c   |    6 ++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ 2 files changed, 7 insertions(+), 0 deletions(-)
  create mode 100644 libbb/getsid.c
 
 diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index 335b341..514dc93 100644
+index a054a44..1fd1d79 100644
 --- a/libbb/Kbuild.src
 +++ b/libbb/Kbuild.src
-@@ -115,6 +115,9 @@ lib-y += xgethostbyname.o
- lib-y += xreadlink.o
- lib-y += xrealloc_vector.o
+@@ -117,6 +117,7 @@ lib-y += xrealloc_vector.o
  
-+# for android-busybox-ndk
+ # for android-busybox-ndk
+ lib-y += mntent_r.o
 +lib-y += getsid.o
-+
+ 
  lib-$(CONFIG_PLATFORM_LINUX) += match_fstype.o
  
- lib-$(CONFIG_FEATURE_UTMP) += utmp.o
 diff --git a/libbb/getsid.c b/libbb/getsid.c
 new file mode 100644
 index 0000000..a938bd5

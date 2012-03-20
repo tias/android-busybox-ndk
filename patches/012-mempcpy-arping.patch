@@ -14,12 +14,12 @@ http://dan.drown.org/android/src/busybox/
  create mode 100644 libbb/mempcpy.c
 
 diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index adcec05..727d301 100644
+index 2025539..28e6bc6 100644
 --- a/libbb/Kbuild.src
 +++ b/libbb/Kbuild.src
-@@ -117,6 +117,7 @@ lib-y += xrealloc_vector.o
- 
+@@ -118,6 +118,7 @@ lib-y += xrealloc_vector.o
  # for android-busybox-ndk
+ lib-y += mntent_r.o
  lib-y += getsid.o
 +lib-y += mempcpy.o
  

@@ -1,25 +1,29 @@
 From: Tias Guns <tias@ulyssis.org>
 Date: Sun, 18 Mar 2012 14:12:41 +0000
-Subject: android: fix 'mount', 'umount', 'fsck', 'df'
+Subject: [PATCH] android: fix 'mount', 'umount', 'fsck', 'df'
 
 patch modified from 'Bionic Patch V1.0 (Vitaly Greck)'
 https://code.google.com/p/busybox-android/downloads/detail?name=patch
+---
+ libbb/Kbuild.src |    3 +
+ libbb/mntent_r.c |  290 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 293 insertions(+), 0 deletions(-)
+ create mode 100644 libbb/mntent_r.c
 
-diff --git a/libbb/find_mount_point.c b/libbb/find_mount_point.c
-index 9676b5f..3576f7b 100644
---- a/libbb/find_mount_point.c
-+++ b/libbb/find_mount_point.c
-@@ -10,6 +10,10 @@
- #include "libbb.h"
- #include <mntent.h>
+diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
+index 335b341..a054a44 100644
+--- a/libbb/Kbuild.src
++++ b/libbb/Kbuild.src
+@@ -115,6 +115,9 @@ lib-y += xgethostbyname.o
+ lib-y += xreadlink.o
+ lib-y += xrealloc_vector.o
  
-+// for android using NDK
-+// implements setmntent, getmntent and getmntent_r
-+#include "mntent_r.c"
++# for android-busybox-ndk
++lib-y += mntent_r.o
 +
- /*
-  * Given a block device, find the mount table entry if that block device
-  * is mounted.
+ lib-$(CONFIG_PLATFORM_LINUX) += match_fstype.o
+ 
+ lib-$(CONFIG_FEATURE_UTMP) += utmp.o
 diff --git a/libbb/mntent_r.c b/libbb/mntent_r.c
 new file mode 100644
 index 0000000..9944a2a
@@ -316,3 +320,6 @@ index 0000000..9944a2a
 +}
 +
 +
+-- 
+1.7.0.4
+
