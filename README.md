@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
+> adjtimex, arping, bbconfig, brctl, date, df, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nslookup (with own resolver), pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -49,7 +49,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
 * CONFIG\_IONICE  --  **has patch** -- miscutils/ionice.c:23: error: 'SYS\_ioprio\_set' undeclared (first use in this function)
 * CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
-* CONFIG\_NSLOOKUP  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
+* CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
 * CONFIG\_SWAPONOFF  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
