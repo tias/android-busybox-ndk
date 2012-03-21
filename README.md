@@ -31,6 +31,8 @@ By **applying the included patches** to the busybox code-base (and config *andro
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
+The config *android\_ndk\_stericson-like* is a config similar to the one shipped by android-busybox (by stericson). You can download a [binary](https://github.com/downloads/tias/android-busybox-ndk/busybox-ndk-cc1bb603e) built with this config (md5sum ab9f5cd5032af9fa7c20c2e9d0ec047d).
+
 Config options that do not build, code error
 --------------------------------------------
 These errors indicate bugs (usually in the restricted android libc library, called bionic), and can often be fixed by adding patches to the busybox code.
