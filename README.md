@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
+> adjtimex, arping, bbconfig, brctl, date, df, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -111,7 +111,7 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_HOSTID  --  undefined reference to 'gethostid'
  * CONFIG\_HOSTNAME  --  **has patch**  --  undefined reference to 'sethostname'
  * CONFIG\_LOGNAME  --  undefined reference to 'getlogin\_r'
- * CONFIG\_MICROCOM  --  undefined reference to 'cfsetspeed'
+ * CONFIG\_MICROCOM  --  **has patch**  --  undefined reference to 'cfsetspeed'
  * CONFIG\_NAMEIF  --  undefined reference to 'ether\_aton\_r'
  * CONFIG\_PIVOT\_ROOT  --  **has patch**  --  undefined reference to 'pivot\_root'
  * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
