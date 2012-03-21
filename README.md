@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, fsck, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
+> adjtimex, arping, bbconfig, brctl, date, df, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, pgrep, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, ubi*, udhcpd, umount, watchdog, zcip
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -44,7 +44,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
  * disables CONFIG\_PING6, CONFIG\_FEATURE\_IFUPDOWN\_IPV6, CONFIG\_TRACEROUTE6
 * CONFIG\_FEATURE\_UTMP, CONFIG\_FEATURE\_WTMP  --  init/halt.c:86: error: 'RUN_LVL' undeclared (first use in this function)
  * disables CONFIG\_WHO, CONFIG\_USERS, CONFIG\_LAST, CONFIG\_RUNLEVEL, CONFIG\_WALL
-* CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  util-linux/fsck\_minix.c:111: error: 'INODE\_SIZE1' undeclared here (not in a function)
+* CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  **has patch**  --  util-linux/fsck\_minix.c:111: error: 'INODE\_SIZE1' undeclared here (not in a function)
 * CONFIG\_INETD  --  **has patch**  --  /opt/android-ndk/platforms/android-9/arch-arm/usr/include/linux/un.h:18: error: expected specifier-qualifier-list before 'sa\_family\_t' and networking/inetd.c:562: error: 'struct sockaddr\_un' has no member named 'sun\_path'
 * CONFIG\_IONICE  --  **has patch** -- miscutils/ionice.c:23: error: 'SYS\_ioprio\_set' undeclared (first use in this function)
 * CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
