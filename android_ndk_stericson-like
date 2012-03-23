@@ -1,7 +1,7 @@
 # A config similar to the one shipped by android-busybox (by stericson):
 # 
 # applets not in this config: 
-# ether-wake, hostid, ifenslave, logname, mt, nameif, ntpd, ping6, readahead,
+# ether-wake, hostid, ifenslave, logname, mt, ntpd, ping6, readahead,
 # rev, rfkill, traceroute6 
 # 
 # applets extra in this config:
@@ -747,8 +747,8 @@ CONFIG_TTYSIZE=y
 #
 # Networking Utilities
 #
-# CONFIG_NAMEIF is not set
-# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
+CONFIG_NAMEIF=y
+CONFIG_FEATURE_NAMEIF_EXTENDED=y
 # CONFIG_NBDCLIENT is not set
 CONFIG_NC=y
 CONFIG_NC_SERVER=y

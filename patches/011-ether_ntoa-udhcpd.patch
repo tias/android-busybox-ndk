@@ -1,6 +1,6 @@
 From: Tias Guns <tias@ulyssis.org>
 Date: Mon, 19 Mar 2012 17:58:53 +0000
-Subject: [PATCH] fix udhcpd, add ether_ntoa_r and ether_aton_r from glibc
+Subject: [PATCH] fix udhcpd and nameif, add ether_ntoa_r and ether_aton_r from glibc
 
 this patch also fixes part of arping and ether-wake, but not
 sufficiently yet
@@ -8,7 +8,7 @@ sufficiently yet
 patch from 'ether_XtoY-from-glibc' by Dan Drown
 http://dan.drown.org/android/src/busybox/
 ---
- networking/Kbuild.src       |    2 +
+ networking/Kbuild.src       |    3 ++
  networking/arping.c         |    7 +++-
  networking/ether-wake.c     |    5 ++-
  networking/ether_aton_r.c   |   63 +++++++++++++++++++++++++++++++++++++++++++
@@ -16,13 +16,13 @@ http://dan.drown.org/android/src/busybox/
  networking/ether_port.h     |   29 +++++++++++++++++++
  networking/udhcp/Kbuild.src |    1 +
  networking/udhcp/files.c    |    3 ++
- 8 files changed, 139 insertions(+), 4 deletions(-)
+ 8 files changed, 140 insertions(+), 4 deletions(-)
  create mode 100644 networking/ether_aton_r.c
  create mode 100644 networking/ether_ntoa_r.c
  create mode 100644 networking/ether_port.h
 
 diff --git a/networking/Kbuild.src b/networking/Kbuild.src
-index 944f27b..767ea2e 100644
+index 944f27b..365ae6c 100644
 --- a/networking/Kbuild.src
 +++ b/networking/Kbuild.src
 @@ -9,9 +9,11 @@ lib-y:=
@@ -37,6 +37,14 @@ index 944f27b..767ea2e 100644
  lib-$(CONFIG_FAKEIDENTD)   += isrv_identd.o isrv.o
  lib-$(CONFIG_FTPD)         += ftpd.o
  lib-$(CONFIG_FTPGET)       += ftpgetput.o
+@@ -26,6 +28,7 @@ lib-$(CONFIG_INETD)        += inetd.o
+ lib-$(CONFIG_IP)           += ip.o
+ lib-$(CONFIG_IPCALC)       += ipcalc.o
+ lib-$(CONFIG_NAMEIF)       += nameif.o
++lib-$(CONFIG_NAMEIF)       += ether_aton_r.o
+ lib-$(CONFIG_NC)           += nc.o
+ lib-$(CONFIG_NETSTAT)      += netstat.o
+ lib-$(CONFIG_NSLOOKUP)     += nslookup.o
 diff --git a/networking/arping.c b/networking/arping.c
 index a4421ed..376d970 100644
 --- a/networking/arping.c
