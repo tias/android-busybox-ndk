@@ -27,7 +27,7 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 > acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, ether-wake, fsck, fsck.minix, hostname, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
+> adjtimex, arping, bbconfig, brctl, date, df, ether-wake, fsck, fsck.minix, hostname, hush, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
@@ -73,7 +73,7 @@ These errors indicate that the library is missing from androids libc implementat
  * CONFIG\_FEATURE\_HAVE\_RPC, CONFIG\_FEATURE\_INETD\_RPC  --  networking/inetd.c:176:22: error: rpc/rpc.h: No such file or directory
  * CONFIG\_FEATURE\_IFCONFIG\_SLIP  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
  * CONFIG\_FEATURE\_SHADOWPASSWDS, CONFIG\_USE\_BB\_SHADOW  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
- * CONFIG\_HUSH  --  shell/hush.c:89:18: error: glob.h: No such file or directory
+ * CONFIG\_HUSH  --  **has patch**  --  shell/hush.c:89:18: error: glob.h: No such file or directory
  * CONFIG\_IFENSLAVE  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
  * CONFIG\_IFPLUGD  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
  * CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:25:21: error: sys/shm.h: No such file or directory
