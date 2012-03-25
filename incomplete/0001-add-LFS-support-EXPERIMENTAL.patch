@@ -1,0 +1,273 @@
+From: Tias Guns <tias@ulyssis.org>
+Date: Tue, 20 Mar 2012 22:57:40 +0000
+Subject: [PATCH] add LFS support EXPERIMENTAL
+
+the original patch (see below) was written for busybox-1.18.5
+I've ported the patch to 1.20.0git,
+**HOWEVER**
+I can not give guarantees that this patch covers all cases. In fact,
+this stuff is beyond me.
+
+Use at your own risk. Do report if you can verify that this patch is
+sufficient and guaranteed to work.
+
+from 'off_t-is-long-stat.st_size-is-long-long' by Dan Drown
+"""
+android/bionic is special, off_t and stat.st_size do not match
+off_t is defined as "long"
+stat.st_size is defined as "long long" (loff_t)
+"""
+http://dan.drown.org/android/src/busybox/
+---
+ archival/libarchive/get_header_tar.c |    4 +-
+ archival/tar.c                       |    4 +-
+ coreutils/od_bloaty.c                |   36 +++++++++++++++++-----------------
+ editors/cmp.c                        |    2 +-
+ include/bb_archive.h                 |    2 +-
+ include/libbb.h                      |    6 -----
+ libbb/loop.c                         |    2 +-
+ libbb/xfuncs_printf.c                |    2 +-
+ 8 files changed, 26 insertions(+), 32 deletions(-)
+
+diff --git a/archival/libarchive/get_header_tar.c b/archival/libarchive/get_header_tar.c
+index 80a7091..4e3efb0 100644
+--- a/archival/libarchive/get_header_tar.c
++++ b/archival/libarchive/get_header_tar.c
+@@ -413,9 +413,9 @@ char FAST_FUNC get_header_tar(archive_handle_t *archive_handle)
+ 	}
+  skip_ext_hdr:
+ 	{
+-		off_t sz;
++		loff_t sz;
+ 		bb_error_msg("warning: skipping header '%c'", tar.typeflag);
+-		sz = (file_header->size + 511) & ~(off_t)511;
++		sz = (file_header->size + 511) & ~(loff_t)511;
+ 		archive_handle->offset += sz;
+ 		sz >>= 9; /* sz /= 512 but w/o contortions for signed div */
+ 		while (sz--)
+diff --git a/archival/tar.c b/archival/tar.c
+index cf972c2..34476c3 100644
+--- a/archival/tar.c
++++ b/archival/tar.c
+@@ -161,9 +161,9 @@ static HardLinkInfo *findHardLinkInfo(HardLinkInfo *hlInfo, struct stat *statbuf
+ /* Put an octal string into the specified buffer.
+  * The number is zero padded and possibly null terminated.
+  * Stores low-order bits only if whole value does not fit. */
+-static void putOctal(char *cp, int len, off_t value)
++static void putOctal(char *cp, int len, loff_t value)
+ {
+-	char tempBuffer[sizeof(off_t)*3 + 1];
++	char tempBuffer[sizeof(loff_t)*3 + 1];
+ 	char *tempString = tempBuffer;
+ 	int width;
+ 
+diff --git a/coreutils/od_bloaty.c b/coreutils/od_bloaty.c
+index 347f879..68470c8 100644
+--- a/coreutils/od_bloaty.c
++++ b/coreutils/od_bloaty.c
+@@ -184,11 +184,11 @@ static struct tspec *spec;
+ 
+ /* Function that accepts an address and an optional following char,
+    and prints the address and char to stdout.  */
+-static void (*format_address)(off_t, char);
++static void (*format_address)(loff_t, char);
+ /* The difference between the old-style pseudo starting address and
+    the number of bytes to skip.  */
+ #if ENABLE_LONG_OPTS
+-static off_t pseudo_offset;
++static loff_t pseudo_offset;
+ #else
+ enum { pseudo_offset = 0 };
+ #endif
+@@ -760,7 +760,7 @@ decode_format_string(const char *s)
+    advance IN_STREAM.  */
+ 
+ static void
+-skip(off_t n_skip)
++skip(loff_t n_skip)
+ {
+ 	if (n_skip == 0)
+ 		return;
+@@ -822,10 +822,10 @@ skip(off_t n_skip)
+ }
+ 
+ 
+-typedef void FN_format_address(off_t address, char c);
++typedef void FN_format_address(loff_t address, char c);
+ 
+ static void
+-format_address_none(off_t address UNUSED_PARAM, char c UNUSED_PARAM)
++format_address_none(loff_t address UNUSED_PARAM, char c UNUSED_PARAM)
+ {
+ }
+ 
+@@ -836,7 +836,7 @@ static char address_fmt[] ALIGN1 = "%0n"OFF_FMT"xc";
+ #define address_pad_len_char address_fmt[2]
+ 
+ static void
+-format_address_std(off_t address, char c)
++format_address_std(loff_t address, char c)
+ {
+ 	/* Corresponds to 'c' */
+ 	address_fmt[sizeof(address_fmt)-2] = c;
+@@ -846,7 +846,7 @@ format_address_std(off_t address, char c)
+ #if ENABLE_LONG_OPTS
+ /* only used with --traditional */
+ static void
+-format_address_paren(off_t address, char c)
++format_address_paren(loff_t address, char c)
+ {
+ 	putchar('(');
+ 	format_address_std(address, ')');
+@@ -854,7 +854,7 @@ format_address_paren(off_t address, char c)
+ }
+ 
+ static void
+-format_address_label(off_t address, char c)
++format_address_label(loff_t address, char c)
+ {
+ 	format_address_std(address, ' ');
+ 	format_address_paren(address + pseudo_offset, c);
+@@ -885,7 +885,7 @@ dump_hexl_mode_trailer(size_t n_bytes, const char *block)
+    only when it has not been padded to length BYTES_PER_BLOCK.  */
+ 
+ static void
+-write_block(off_t current_offset, size_t n_bytes,
++write_block(loff_t current_offset, size_t n_bytes,
+ 		const char *prev_block, const char *curr_block)
+ {
+ 	static char first = 1;
+@@ -976,7 +976,7 @@ get_lcm(void)
+    read.  */
+ 
+ static void
+-dump(off_t current_offset, off_t end_offset)
++dump(loff_t current_offset, loff_t end_offset)
+ {
+ 	char *block[2];
+ 	int idx;
+@@ -993,7 +993,7 @@ dump(off_t current_offset, off_t end_offset)
+ 				n_bytes_read = 0;
+ 				break;
+ 			}
+-			n_needed = MIN(end_offset - current_offset, (off_t) bytes_per_block);
++			n_needed = MIN(end_offset - current_offset, (loff_t) bytes_per_block);
+ 			read_block(n_needed, block[idx], &n_bytes_read);
+ 			if (n_bytes_read < bytes_per_block)
+ 				break;
+@@ -1059,7 +1059,7 @@ dump(off_t current_offset, off_t end_offset)
+    traditional version of od.  */
+ 
+ static void
+-dump_strings(off_t address, off_t end_offset)
++dump_strings(loff_t address, loff_t end_offset)
+ {
+ 	unsigned bufsize = MAX(100, string_min);
+ 	unsigned char *buf = xmalloc(bufsize);
+@@ -1131,7 +1131,7 @@ dump_strings(off_t address, off_t end_offset)
+    leading '+' return nonzero and set *OFFSET to the offset it denotes.  */
+ 
+ static int
+-parse_old_offset(const char *s, off_t *offset)
++parse_old_offset(const char *s, loff_t *offset)
+ {
+ 	static const struct suffix_mult Bb[] = {
+ 		{ "B", 1024 },
+@@ -1192,11 +1192,11 @@ int od_main(int argc UNUSED_PARAM, char **argv)
+ 	unsigned opt;
+ 	int l_c_m;
+ 	/* The number of input bytes to skip before formatting and writing.  */
+-	off_t n_bytes_to_skip = 0;
++	loff_t n_bytes_to_skip = 0;
+ 	/* The offset of the first byte after the last byte to be formatted.  */
+-	off_t end_offset = 0;
++	loff_t end_offset = 0;
+ 	/* The maximum number of bytes that will be formatted.  */
+-	off_t max_bytes_to_format = 0;
++	loff_t max_bytes_to_format = 0;
+ 
+ 	spec = NULL;
+ 	format_address = format_address_std;
+@@ -1267,8 +1267,8 @@ int od_main(int argc UNUSED_PARAM, char **argv)
+ #if ENABLE_LONG_OPTS
+ 	if (opt & OPT_traditional) {
+ 		if (argv[0]) {
+-			off_t pseudo_start = -1;
+-			off_t o1, o2;
++			loff_t pseudo_start = -1;
++			loff_t o1, o2;
+ 
+ 			if (!argv[1]) { /* one arg */
+ 				if (parse_old_offset(argv[0], &o1)) {
+diff --git a/editors/cmp.c b/editors/cmp.c
+index fbe6b97..a566e70 100644
+--- a/editors/cmp.c
++++ b/editors/cmp.c
+@@ -34,7 +34,7 @@ int cmp_main(int argc UNUSED_PARAM, char **argv)
+ {
+ 	FILE *fp1, *fp2, *outfile = stdout;
+ 	const char *filename1, *filename2 = "-";
+-	off_t skip1 = 0, skip2 = 0, char_pos = 0;
++	loff_t skip1 = 0, skip2 = 0, char_pos = 0;
+ 	int line_pos = 1; /* Hopefully won't overflow... */
+ 	const char *fmt;
+ 	int c1, c2;
+diff --git a/include/bb_archive.h b/include/bb_archive.h
+index 2043d85..d633dd3 100644
+--- a/include/bb_archive.h
++++ b/include/bb_archive.h
+@@ -35,7 +35,7 @@ typedef struct file_header_t {
+ 	char *tar__uname;
+ 	char *tar__gname;
+ #endif
+-	off_t size;
++	loff_t size;
+ 	uid_t uid;
+ 	gid_t gid;
+ 	mode_t mode;
+diff --git a/include/libbb.h b/include/libbb.h
+index 2cc1466..464acf2 100644
+--- a/include/libbb.h
++++ b/include/libbb.h
+@@ -249,12 +249,6 @@ typedef unsigned long uoff_t;
+ #endif
+ /* scary. better ideas? (but do *test* them first!) */
+ #define OFF_T_MAX  ((off_t)~((off_t)1 << (sizeof(off_t)*8-1)))
+-/* Users report bionic to use 32-bit off_t even if LARGEFILE support is requested.
+- * We misdetected that. Don't let it build:
+- */
+-struct BUG_off_t_size_is_misdetected {
+-	char BUG_off_t_size_is_misdetected[sizeof(off_t) == sizeof(uoff_t) ? 1 : -1];
+-};
+ 
+ /* Some useful definitions */
+ #undef FALSE
+diff --git a/libbb/loop.c b/libbb/loop.c
+index b3a5208..7c37e29 100644
+--- a/libbb/loop.c
++++ b/libbb/loop.c
+@@ -56,7 +56,7 @@ char* FAST_FUNC query_loop(const char *device)
+ 	fd = open(device, O_RDONLY);
+ 	if (fd >= 0) {
+ 		if (ioctl(fd, BB_LOOP_GET_STATUS, &loopinfo) == 0) {
+-			dev = xasprintf("%"OFF_FMT"u %s", (off_t) loopinfo.lo_offset,
++			dev = xasprintf("%"OFF_FMT"u %s", (loff_t) loopinfo.lo_offset,
+ 					(char *)loopinfo.lo_file_name);
+ 		}
+ 		close(fd);
+diff --git a/libbb/xfuncs_printf.c b/libbb/xfuncs_printf.c
+index d8a42ba..5bb1b55 100644
+--- a/libbb/xfuncs_printf.c
++++ b/libbb/xfuncs_printf.c
+@@ -234,7 +234,7 @@ off_t FAST_FUNC xlseek(int fd, off_t offset, int whence)
+ 	off_t off = lseek(fd, offset, whence);
+ 	if (off == (off_t)-1) {
+ 		if (whence == SEEK_SET)
+-			bb_perror_msg_and_die("lseek(%"OFF_FMT"u)", offset);
++			bb_perror_msg_and_die("lseek(%lu)", offset);
+ 		bb_perror_msg_and_die("lseek");
+ 	}
+ 	return off;
+-- 
+1.7.0.4
+
