@@ -1,8 +1,7 @@
 # A config similar to the one shipped by android-busybox (by stericson):
 # 
 # applets not in this config: 
-# ether-wake, hostid, ifenslave, logname, mt, ntpd, readahead,
-# rev, rfkill
+# hostid, ifenslave, logname, mt, ntpd, readahead, rev, rfkill
 # 
 # applets extra in this config:
 # ar, bbconfig, beep, brctl, bunzip2, bzcat, bzip2, chat, cmp, cpio, ed,
@@ -768,7 +767,7 @@ CONFIG_BRCTL=y
 CONFIG_FEATURE_BRCTL_FANCY=y
 CONFIG_FEATURE_BRCTL_SHOW=y
 CONFIG_DNSD=y
-# CONFIG_ETHER_WAKE is not set
+CONFIG_ETHER_WAKE=y
 CONFIG_FAKEIDENTD=y
 CONFIG_FTPD=y
 CONFIG_FEATURE_FTP_WRITE=y
