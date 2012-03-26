@@ -9,8 +9,8 @@ https://github.com/Gnurou/busybox-android
 ---
  include/libbb.h |    4 ++--
  init/init.c     |    2 +-
- shell/ash.c     |   11 ++++-------
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ shell/ash.c     |    4 ++++
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
 index 2cc1466..6c4e6a7 100644
@@ -45,20 +45,23 @@ index 7248946..a5dc50d 100644
  
  	if (argv[1])
 diff --git a/shell/ash.c b/shell/ash.c
-index d197fa1..24c9648 100644
+index d197fa1..2df6d2c 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -13165,20 +13165,17 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13165,12 +13165,16 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  	if (iflag) {
  		const char *hp = lookupvar("HISTFILE");
  		if (!hp) {
--			hp = lookupvar("HOME");
--			if (hp) {
--				char *defhp = concat_path_file(hp, ".ash_history");
--				setvar("HISTFILE", defhp, 0);
--				free(defhp);
--			}
-+			setvar("HISTFILE", "/sdcard/ash_history", 0);
++#ifdef __ANDROID__
++			setvar("HISTFILE", "/mnt/sdcard/ash_history", 0);
++#else
+ 			hp = lookupvar("HOME");
+ 			if (hp) {
+ 				char *defhp = concat_path_file(hp, ".ash_history");
+ 				setvar("HISTFILE", defhp, 0);
+ 				free(defhp);
+ 			}
++#endif
  		}
  	}
  #endif
