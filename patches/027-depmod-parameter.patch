@@ -1,0 +1,30 @@
+From 9abab27407923ee7a62817538ce80e3806f58793 Mon Sep 17 00:00:00 2001
+From: Tanguy Pruvot <tanguy.pruvot@gmail.com>
+Date: Sat, 17 Mar 2012 06:01:37 +0100
+Subject: [PATCH] depmod: fix syntax with modules in parameter
+
+Change-Id: I21b8664db01cf0132db82f8d6caa1a0e77e71004
+from https://github.com/tpruvot/android_external_busybox
+---
+ modutils/depmod.c |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/modutils/depmod.c b/modutils/depmod.c
+index 7752361..a1419d6 100644
+--- a/modutils/depmod.c
++++ b/modutils/depmod.c
+@@ -50,7 +50,10 @@ static int FAST_FUNC parse_module(const char *fname, struct stat *sb UNUSED_PARA
+ 	*first = info;
+ 
+ 	info->dnext = info->dprev = info;
+-	info->name = xstrdup(fname + 2); /* skip "./" */
++	if (strncmp(fname, "./", 2) == 0)
++		info->name = xstrdup(fname + 2);
++	else
++		info->name = xstrdup(fname);
+ 	info->modname = xstrdup(filename2modname(fname, modname));
+ 	for (ptr = image; ptr < image + len - 10; ptr++) {
+ 		if (strncmp(ptr, "depends=", 8) == 0) {
+-- 
+1.7.0.4
+
