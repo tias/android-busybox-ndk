@@ -1,5 +1,5 @@
 From: Tias Guns <tias@ulyssis.org>
-Date: Fri, 23 Mar 2012 23:43:57 +0000
+Date: Sun, 5 Aug 2012 16:13:55 +0200
 Subject: [PATCH] ash history
 
 allows ash history to work on Android
@@ -13,16 +13,16 @@ https://github.com/Gnurou/busybox-android
  3 files changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
-index 2cc1466..6c4e6a7 100644
+index f22e58e..90b2866 100644
 --- a/include/libbb.h
 +++ b/include/libbb.h
-@@ -1756,12 +1756,12 @@ extern struct globals *const ptr_to_globals;
+@@ -1757,12 +1757,12 @@ extern struct globals *const ptr_to_globals;
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
 -#define LIBBB_DEFAULT_LOGIN_SHELL  "-/bin/sh"
 +#define LIBBB_DEFAULT_LOGIN_SHELL  "-/sbin/sh"
- extern const char bb_default_login_shell[];
+ extern const char bb_default_login_shell[] ALIGN1;
  /* "/bin/sh" */
  #define DEFAULT_SHELL              (bb_default_login_shell+1)
  /* "sh" */
@@ -32,7 +32,7 @@ index 2cc1466..6c4e6a7 100644
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
 diff --git a/init/init.c b/init/init.c
-index 7248946..a5dc50d 100644
+index 7248946..8644cc8 100644
 --- a/init/init.c
 +++ b/init/init.c
 @@ -1047,7 +1047,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
@@ -45,10 +45,10 @@ index 7248946..a5dc50d 100644
  
  	if (argv[1])
 diff --git a/shell/ash.c b/shell/ash.c
-index d197fa1..2df6d2c 100644
+index b20c32b..5f75ed7 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -13165,12 +13165,16 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13172,12 +13172,16 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  	if (iflag) {
  		const char *hp = lookupvar("HISTFILE");
  		if (!hp) {
@@ -77,5 +77,5 @@ index d197fa1..2df6d2c 100644
  		state = 2;
  		read_profile(".profile");
 -- 
-1.7.0.4
+1.7.10.4
 
