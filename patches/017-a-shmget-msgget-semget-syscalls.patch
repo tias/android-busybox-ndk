@@ -1,0 +1,39 @@
+From: Tias Guns <tias@ulyssis.org>
+Date: Sun, 5 Aug 2012 15:02:35 +0200
+Subject: [PATCH] android syscalls: shmget/msgget/semget
+
+patch from 'no-sys-shm,msg,sem' by Dan Drown
+http://dan.drown.org/android/src/busybox/
+
+Signed-off-by: Tias Guns <tias@ulyssis.org>
+---
+ libbb/missing_syscalls.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
+index 235f4b8..a75a332 100644
+--- a/libbb/missing_syscalls.c
++++ b/libbb/missing_syscalls.c
+@@ -49,4 +49,19 @@ int swapon(const char *path, int swapflags)
+ {
+   return syscall(__NR_swapon, path, swapflags);
+ }
++
++int shmget(key_t key, size_t size, int shmflg)
++{
++  return syscall(__NR_shmget, key, size, shmflg);
++}
++
++int msgget(key_t key, int msgflg)
++{
++  return syscall(__NR_msgget, key, msgflg);
++}
++
++int semget(key_t key, int nsems, int semflg)
++{
++  return syscall(__NR_semget, key, nsems, semflg);
++}
+ #endif
+-- 
+1.7.10.4
+
