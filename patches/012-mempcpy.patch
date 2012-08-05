@@ -4,13 +4,13 @@ Subject: [PATCH] Add mempcpy (android/bionic doesn't have it)
 
 Signed-off-by: Tias Guns <tias@ulyssis.org>
 ---
- include/platform.h  |    6 ++++++
- libbb/platform.c    |    8 ++++++++
+ include/platform.h  |    7 +++++++
+ libbb/platform.c    |    9 +++++++++
  networking/arping.c |    7 -------
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
 diff --git a/include/platform.h b/include/platform.h
-index ba534b2..1cecf2f 100644
+index ba534b2..3e101ba 100644
 --- a/include/platform.h
 +++ b/include/platform.h
 @@ -368,6 +368,7 @@ typedef unsigned smalluint;
@@ -29,31 +29,34 @@ index ba534b2..1cecf2f 100644
  #endif
  
  /*
-@@ -506,4 +508,8 @@ extern int vasprintf(char **string_ptr, const char *format, va_list p) FAST_FUNC
+@@ -506,4 +508,9 @@ extern int vasprintf(char **string_ptr, const char *format, va_list p) FAST_FUNC
  extern ssize_t getline(char **lineptr, size_t *n, FILE *stream) FAST_FUNC;
  #endif
  
 +#ifndef HAVE_MEMPCPY
-+extern void *mempcpy(void *_dst, const void *_src, int n)
++# include <sys/types.h> /* size_t */
++extern void *mempcpy(void *dest, const void *src, size_t n);
 +#endif
 +
  #endif
 diff --git a/libbb/platform.c b/libbb/platform.c
-index 2bf34f5..ba9ff18 100644
+index 2bf34f5..9e0d14e 100644
 --- a/libbb/platform.c
 +++ b/libbb/platform.c
-@@ -174,3 +174,11 @@ ssize_t FAST_FUNC getline(char **lineptr, size_t *n, FILE *stream)
+@@ -174,3 +174,12 @@ ssize_t FAST_FUNC getline(char **lineptr, size_t *n, FILE *stream)
  	return len;
  }
  #endif
 +
 +#ifndef HAVE_MEMPCPY
-+void *mempcpy(void *_dst, const void *_src, int n)
++void *mempcpy(void *dest, const void *src, size_t n)
 +{
-+	memcpy(_dst, _src, n);
-+	return (char*)_dst + n;
++  memcpy(dest, src, n);
++  dest += n;
++  return dest;
 +}
 +#endif
+\ No newline at end of file
 diff --git a/networking/arping.c b/networking/arping.c
 index 376d970..37dfec1 100644
 --- a/networking/arping.c
