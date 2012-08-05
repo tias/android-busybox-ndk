@@ -329,7 +329,7 @@ new file mode 100644
 index 0000000..90a400f
 --- /dev/null
 +++ b/libres/dn_expand.c
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,12 @@
 +#include <netinet/in.h>
 +#include <arpa/nameser.h>
 +#include <resolv.h>
@@ -342,7 +342,6 @@ index 0000000..90a400f
 +int diet_dn_expand(const unsigned char *msg, const unsigned char *eomorig, const unsigned char *comp_dn, unsigned char *exp_dn, int length) {
 +  return __dns_decodename(msg,comp_dn-msg,exp_dn,length,eomorig)-(comp_dn-msg);
 +}
-+
 diff --git a/libres/dnscruft.c b/libres/dnscruft.c
 new file mode 100644
 index 0000000..142ffec
@@ -872,7 +871,7 @@ new file mode 100644
 index 0000000..8a48aef
 --- /dev/null
 +++ b/libres/res_mkquery.c
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,85 @@
 +#include <resolv.h>
 +#include <string.h>
 +#include <sys/types.h>
@@ -958,7 +957,6 @@ index 0000000..8a48aef
 +    return x-packet;
 +  }
 +}
-+
 diff --git a/libres/res_query.c b/libres/res_query.c
 new file mode 100644
 index 0000000..19898b7

@@ -2,32 +2,21 @@ From: Tias Guns <tias@ulyssis.org>
 Date: Tue, 20 Mar 2012 23:45:32 +0000
 Subject: [PATCH] fix microcom, add cfsetspeed syscall from glibc
 
-from misc-syscalls by Dan Drown
-"from glibc: cfsetspeed"
+based on 'misc-syscalls' by Dan Drown
 http://dan.drown.org/android/src/busybox/
+
+Signed-off-by: Tias Guns <tias@ulyssis.org>
 ---
- libbb/Kbuild.src   |    3 +
- libbb/cfsetspeed.c |  162 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 165 insertions(+), 0 deletions(-)
+ libbb/cfsetspeed.c |  165 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 165 insertions(+)
  create mode 100644 libbb/cfsetspeed.c
 
-diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index d2e8c94..1cb1427 100644
---- a/libbb/Kbuild.src
-+++ b/libbb/Kbuild.src
-@@ -203,3 +203,6 @@ lib-$(CONFIG_ADJTIMEX) += adjtimex.o
- lib-$(CONFIG_SWAPONOFF) += swapon.o swapoff.o
- 
- lib-$(CONFIG_SYSLOGD) += semop.o shmdt-at.o
-+
-+lib-$(CONFIG_MICROCOM) += cfsetspeed.o
-+lib-$(CONFIG_GETTY) += cfsetspeed.o
 diff --git a/libbb/cfsetspeed.c b/libbb/cfsetspeed.c
 new file mode 100644
-index 0000000..436c54b
+index 0000000..ccf321a
 --- /dev/null
 +++ b/libbb/cfsetspeed.c
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,165 @@
 +/* Copyright (C) 1992,93,96,97,98,2001 Free Software Foundation, Inc.
 +   This file is part of the GNU C Library.
 +
@@ -45,6 +34,9 @@ index 0000000..436c54b
 +   License along with the GNU C Library; if not, write to the Free
 +   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 +   02111-1307 USA.  */
++
++//kbuild:lib-$(CONFIG_MICROCOM) += cfsetspeed.o
++//kbuild:lib-$(CONFIG_GETTY) += cfsetspeed.o
 +
 +#include <termios.h>
 +#include <errno.h>
@@ -191,5 +183,5 @@ index 0000000..436c54b
 +  return -1;
 +}
 -- 
-1.7.0.4
+1.7.10.4
 

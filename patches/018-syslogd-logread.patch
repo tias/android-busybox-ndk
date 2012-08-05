@@ -7,16 +7,11 @@ patch from 'no-sys-shm,msg,sem' and 'sys-syslog' by Dan Drown
 http://dan.drown.org/android/src/busybox/
 ---
  include/sys/syslog.h          |  138 +++++++++++++++++++++++++++++++++++++++++
- libbb/Kbuild.src              |    2 +
- libbb/semop.c                 |    8 +++
- libbb/shmdt-at.c              |   11 +++
  sysklogd/logread.c            |    4 +-
  sysklogd/syslogd.c            |    4 +-
  sysklogd/syslogd_and_logger.c |    1 +
- 7 files changed, 164 insertions(+), 4 deletions(-)
+ 4 files changed, 143 insertions(+), 4 deletions(-)
  create mode 100644 include/sys/syslog.h
- create mode 100644 libbb/semop.c
- create mode 100644 libbb/shmdt-at.c
 
 diff --git a/include/sys/syslog.h b/include/sys/syslog.h
 new file mode 100644
@@ -162,47 +157,6 @@ index 0000000..3c749a0
 +#define	LOG_PERROR	0x20	/* log to stderr as well */
 +
 +#endif /* sys/syslog.h */
-diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index 9c0d13f..d2e8c94 100644
---- a/libbb/Kbuild.src
-+++ b/libbb/Kbuild.src
-@@ -201,3 +201,5 @@ lib-$(CONFIG_HOSTNAME) += sethostname.o
- 
- lib-$(CONFIG_ADJTIMEX) += adjtimex.o
- lib-$(CONFIG_SWAPONOFF) += swapon.o swapoff.o
-+
-+lib-$(CONFIG_SYSLOGD) += semop.o shmdt-at.o
-diff --git a/libbb/semop.c b/libbb/semop.c
-new file mode 100644
-index 0000000..362aa62
---- /dev/null
-+++ b/libbb/semop.c
-@@ -0,0 +1,8 @@
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <linux/sem.h>
-+
-+int semop(int semid, struct sembuf *sops, unsigned nsops) {
-+  return syscall(__NR_semop, semid, sops, nsops);
-+}
-+
-diff --git a/libbb/shmdt-at.c b/libbb/shmdt-at.c
-new file mode 100644
-index 0000000..1831e11
---- /dev/null
-+++ b/libbb/shmdt-at.c
-@@ -0,0 +1,11 @@
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <linux/shm.h>
-+
-+int shmdt(const void *shmaddr) {
-+  return syscall(__NR_shmdt, shmaddr);
-+}
-+
-+void *shmat(int shmid, const void *shmaddr, int shmflg) {
-+  return (void *)syscall(__NR_shmat, shmid, shmaddr, shmflg);
-+}
 diff --git a/sysklogd/logread.c b/sysklogd/logread.c
 index 9939569..e978a5d 100644
 --- a/sysklogd/logread.c
@@ -246,5 +200,5 @@ index 0964f23..81c8909 100644
  #if 0
  /* For the record: with SYSLOG_NAMES <syslog.h> defines
 -- 
-1.7.0.4
+1.7.10.4
 

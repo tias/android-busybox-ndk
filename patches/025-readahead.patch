@@ -1,5 +1,5 @@
 From: Tias Guns <tias@ulyssis.org>
-Date: Tue, 20 Mar 2012 23:03:44 +0000
+Date: Sun, 5 Aug 2012 16:00:19 +0200
 Subject: [PATCH] fix readahead, add syscall
 
 fix readahead, add simple syscall
@@ -8,36 +8,25 @@ Can only be tested with LFS support (not patched yet)
 from 'misc-syscalls' by Dan Drown
 http://dan.drown.org/android/src/busybox/
 ---
- libbb/Kbuild.src  |    1 +
- libbb/readahead.c |    7 +++++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
- create mode 100644 libbb/readahead.c
+ libbb/missing_syscalls.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index 1cb1427..97c2738 100644
---- a/libbb/Kbuild.src
-+++ b/libbb/Kbuild.src
-@@ -201,6 +201,7 @@ lib-$(CONFIG_HOSTNAME) += sethostname.o
+diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
+index 474accb..913f00e 100644
+--- a/libbb/missing_syscalls.c
++++ b/libbb/missing_syscalls.c
+@@ -75,6 +75,11 @@ int semget(key_t key, int nsems, int semflg)
+   return syscall(__NR_semget, key, nsems, semflg);
+ }
  
- lib-$(CONFIG_ADJTIMEX) += adjtimex.o
- lib-$(CONFIG_SWAPONOFF) += swapon.o swapoff.o
-+lib-$(CONFIG_READAHEAD) += readahead.o
- 
- lib-$(CONFIG_SYSLOGD) += semop.o shmdt-at.o
- 
-diff --git a/libbb/readahead.c b/libbb/readahead.c
-new file mode 100644
-index 0000000..c0474f9
---- /dev/null
-+++ b/libbb/readahead.c
-@@ -0,0 +1,7 @@
-+#include <fcntl.h>
-+#include <sys/syscall.h>
-+#include <stdio.h>
-+
-+ssize_t readahead(int fd, off64_t offset, size_t count) {
++ssize_t readahead(int fd, off64_t offset, size_t count)
++{
 +  return syscall(__NR_readahead, fd, offset, count);
 +}
++
+ struct msqid_ds; /* #include <linux/msg.h> */
+ int msgctl(int msqid, int cmd, struct msqid_ds *buf)
+ {
 -- 
-1.7.0.4
+1.7.10.4
 

@@ -1,66 +1,28 @@
 From: Tias Guns <tias@ulyssis.org>
 Date: Mon, 19 Mar 2012 23:35:34 +0000
-Subject: [PATCH] fix swapon, swapoff: add syscalls, comment out MNTOPT_NOAUTO
+Subject: [PATCH] fix swapon, swapoff: comment out MNTOPT_NOAUTO
 
 patch from 'swap-on-off' by Dan Drown
 "syscalls for swapon/swapoff and defines"
 http://dan.drown.org/android/src/busybox/
 ---
- libbb/Kbuild.src       |    1 +
- libbb/swapoff.c        |    6 ++++++
- libbb/swapon.c         |    6 ++++++
  util-linux/swaponoff.c |    2 ++
- 4 files changed, 15 insertions(+), 0 deletions(-)
- create mode 100644 libbb/swapoff.c
- create mode 100644 libbb/swapon.c
+ 1 file changed, 2 insertions(+)
 
-diff --git a/libbb/Kbuild.src b/libbb/Kbuild.src
-index 28e6bc6..ade87b2 100644
---- a/libbb/Kbuild.src
-+++ b/libbb/Kbuild.src
-@@ -198,3 +198,4 @@ lib-$(CONFIG_PIVOT_ROOT) += pivot_root.o
- lib-$(CONFIG_HOSTNAME) += sethostname.o
- 
- lib-$(CONFIG_ADJTIMEX) += adjtimex.o
-+lib-$(CONFIG_SWAPONOFF) += swapon.o swapoff.o
-diff --git a/libbb/swapoff.c b/libbb/swapoff.c
-new file mode 100644
-index 0000000..1812b3d
---- /dev/null
-+++ b/libbb/swapoff.c
-@@ -0,0 +1,6 @@
-+#include <sys/syscall.h>
-+
-+int swapoff(const char *path) {
-+  return syscall(__NR_swapoff, path);
-+}
-+
-diff --git a/libbb/swapon.c b/libbb/swapon.c
-new file mode 100644
-index 0000000..ea81381
---- /dev/null
-+++ b/libbb/swapon.c
-@@ -0,0 +1,6 @@
-+#include <sys/syscall.h>
-+
-+int swapon(const char *path, int swapflags) {
-+  return syscall(__NR_swapon, path, swapflags);
-+}
-+
 diff --git a/util-linux/swaponoff.c b/util-linux/swaponoff.c
-index 54867ec..450dc9b 100644
+index 54867ec..03f7786 100644
 --- a/util-linux/swaponoff.c
 +++ b/util-linux/swaponoff.c
 @@ -93,7 +93,9 @@ static int do_em_all(void)
  			/* swapon -a should ignore entries with noauto,
  			 * but swapoff -a should process them */
  			if (applet_name[5] != 'n'
-+#ifndef __BIONIC__
++#ifdef MNTOPT_NOAUTO
  			 || hasmntopt(m, MNTOPT_NOAUTO) == NULL
 +#endif
  			) {
  				err += swap_enable_disable(m->mnt_fsname);
  			}
 -- 
-1.7.0.4
+1.7.10.4
 
