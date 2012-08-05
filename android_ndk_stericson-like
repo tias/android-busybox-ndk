@@ -5,7 +5,7 @@
 # 
 # applets extra in this config:
 # ar, bbconfig, beep, brctl, bunzip2, bzcat, bzip2, chat, cmp, cpio, ed,
-# false, findfs, fuser, hdparm, lspci, lzcat, lzma, man, mesg, mktemp, nohup,
+# false, findfs, fuser, hdparm, lsof, lspci, lzcat, lzma, man, mesg, mktemp, nohup,
 # pstree, pwdx, readlink, resize, setconsole, setserial, setuidgid, sh,
 # slattach, true, tune2fs, unlzma, unxz, xz, xzcat, yes, zcip
 # 
@@ -910,6 +910,7 @@ CONFIG_FEATURE_MIME_CHARSET=""
 # Process Utilities
 #
 CONFIG_IOSTAT=y
+CONFIG_LSOF=y
 # CONFIG_MPSTAT is not set
 CONFIG_NMETER=y
 CONFIG_PMAP=y
