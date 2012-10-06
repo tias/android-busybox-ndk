@@ -5,7 +5,7 @@
 ANDROID_NDK="/opt/android-ndk"
 
 # Pick your target ARCH (arm,mips,x86)
-ARCH=arm
+ARCH=x86
 
 # Config to use
 CONFIG_FILE="./android_ndk_stericson-like"
@@ -27,10 +27,20 @@ endif
 
 #
 # MIPS SETUP
+# NOTE: MIPS_SIM_NABI32  is a 64bit ABI; Android uses MIPS_SIM_ABI32
 #
 ifeq ($(ARCH),mips)
   GCC_PREFIX=$(ANDROID_NDK)/toolchains/mipsel-linux-android-4.4.3/prebuilt/linux-x86/bin/mipsel-linux-android-
-  EXTRA_CFLAGS=-DANDROID -D__ANDROID__ -DSK_RELEASE -fpic -fno-short-enums -fgcse-after-reload -frename-registers  -U_MIPS_SIM -D_MIPS_SIM=_MIPS_SIM_NABI32
+  EXTRA_CFLAGS=-DANDROID -D__ANDROID__ -DSK_RELEASE -fpic -fno-short-enums -fgcse-after-reload -frename-registers  -U_MIPS_SIM -D_MIPS_SIM=_MIPS_SIM_ABI32
+  EXTRA_LDFLAGS=-Xlinker -z -Xlinker muldefs -nostdlib -Bdynamic -Xlinker -dynamic-linker -Xlinker /system/bin/linker -Xlinker -z -Xlinker nocopyreloc -Xlinker --no-undefined \$${SYSROOT}/usr/lib/crtbegin_dynamic.o \$${SYSROOT}/usr/lib/crtend_android.o
+endif
+
+#
+# X86 SETUP
+#
+ifeq ($(ARCH),x86)
+  GCC_PREFIX=$(ANDROID_NDK)/toolchains/x86-4.4.3/prebuilt/linux-x86/bin/i686-android-linux-
+  EXTRA_CFLAGS=-DANDROID -D__ANDROID__ -DSK_RELEASE -nostdlib -fpic -fno-short-enums -fgcse-after-reload -frename-registers -Dhtons=__swap16 -Dhtonl=__swap32 -Dntohs=__swap16 -Dntohl=__swap32 -D_XOPEN_SOURCE -D_POSIX_C_SOURCE
   EXTRA_LDFLAGS=-Xlinker -z -Xlinker muldefs -nostdlib -Bdynamic -Xlinker -dynamic-linker -Xlinker /system/bin/linker -Xlinker -z -Xlinker nocopyreloc -Xlinker --no-undefined \$${SYSROOT}/usr/lib/crtbegin_dynamic.o \$${SYSROOT}/usr/lib/crtend_android.o
 endif
 

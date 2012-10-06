@@ -1,0 +1,19 @@
+From: Piet Delaney <piet@mips.com>
+Subject: [PATCH] android syscall: semctl
+
+Patch to allow MIPS MIPS_SIM_ABI32 to compile as well as X86.
+TODO: Will look into using __NR_restart_syscall:0 for this situation.
+
+--- a/libbb/semctl.c	2012-10-05 18:14:58.103606021 -0700
++++ b/libbb/semctl.c	2012-10-05 18:15:48.205480393 -0700
+@@ -53,6 +53,9 @@ int semctl(int semid, int semnum, int cm
+   }
+ 
+   va_end (ap);
+-
++#ifdef __NR_semctl
+   return syscall(__NR_semctl, semid, semnum, cmd, arg);
++#else
++  return -1;
++#endif
+ }
