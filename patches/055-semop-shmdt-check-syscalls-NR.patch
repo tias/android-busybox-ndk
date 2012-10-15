@@ -1,0 +1,141 @@
+From: Piet Delaney <piet@mips.com>
+Subject: [PATCH] android syscalls: shmdt shmat sembuf
+
+Patch to allow MIPS MIPS_SIM_ABI32 to compile as well as X86.
+TODO: Will look into using __NR_restart_syscall:0 for this situation.
+
+--- a/libbb/missing_syscalls.c	2012-10-05 16:54:17.103825783 -0700
++++ b/libbb/missing_syscalls.c	2012-10-05 17:03:46.373606205 -0700
+@@ -26,76 +26,132 @@ int stime(const time_t *t)
+ 
+ int sethostname(const char *name, size_t len)
+ {
++#ifdef __NR_sethostname
+ 	return syscall(__NR_sethostname, name, len);
++#else
++	return -1;
++#endif
+ }
+ 
+ struct timex;
+ int adjtimex(struct timex *buf)
+ {
++#ifdef __NR_adjtimex
+ 	return syscall(__NR_adjtimex, buf);
++#else
++	return -1;
++#endif
+ }
+ 
+ int pivot_root(const char *new_root, const char *put_old)
+ {
++#ifdef __NR_pivot_root
+ 	return syscall(__NR_pivot_root, new_root, put_old);
++#else
++	return -1;
++#endif
+ }
+ 
+ int swapoff(const char *path)
+ {
++#ifdef __NR_swapoff
+   return syscall(__NR_swapoff, path);
++#else
++  return -1;
++#endif
+ }
+ 
+ int swapon(const char *path, int swapflags)
+ {
++#ifdef __NR_swapon
+   return syscall(__NR_swapon, path, swapflags);
++#else
++  return -1;
++#endif
+ }
+ 
+ int shmget(key_t key, size_t size, int shmflg)
+ {
++#ifdef __NR_shmget
+   return syscall(__NR_shmget, key, size, shmflg);
++#else
++  return -1;
++#endif
+ }
+ 
+ int shmdt(const void *shmaddr)
+ {
++#ifdef __NR_shmdt
+   return syscall(__NR_shmdt, shmaddr);
++#else
++  return -1;
++#endif
+ }
+ 
+ void *shmat(int shmid, const void *shmaddr, int shmflg)
+ {
++#ifdef __NR_shmat
+   return (void *)syscall(__NR_shmat, shmid, shmaddr, shmflg);
++#else
++  return -1;
++#endif
+ }
+ 
+ int msgget(key_t key, int msgflg)
+ {
++#ifdef __NR_msgget
+   return syscall(__NR_msgget, key, msgflg);
++#else
++  return -1;
++#endif
+ }
+ 
+ int semget(key_t key, int nsems, int semflg)
+ {
++#ifdef __NR_semget
+   return syscall(__NR_semget, key, nsems, semflg);
++#else
++  return -1;
++#endif
+ }
+ 
+ ssize_t readahead(int fd, off64_t offset, size_t count)
+ {
++#ifdef __NR_readahead
+   return syscall(__NR_readahead, fd, offset, count);
++#else 
++  return -1;
++#endif
+ }
+ 
+ struct msqid_ds; /* #include <linux/msg.h> */
+ int msgctl(int msqid, int cmd, struct msqid_ds *buf)
+ {
++#ifdef __NR_msgctl
+   return syscall(__NR_msgctl, msqid, cmd, buf);
++#else
++  return -1;
++#endif
+ }
+ 
+ struct shmid_ds; /* #include <linux/shm.h> */
+ // NOTE: IPC_INFO takes a struct shminfo64
+ int shmctl(int shmid, int cmd, struct shmid_ds *buf)
+ {
++#ifdef __NR_shmctl
+   return syscall(__NR_shmctl, shmid, cmd, buf);
++#else
++  return -1;
++#endif
+ }
+ 
+ struct sembuf; /* #include <linux/sem.h> */
+ int semop(int semid, struct sembuf *sops, unsigned nsops)
+ {
++#ifdef __NR_semop
+   return syscall(__NR_semop, semid, sops, nsops);
++#else
++  return -1;
++#endif
+ }
+ #endif
