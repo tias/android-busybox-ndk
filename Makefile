@@ -23,6 +23,7 @@ busybox-git:
 	else \
 		echo "Fetching fresh busybox source"; \
 		git clone git://git.busybox.net/busybox $(BB_DIR); \
+		echo "Last tested revision: 1_21_0"; \
 	fi
 
 config:
