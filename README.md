@@ -29,6 +29,9 @@ Using file *android\_ndk\_defconfigPlus* you additionally get following applets 
 By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
 > adjtimex, arping, bbconfig, brctl, date, df, ether-wake, fsck, fsck.minix, hostname, hush, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
 
+(when cherry-picking certain patches you have to include all patches with a lower number as well, there are dependencies between them except for 050 and 051).
+
+
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
 The config *android\_ndk\_stericson-like* is a config similar to the one shipped by android-busybox (by stericson). You can download a [binary](https://github.com/downloads/tias/android-busybox-ndk/busybox-ndk-cc1bb603e) built with this config (md5sum ab9f5cd5032af9fa7c20c2e9d0ec047d).
