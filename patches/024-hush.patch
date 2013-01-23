@@ -12,7 +12,7 @@ http://dan.drown.org/android/src/busybox/
  shell/glob.h          |  113 +++++++
  shell/hush.c          |    3 +-
  shell/sigisemptyset.c |    8 +
- 4 files changed, 909 insertions(+), 1 deletions(-)
+ 4 files changed, 909 insertions(+), 1 deletion(-)
  create mode 100644 shell/glob.c
  create mode 100644 shell/glob.h
  create mode 100644 shell/sigisemptyset.c
@@ -929,7 +929,7 @@ index 0000000..e8e6578
 +
 +#endif /* !_GLOB_H_ */
 diff --git a/shell/hush.c b/shell/hush.c
-index 7a34f59..f8ddbdb 100644
+index e2dc1e2..7f8e0be 100644
 --- a/shell/hush.c
 +++ b/shell/hush.c
 @@ -86,7 +86,7 @@
@@ -941,7 +941,7 @@ index 7a34f59..f8ddbdb 100644
  /* #include <dmalloc.h> */
  #if ENABLE_HUSH_CASE
  # include <fnmatch.h>
-@@ -252,6 +252,7 @@ typedef void (*hush_sighandler_t)(int);
+@@ -248,6 +248,7 @@
  //applet:IF_FEATURE_BASH_IS_HUSH(APPLET_ODDNAME(bash, hush, BB_DIR_BIN, BB_SUID_DROP, bash))
  
  //kbuild:lib-$(CONFIG_HUSH) += hush.o match.o shell_common.o
@@ -964,5 +964,5 @@ index 0000000..8297313
 +  return set;
 +}
 -- 
-1.7.0.4
+1.7.10.4
 

@@ -9,14 +9,14 @@ https://github.com/Gnurou/busybox-android
 ---
  include/libbb.h |    4 ++--
  init/init.c     |    2 +-
- shell/ash.c     |    4 ++++
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ shell/ash.c     |    8 +++++++-
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
-index f22e58e..90b2866 100644
+index e520060..f91d635 100644
 --- a/include/libbb.h
 +++ b/include/libbb.h
-@@ -1757,12 +1757,12 @@ extern struct globals *const ptr_to_globals;
+@@ -1764,12 +1764,12 @@ extern struct globals *const ptr_to_globals;
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
@@ -32,7 +32,7 @@ index f22e58e..90b2866 100644
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
 diff --git a/init/init.c b/init/init.c
-index 7248946..8644cc8 100644
+index b84bdcc..b805a79 100644
 --- a/init/init.c
 +++ b/init/init.c
 @@ -1047,7 +1047,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
@@ -45,10 +45,10 @@ index 7248946..8644cc8 100644
  
  	if (argv[1])
 diff --git a/shell/ash.c b/shell/ash.c
-index b20c32b..5f75ed7 100644
+index 31fbc55..f9dad6a 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -13172,12 +13172,16 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13213,20 +13213,26 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  	if (iflag) {
  		const char *hp = lookupvar("HISTFILE");
  		if (!hp) {

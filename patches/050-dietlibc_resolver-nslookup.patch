@@ -16,23 +16,23 @@ http://dan.drown.org/android/src/libres/
  Makefile                  |    1 +
  libres/Kbuild.src         |   11 +++
  libres/Makefile           |   32 ++++++++
- libres/README             |    5 +
+ libres/README             |    5 ++
  libres/dietdns.h          |  189 +++++++++++++++++++++++++++++++++++++++++++++
- libres/dn_expand.c        |   13 +++
+ libres/dn_expand.c        |   12 +++
  libres/dnscruft.c         |  119 ++++++++++++++++++++++++++++
  libres/dnscruft2.c        |  132 +++++++++++++++++++++++++++++++
  libres/dnscruft3.c        |    6 ++
  libres/freeaddrinfo.c     |   14 ++++
  libres/gai_strerror.c     |   14 ++++
  libres/getaddrinfo.c      |  137 ++++++++++++++++++++++++++++++++
- libres/gethostbyname2_r.c |   35 ++++++++
+ libres/gethostbyname2_r.c |   35 +++++++++
  libres/h_errno.c          |    1 +
  libres/res_init.c         |   12 +++
- libres/res_mkquery.c      |   86 ++++++++++++++++++++
+ libres/res_mkquery.c      |   85 ++++++++++++++++++++
  libres/res_query.c        |   81 +++++++++++++++++++
  libres/test.c             |  105 +++++++++++++++++++++++++
- networking/nslookup.c     |   25 ++++---
- 19 files changed, 1007 insertions(+), 11 deletions(-)
+ networking/nslookup.c     |   25 +++---
+ 19 files changed, 1005 insertions(+), 11 deletions(-)
  create mode 100644 libres/Kbuild.src
  create mode 100644 libres/Makefile
  create mode 100644 libres/README
@@ -52,10 +52,10 @@ http://dan.drown.org/android/src/libres/
  create mode 100644 libres/test.c
 
 diff --git a/Makefile b/Makefile
-index 35d2e1e..71b2b93 100644
+index c31ca89..8e0226a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -475,6 +475,7 @@ libs-y		:= \
+@@ -476,6 +476,7 @@ libs-y		:= \
  		init/ \
  		libbb/ \
  		libpwdgrp/ \
@@ -326,7 +326,7 @@ index 0000000..9ae0b4d
 +#endif
 diff --git a/libres/dn_expand.c b/libres/dn_expand.c
 new file mode 100644
-index 0000000..90a400f
+index 0000000..9eb4587
 --- /dev/null
 +++ b/libres/dn_expand.c
 @@ -0,0 +1,12 @@
@@ -868,7 +868,7 @@ index 0000000..c3a7e6d
 +}
 diff --git a/libres/res_mkquery.c b/libres/res_mkquery.c
 new file mode 100644
-index 0000000..8a48aef
+index 0000000..a8cece6
 --- /dev/null
 +++ b/libres/res_mkquery.c
 @@ -0,0 +1,85 @@
@@ -1239,5 +1239,5 @@ index f4fd407..465f4b4 100644
  	/* (but it also says "may be enabled in /etc/resolv.conf") */
  	/*_res.options |= RES_USE_INET6;*/
 -- 
-1.7.0.4
+1.7.10.4
 
