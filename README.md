@@ -77,12 +77,17 @@ These errors indicate that the library is missing from androids libc implementat
  * CONFIG\_FEATURE\_IFCONFIG\_SLIP  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
  * CONFIG\_FEATURE\_SHADOWPASSWDS, CONFIG\_USE\_BB\_SHADOW  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
  * CONFIG\_HUSH  --  **has patch**  --  shell/hush.c:89:18: error: glob.h: No such file or directory
+ * CONFIG\_I2C*  --  miscutils/i2c\_tools.c:65:27: fatal error: linux/i2c-dev.h: No such file or directory
+  * disables CONFIG\_I2CGET, CONFIG\_I2CSET, CONFIG\_I2CDUMP, CONFIG\_I2CDETECT
  * CONFIG\_IFENSLAVE  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
  * CONFIG\_IFPLUGD  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
  * CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:25:21: error: sys/shm.h: No such file or directory
  * CONFIG\_MT  --  miscutils/mt.c:19:22: error: sys/mtio.h: No such file or directory
  * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
+ * CONFIG\_RFKILL  --  miscutils/rfkill.c:40:26: fatal error: linux/rfkill.h: No such file or directory
  * CONFIG\_SETARCH  --  util-linux/setarch.c:23:29: error: sys/personality.h: No such file or directory
+ * CONFIG\_TELNET  --  networking/telnet.c:39:25: fatal error: arpa/telnet.h: No such file or directory
+ * CONFIG\_TELNETD  --  networking/telnetd.c:53:25: fatal error: arpa/telnet.h: No such file or directory
  * CONFIG\_WATCHDOG  --  **has patch**  --  miscutils/watchdog.c:24:28: error: linux/watchdog.h: No such file or directory
  * CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
   * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL
@@ -95,6 +100,7 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_DF  --  undefined reference to 'setmntent', 'endmntent'
  * CONFIG\_FSCK  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
  * CONFIG\_MKFS\_EXT2  --  undefined reference to 'setmntent', 'endmntent'
+ * CONFIG\_MKFS\_REISER  --  undefined reference to 'setmntent', 'endmntent'
  * CONFIG\_MOUNTPOINT  --  undefined reference to 'setmntent', 'endmntent'
  * CONFIG\_MOUNT  --  undefined reference to 'setmntent', 'getmntent\_r'
  * CONFIG\_UMOUNT  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
@@ -116,8 +122,10 @@ Androids libc implementation claims to implement the methods in the error, but s
  * CONFIG\_HOSTID  --  undefined reference to 'gethostid'
  * CONFIG\_HOSTNAME  --  **has patch**  --  undefined reference to 'sethostname'
  * CONFIG\_LOGNAME  --  undefined reference to 'getlogin\_r'
+ * CONFIG\_MDEV  --  undefined reference to 'sigtimedwait'
  * CONFIG\_MICROCOM  --  **has patch**  --  undefined reference to 'cfsetspeed'
  * CONFIG\_NAMEIF  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
  * CONFIG\_PIVOT\_ROOT  --  **has patch**  --  undefined reference to 'pivot\_root'
  * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
+ * CONFIG\_SYNC  --   undefined reference to 'syncfs'
  * CONFIG\_UDHCPD  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
