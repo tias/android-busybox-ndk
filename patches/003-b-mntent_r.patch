@@ -1,0 +1,32 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Fri, 27 Nov 2015 13:50:30 -0400
+Subject: [PATCH] Fix mntent patch linking error "multiple definition of `getmntent'"
+
+---
+ libbb/mntent_r.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libbb/mntent_r.c b/libbb/mntent_r.c
+index 1077487..5660d0a 100644
+--- a/libbb/mntent_r.c
++++ b/libbb/mntent_r.c
+@@ -168,6 +168,7 @@ struct mntent *getmntent_r (FILE *stream, struct mntent *mp, char *buffer, int b
+   return mp;
+ }
+ 
++/* Comment out as libc/bionic/stubs.c now has this defined
+ struct mntent *getmntent (FILE *stream)
+ {
+   static struct mntent m;
+@@ -180,7 +181,7 @@ struct mntent *getmntent (FILE *stream)
+ 
+   return getmntent_r (stream, &m, getmntent_buffer, BUFFER_SIZE);
+   #undef BUFFER_SIZE
+-}
++}  */
+ 
+ 
+ /* We have to use an encoding for names if they contain spaces or tabs.
+-- 
+2.5.3
+
