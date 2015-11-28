@@ -1,0 +1,24 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Fri, 27 Nov 2015 11:39:34 -0400
+Subject: [PATCH 1/2] Fix mconf host "warning array subscript has type 'char'"
+
+---
+ scripts/kconfig/mconf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
+index 006d037..5c0adf0 100644
+--- a/scripts/kconfig/mconf.c
++++ b/scripts/kconfig/mconf.c
+@@ -766,7 +766,7 @@ static void conf(struct menu *menu)
+ 		if (!type)
+ 			continue;
+ 
+-		for (i = 0; input_buf[i] && !isspace(input_buf[i]); i++)
++		for (i = 0; (unsigned char)input_buf[i] && !isspace((unsigned char)input_buf[i]); i++)
+ 			;
+ 		if (i >= sizeof(active_entry))
+ 			i = sizeof(active_entry) - 1;
+-- 
+2.5.3
+

@@ -1,0 +1,24 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Fri, 27 Nov 2015 11:58:38 -0400
+Subject: [PATCH] Fix applet_tables host "warning array subscript has type 'char'"
+
+---
+ applets/applet_tables.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/applets/applet_tables.c b/applets/applet_tables.c
+index 92bf1e4..51ad8f9 100644
+--- a/applets/applet_tables.c
++++ b/applets/applet_tables.c
+@@ -53,7 +53,7 @@ static int cmp_name(const void *a, const void *b)
+ static int str_isalnum_(const char *s)
+ {
+ 	while (*s) {
+-		if (!isalnum(*s) && *s != '_')
++		if (!isalnum((unsigned char)*s) && (unsigned char)*s != '_')
+ 			return 0;
+ 		s++;
+ 	}
+-- 
+2.5.3
+

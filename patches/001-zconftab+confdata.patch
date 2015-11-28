@@ -1,0 +1,24 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Fri, 27 Nov 2015 11:49:59 -0400
+Subject: [PATCH] Fix zconf.tab/confdata host "warning array subscript has type 'char'"
+
+---
+ scripts/kconfig/confdata.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index 8f4ecbd..4c310ba 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -54,7 +54,7 @@ static char *conf_expand_value(const char *in)
+ 		strncat(res_value, in, src - in);
+ 		src++;
+ 		dst = name;
+-		while (isalnum(*src) || *src == '_')
++		while (isalnum((unsigned char)*src) || (unsigned char)*src == '_')
+ 			*dst++ = *src++;
+ 		*dst = 0;
+ 		sym = sym_lookup(name, 0);
+-- 
+2.5.3
+
