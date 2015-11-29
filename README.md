@@ -1,21 +1,24 @@
-The aim is to gather information and patches on how to build busybox using the compiler shipped with the android NDK.
+The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
+
 Currently up-to-date as of busybox 1.24.1, with added patches to avoid constant host warnings if compiling in Cygwin.
 
-Building busybox with the standard android NDK
+Building busybox with the standard Android NDK
 ==============================================
 
-tias-@-ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermail/busybox/2012-March/077486.html),[2](http://lists.busybox.net/pipermail/busybox/2012-March/077505.html)] of upstream changes make it possible to build the latest git version of busybox, __without requiring any patches__:
+tias@ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermail/busybox/2012-March/077486.html),[2](http://lists.busybox.net/pipermail/busybox/2012-March/077505.html)] of upstream changes make it possible to build the latest git version of busybox, __without requiring any patches__:
 
     # get busybox sources
     git clone git://busybox.net/busybox.git
     # use default upstream config
     cp configs/android_ndk_defconfig .config
     
-    # add the NDK cross-compilers to your exported PATH and CROSS_COMPILE prefix
+    # add the target NDK cross-compiler to your exported PATH and CROSS_COMPILE prefix
     export PATH="/path/to/your/android-ndk/android-ndk-r7b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin:$PATH"
     export CROSS_COMPILE="/path/to/your/android-ndk/android-ndk-r7b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-"
+    
     # if android-ndk is not installed in /opt/android-ndk, edit SYSROOT= in .config
-    xdg-open .config
+    # (alternately make all but CFLAGS blank if using standalone cross-compiler)
+    nano .config
     
     # adjust enabled applets/features (optional)
     make menuconfig
@@ -91,7 +94,7 @@ others
 
 Config options that give a linking error
 ----------------------------------------
-Androids libc implementation claims to implement the methods in the error, but surprisingly does not.
+Android's libc implementation claims to implement the methods in the error, but surprisingly does not.
 
 * mntent -- **has patch**
  * CONFIG\_DF  --  undefined reference to 'setmntent', 'endmntent'
