@@ -60,16 +60,16 @@ Config options that do not build, missing library
 -------------------------------------------------
 These errors indicate that the library is missing from androids libc implementation
 
-sys/sem.h  **has patch**
+sys/sem.h  --  **has patch**
 * CONFIG\_IPCS  --  util-linux/ipcs.c:32:21: error: sys/sem.h: No such file or directory
 * CONFIG\_LOGREAD  --  sysklogd/logread.c:20:21: error: sys/sem.h: No such file or directory
 * CONFIG\_SYSLOGD  --  sysklogd/syslogd.c:68:21: error: sys/sem.h: No such file or directory
 
-sys/kd.h
+sys/kd.h  --  **has patch**
 * CONFIG\_CONSPY  --  miscutils/conspy.c:45:20: error: sys/kd.h: No such file or directory
 * CONFIG\_LOADFONT, CONFIG\_SETFONT  --  console-tools/loadfont.c:33:20: error: sys/kd.h: No such file or directory
 
-arpa/telnet.h  **has patch**
+arpa/telnet.h  --  **has patch**
 * CONFIG\_TELNET  --  networking/telnet.c:39:25: error: arpa/telnet.h: No such file or directory
 * CONFIG\_TELNETD  --  networking/telnetd.c:53:25: error: arpa/telnet.h: No such file or directory
 
