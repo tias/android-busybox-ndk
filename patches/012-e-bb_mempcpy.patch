@@ -1,0 +1,31 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Thu, 3 Dec 2015 00:35:51 -0400
+Subject: [PATCH] Fix mempcpy patch error "redefinition of 'bb__mempcpy'"
+
+---
+ libbb/platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libbb/platform.c b/libbb/platform.c
+index a5672cf..9d39200 100644
+--- a/libbb/platform.c
++++ b/libbb/platform.c
+@@ -214,6 +214,7 @@ int ttyname_r(int fd, char *buf, size_t buflen)
+ }
+ #endif
+ 
++/* Comment out as busybox now appears to define this itself
+ #ifndef HAVE_MEMPCPY
+ void *mempcpy(void *dest, const void *src, size_t n)
+ {
+@@ -221,4 +222,4 @@ void *mempcpy(void *dest, const void *src, size_t n)
+   dest += n;
+   return dest;
+ }
+-#endif
+\ No newline at end of file
++#endif */
+\ No newline at end of file
+-- 
+2.5.3
+
