@@ -1,21 +1,24 @@
-From: Tanguy Pruvot <tanguy.pruvot@gmail.com>
-Date: Mon, 13 Feb 2012 20:13:11 +0100
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Thu, 3 Dec 2015 14:19:29 -0400
 Subject: [PATCH] modinfo/modprobe: use ifdef block for android without-utsrel modules path
 
 and fixes the modules.dep requirement, it is now optional...
 
+Patch by Tanguy Pruvot <tanguy.pruvot@gmail.com>
 Change-Id: Ifccb530fa23b021fd12e2395f5d0c66600b25c04
 from https://github.com/tpruvot/android_external_busybox
 
 and commit 2df42d3971f1e260e67c3fa4831cb9195fb276c4
 from https://github.com/tpruvot/android_external_busybox
+
+Rebased for busybox 1.24.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
- modutils/modinfo.c  |   40 ++++++++++++++++++++++++++++++++++------
- modutils/modprobe.c |   18 +++++++++++++++++-
+ modutils/modinfo.c  | 40 ++++++++++++++++++++++++++++++++++------
+ modutils/modprobe.c | 18 +++++++++++++++++-
  2 files changed, 51 insertions(+), 7 deletions(-)
 
 diff --git a/modutils/modinfo.c b/modutils/modinfo.c
-index 7c978d1..10b2e0a 100644
+index 8e74b64..ad3455b 100644
 --- a/modutils/modinfo.c
 +++ b/modutils/modinfo.c
 @@ -22,6 +22,9 @@
@@ -31,7 +34,7 @@ index 7c978d1..10b2e0a 100644
 @@ -63,7 +66,7 @@ static void modinfo(const char *path, const char *version,
  	};
  	size_t len;
- 	int j, length;
+ 	int j;
 -	char *ptr, *the_module;
 +	char *ptr, *fullpath, *the_module;
  	const char *field = env->field;
@@ -63,7 +66,7 @@ index 7c978d1..10b2e0a 100644
  	}
  
  	if (field)
-@@ -145,9 +158,23 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
+@@ -148,9 +161,23 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
  	uname(&uts);
  	parser = config_open2(
  		xasprintf("%s/%s/%s", CONFIG_DEFAULT_MODULES_DIR, uts.release, CONFIG_DEFAULT_DEPMOD_FILE),
@@ -88,7 +91,7 @@ index 7c978d1..10b2e0a 100644
  	while (config_read(parser, tokens, 2, 1, "# \t", PARSE_NORMAL)) {
  		colon = last_char_is(tokens[0], ':');
  		if (colon == NULL)
-@@ -164,6 +191,7 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
+@@ -167,6 +194,7 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
  	if (ENABLE_FEATURE_CLEAN_UP)
  		config_close(parser);
  
@@ -97,10 +100,10 @@ index 7c978d1..10b2e0a 100644
  		if (argv[i][0]) {
  			modinfo(argv[i], uts.release, &env);
 diff --git a/modutils/modprobe.c b/modutils/modprobe.c
-index fb6c659..9143dcd 100644
+index 314a7a1..c95afda 100644
 --- a/modutils/modprobe.c
 +++ b/modutils/modprobe.c
-@@ -147,6 +147,10 @@ static const char modprobe_longopts[] ALIGN1 =
+@@ -150,6 +150,10 @@ static const char modprobe_longopts[] ALIGN1 =
  #define MODULE_FLAG_FOUND_IN_MODDEP     0x0004
  #define MODULE_FLAG_BLACKLISTED         0x0008
  
@@ -111,7 +114,7 @@ index fb6c659..9143dcd 100644
  struct module_entry { /* I'll call it ME. */
  	unsigned flags;
  	char *modname; /* stripped of /path/, .ext and s/-/_/g */
-@@ -446,10 +450,17 @@ static int do_modprobe(struct module_entry *m)
+@@ -482,10 +486,17 @@ static int do_modprobe(struct module_entry *m)
  			options = gather_options_str(options, G.cmdline_mopts);
  
  		if (option_mask32 & OPT_SHOW_DEPS) {
@@ -129,7 +132,7 @@ index fb6c659..9143dcd 100644
  			free(options);
  			continue;
  		}
-@@ -531,6 +542,7 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
+@@ -567,6 +578,7 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
  	int rc;
  	unsigned opt;
  	struct module_entry *me;
@@ -137,7 +140,7 @@ index fb6c659..9143dcd 100644
  
  	INIT_G();
  
-@@ -541,8 +553,12 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
+@@ -577,8 +589,12 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
  
  	/* Goto modules location */
  	xchdir(CONFIG_DEFAULT_MODULES_DIR);
@@ -152,5 +155,5 @@ index fb6c659..9143dcd 100644
  	if (opt & OPT_LIST_ONLY) {
  		int i;
 -- 
-1.7.10.4
+2.5.3
 
