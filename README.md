@@ -30,9 +30,9 @@ These applets are available without any patches:
 > [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iproute, iprule, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nandump, nandwrite, nbd-client, nc, netstat, nice, nmeter, nohup, od, openvt, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, slattach, sleep, smemcap, softlimit, sort, split, start-stop-daemon, stat, strings, stty, sum, sv, svlogd, switch\_root, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, time, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xz, xzcat, yes, zcat
 
 By **applying the included patches** to the busybox code-base you additionally get:
-> arping, conspy, df, ether-wake, fsck, fsck.minix, hush, ipcrm, ipcs, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont; swapon, swapoff, syslogd, telnet, telnetd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
+> arping, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont; swapon, swapoff, syslogd, telnet, telnetd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
 
-(when cherry-picking certain patches you should include all patches with a lower number as well, there are often dependencies between them).
+(when applying certain patches you should include all patches with a lower number as well, there are often dependencies between them).
 
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
@@ -54,6 +54,7 @@ These errors indicate bugs (usually in the restricted android libc library, call
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
 * CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
 * CONFIG\_SWAPONOFF  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
+* CONFIG\_USE\_BB\_PWD\_GRP  --  libpwdgrp/pwd_grp.c:72:3: error: 'struct passwd' has no member named 'pw_gecos'
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
 Config options that do not build, missing library
@@ -74,15 +75,16 @@ arpa/telnet.h  --  **has patch**
 * CONFIG\_TELNETD  --  networking/telnetd.c:53:25: error: arpa/telnet.h: No such file or directory
 
 others
-* CONFIG\_EJECT  --  miscutils/eject.c:30:21: error: scsi/sg.h: No such file or directory
+* CONFIG\_EJECT  --  **has patch**  --  miscutils/eject.c:30:21: error: scsi/sg.h: No such file or directory
 * CONFIG\_FEATURE\_HAVE\_RPC, CONFIG\_FEATURE\_INETD\_RPC  --  networking/inetd.c:176:22: error: rpc/rpc.h: No such file or directory
-* CONFIG\_FEATURE\_IFCONFIG\_SLIP  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
-* CONFIG\_FEATURE\_SHADOWPASSWDS, CONFIG\_USE\_BB\_SHADOW  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
+* CONFIG\_FEATURE\_IFCONFIG\_SLIP  -- **has patch**  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
+* CONFIG\_FEATURE\_SHADOWPASSWDS  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
+ * CONFIG\_USE\_BB\_PWD\_GRP, CONFIG\_USE\_BB\_SHADOW would potentially work around, but there is a code error as listed above
 * CONFIG\_HUSH  --  **has patch**  --  shell/hush.c:89:18: error: glob.h: No such file or directory
 * CONFIG\_I2C*  --  miscutils/i2c\_tools.c:65:27: error: linux/i2c-dev.h: No such file or directory
  * disables CONFIG\_I2CGET, CONFIG\_I2CSET, CONFIG\_I2CDUMP, CONFIG\_I2CDETECT
-* CONFIG\_IFENSLAVE  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
-* CONFIG\_IFPLUGD  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
+* CONFIG\_IFENSLAVE  --  **has patch**  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
+* CONFIG\_IFPLUGD  --  **has patch**  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
 * CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:25:21: error: sys/shm.h: No such file or directory
 * CONFIG\_MT  --  miscutils/mt.c:19:22: error: sys/mtio.h: No such file or directory
 * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
