@@ -1,0 +1,24 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Fri, 4 Dec 2015 12:45:40 -0400
+Subject: [PATCH] Fix checklist host "warning array subscript has type 'char'"
+
+---
+ scripts/kconfig/lxdialog/checklist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/kconfig/lxdialog/checklist.c b/scripts/kconfig/lxdialog/checklist.c
+index be0200e..0a4944a 100644
+--- a/scripts/kconfig/lxdialog/checklist.c
++++ b/scripts/kconfig/lxdialog/checklist.c
+@@ -205,7 +205,7 @@ int dialog_checklist(const char *title, const char *prompt, int height,
+ 
+ 		for (i = 0; i < max_choice; i++)
+ 			if (toupper(key) ==
+-			    toupper(items[(scroll + i) * 3 + 1][0]))
++			    toupper((unsigned char)items[(scroll + i) * 3 + 1][0]))
+ 				break;
+ 
+ 		if (i < max_choice || key == KEY_UP || key == KEY_DOWN ||
+-- 
+2.5.3
+
