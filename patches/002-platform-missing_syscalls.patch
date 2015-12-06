@@ -1,0 +1,43 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Sat, 5 Dec 2015 14:57:28 -0400
+Subject: [PATCH] resolve linker issues with Android API 21 - dprintf is
+ now used, not fdprintf - tcdrain is now defined
+
+---
+ include/platform.h       | 4 +++-
+ libbb/missing_syscalls.c | 2 ++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/include/platform.h b/include/platform.h
+index 1706b18..d6107cb 100644
+--- a/include/platform.h
++++ b/include/platform.h
+@@ -483,7 +483,9 @@ typedef unsigned smalluint;
+ # if __ANDROID_API__ < 8
+ #  undef HAVE_DPRINTF
+ # else
+-#  define dprintf fdprintf
++#  if __ANDROID_API__ < 21
++#   define dprintf fdprintf
++#  endif
+ # endif
+ # if __ANDROID_API__ < 21
+ #  undef HAVE_TTYNAME_R
+diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
+index e3c1e92..c18848c 100644
+--- a/libbb/missing_syscalls.c
++++ b/libbb/missing_syscalls.c
+@@ -40,8 +40,10 @@ int pivot_root(const char *new_root, const char *put_old)
+ 	return syscall(__NR_pivot_root, new_root, put_old);
+ }
+ 
++# if __ANDROID_API__ < 21
+ int tcdrain(int fd)
+ {
+ 	return ioctl(fd, TCSBRK, 1);
+ }
++#endif
+ #endif
+-- 
+2.5.3
+
