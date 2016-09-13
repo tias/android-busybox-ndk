@@ -12,8 +12,8 @@ index ea9dd3d..c378593 100644
 +++ b/Makefile
 @@ -1,7 +1,7 @@
  VERSION = 1
- PATCHLEVEL = 24
- SUBLEVEL = 2
+ PATCHLEVEL = 25
+ SUBLEVEL = 0
 -EXTRAVERSION =
 +EXTRAVERSION = -osm0sis
  NAME = Unnamed
