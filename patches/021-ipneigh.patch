@@ -1,0 +1,26 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Tue, 13 Sep 2016 02:34:27 -0300
+Subject: [PATCH] Fix ipneigh missing header and redefinition errors since all
+ the necessary defines are included elsewhere in bionic
+
+---
+ networking/libiproute/ipneigh.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/networking/libiproute/ipneigh.c b/networking/libiproute/ipneigh.c
+index 2a1c20e..cabd9fc 100644
+--- a/networking/libiproute/ipneigh.c
++++ b/networking/libiproute/ipneigh.c
+@@ -11,7 +11,9 @@
+ #include "common_bufsiz.h"
+ #include "rt_names.h"
+ #include "utils.h"
++#if !defined(ANDROID) && !defined(__ANDROID__)
+ #include <linux/neighbour.h>
++#endif
+ #include <net/if_arp.h>
+ 
+ //static int xshow_stats = 3;
+-- 
+2.8.3
+
