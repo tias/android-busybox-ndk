@@ -21,9 +21,9 @@ index 3e101ba..30bcff6 100644
 --- a/include/platform.h
 +++ b/include/platform.h
 @@ -449,6 +449,7 @@ typedef unsigned smalluint;
+ # undef HAVE_STRVERSCMP
  # undef HAVE_UNLOCKED_LINE_OPS
  # undef HAVE_NET_ETHERNET_H
- # undef HAVE_MEMPCPY
 +# undef HAVE_SETBIT
  #endif
  
