@@ -13,7 +13,7 @@ index ea9dd3d..c378593 100644
 @@ -1,7 +1,7 @@
  VERSION = 1
  PATCHLEVEL = 25
- SUBLEVEL = 0
+ SUBLEVEL = 1
 -EXTRAVERSION =
 +EXTRAVERSION = -osm0sis
  NAME = Unnamed
