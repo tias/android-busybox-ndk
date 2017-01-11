@@ -1,5 +1,5 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Sat, 28 Nov 2015 07:16:25 -0400
+Date: Tue, 10 Jan 2017 13:51:10 -0400
 Subject: [PATCH] Add custom busybox version tagging
 
 ---
@@ -12,8 +12,8 @@ index ea9dd3d..c378593 100644
 +++ b/Makefile
 @@ -1,7 +1,7 @@
  VERSION = 1
- PATCHLEVEL = 25
- SUBLEVEL = 1
+ PATCHLEVEL = 26
+ SUBLEVEL = 2
 -EXTRAVERSION =
 +EXTRAVERSION = -osm0sis
  NAME = Unnamed
