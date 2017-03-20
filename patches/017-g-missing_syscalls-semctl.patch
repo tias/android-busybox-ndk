@@ -1,4 +1,3 @@
-From 4fe833634cc56aae7e66858634335d52a9ec36b4 Mon Sep 17 00:00:00 2001
 From: Umakanthan Chandran <cumakt@gmail.com>
 Date: Fri, 3 Mar 2017 07:32:22 +0530
 Subject: [PATCH] missing_syscalls/semctl: fix missing definitions on x86 and
