@@ -32,8 +32,10 @@ These applets are available without any patches:
 By **applying the included patches** to the busybox code-base you additionally get:
 > arping, blkdiscard, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont, swapon, swapoff, syslogd, telnet, telnetd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
 
-(when applying certain patches you should include all patches with a lower number as well, there are often dependencies between them).
+Also worth noting that while they do build without issue these applets do not work correctly on Android without any patches:
+> poweroff, reboot
 
+(when applying certain patches you should include all patches with a lower number as well, there are often dependencies between them).
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
