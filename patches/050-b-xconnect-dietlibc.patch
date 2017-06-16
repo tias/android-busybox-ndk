@@ -1,4 +1,4 @@
-From: Chris Renhsaw <osm0sis@outlook.com>
+From: Chris Renshaw <osm0sis@outlook.com>
 Date: Tue, 11 Apr 2017 07:50:46 -0300
 Subject: [PATCH] hack: use dietlibc's resolver to avoid static compiliation
  issues with bionic's getaddrinfo() returning only null instead of opening the
