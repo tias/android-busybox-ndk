@@ -1,6 +1,6 @@
 The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
 
-Currently up-to-date as of busybox 1.26.2, with added patches to avoid constant host warnings if compiling in Cygwin.
+Currently up-to-date as of busybox 1.27.1, with added patches to avoid constant host warnings if compiling in Cygwin.
 
 Building busybox with the standard Android NDK
 ==============================================
@@ -27,7 +27,7 @@ tias@ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermai
     make ARCH=arm CROSS_COMPILE="$CROSS_COMPILE"
 
 These applets are available without any patches:
-> [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nmeter, nohup, od, openvt, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, slattach, sleep, smemcap, softlimit, sort, split, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xz, xzcat, yes, zcat
+> [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, factor, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsfreeze, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, link, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsscsi, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nl, nmeter, nohup, od, openvt, partprobe, paste, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setpriv, setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, shred, slattach, sleep, smemcap, softlimit, sort, split, ssl_client, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
 
 By **applying the included patches** to the busybox code-base you additionally get:
 > arping, blkdiscard, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont, swapon, swapoff, syslogd, telnet, telnetd, time, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
@@ -96,6 +96,7 @@ others
 * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
 * CONFIG\_RFKILL  --  **has patch**  --  miscutils/rfkill.c:40:26: error: linux/rfkill.h: No such file or directory
 * CONFIG\_WATCHDOG  --  **has patch**  --  miscutils/watchdog.c:24:28: error: linux/watchdog.h: No such file or directory
+* CONFIG\_UDHCPC6  --  **has patch**  --  networking/udhcp/d6\_socket.c:10:21: fatal error: ifaddrs.h: No such file or directory
 * CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
   * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL, CONFIG\_UBIRENAME
 
@@ -114,6 +115,7 @@ mntent -- **has patch**
  * CONFIG\_UMOUNT  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
 
 others
+ * CONFIG\_FALLOCATE  --  undefined reference to 'posix\_fallocate'
  * CONFIG\_FEATURE\_HTTPD\_AUTH\_MD5  --  undefined reference to 'crypt'
  * CONFIG\_FEATURE\_SYNC\_FANCY  --   undefined reference to 'syncfs'
  * CONFIG\_HOSTID  --  undefined reference to 'gethostid'
@@ -121,7 +123,9 @@ others
  * CONFIG\_MDEV  --  undefined reference to 'sigtimedwait'
  * CONFIG\_MICROCOM  --  **has patch**  --  undefined reference to 'cfsetspeed'
  * CONFIG\_NAMEIF  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
+ * CONFIG\_NPROC  -- undefined reference to 'sched\_getaffinity'
  * CONFIG\_NSENTER  --  undefined reference to 'setns'
  * CONFIG\_TIME  -- **has patch**  --  undefined reference to 'wait3'
+ * CONFIG\_UDHCPC6  --  **has patch**  --  undefined reference to 'getifaddrs', 'freeifaddrs'
  * CONFIG\_UDHCPD  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
  * CONFIG\_UNSHARE  --  undefined reference to 'unshare'
