@@ -30,7 +30,7 @@ These applets are available without any patches:
 > [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, factor, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsfreeze, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, link, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsscsi, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nl, nmeter, nohup, od, openvt, partprobe, paste, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setpriv, setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, shred, slattach, sleep, smemcap, softlimit, sort, split, ssl_client, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
 
 By **applying the included patches** to the busybox code-base you additionally get:
-> arping, blkdiscard, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont, swapon, swapoff, syslogd, telnet, telnetd, time, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
+> arping, blkdiscard, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, setfont, swapon, swapoff, syslogd, telnet, telnetd, time, traceroute6, ubi*, udhcpc6, udhcpd, umount, watchdog, zcip
 
 Also worth noting that while they do build without issue these applets do not work correctly on Android without any patches:
 > poweroff, reboot
@@ -59,6 +59,7 @@ These errors indicate bugs (usually in the restricted Android libc library, call
 * CONFIG\_NANDDUMP, CONFIG\_NANDWRITE  --  **has patch**  --  miscutils/nandwrite.c:151:35: error: 'MTD_FILE_MODE_RAW' undeclared (first use in this function)
 * CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
 * CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT_NOAUTO' undeclared (first use in this function)
+* CONFIG\_TLS  --  **has patch**  --  networking/tls\_pstm\_montgomery\_reduce.c:66:1: error: 'asm' operand has impossible constraints
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
 Config options that do not build, missing library
@@ -90,13 +91,13 @@ others
 * CONFIG\_IFENSLAVE  --  **has patch**  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
 * CONFIG\_IFPLUGD  --  **has patch**  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
 * CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:25:21: error: sys/shm.h: No such file or directory
-* CONFIG\_IPNEIGH -- **has patch**  --  networking/libiproute/ipneigh.c:14:29: fatal error: linux/neighbour.h: No such file or directory
+* CONFIG\_IPNEIGH -- **has patch**  --  networking/libiproute/ipneigh.c:14:29: error: linux/neighbour.h: No such file or directory
 * CONFIG\_LINUX32, CONFIG_LINUX64, CONFIG\_SETARCH  --  util-linux/setarch.c:23:29: error: sys/personality.h: No such file or directory
 * CONFIG\_MT  --  miscutils/mt.c:19:22: error: sys/mtio.h: No such file or directory
 * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
 * CONFIG\_RFKILL  --  **has patch**  --  miscutils/rfkill.c:40:26: error: linux/rfkill.h: No such file or directory
 * CONFIG\_WATCHDOG  --  **has patch**  --  miscutils/watchdog.c:24:28: error: linux/watchdog.h: No such file or directory
-* CONFIG\_UDHCPC6  --  **has patch**  --  networking/udhcp/d6\_socket.c:10:21: fatal error: ifaddrs.h: No such file or directory
+* CONFIG\_UDHCPC6  --  **has patch**  --  networking/udhcp/d6\_socket.c:10:21: error: ifaddrs.h: No such file or directory
 * CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
   * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL, CONFIG\_UBIRENAME
 
