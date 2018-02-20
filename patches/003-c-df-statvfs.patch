@@ -1,0 +1,24 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Tue, 20 Feb 2018 15:57:18 -0400
+Subject: [PATCH] Fix df missing header on API <21
+
+Wrap functionality to working header/struct for these platform revisions.
+---
+ include/sys/statvfs.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 include/sys/statvfs.h
+
+diff --git a/include/sys/statvfs.h b/include/sys/statvfs.h
+new file mode 100644
+index 000000000..91e49dc20
+--- /dev/null
++++ b/include/sys/statvfs.h
+@@ -0,0 +1,5 @@
++/* Get the system-specific definition of `struct statfs'.  */
++#include <sys/vfs.h>
++
++/* Hack for Android API <21 since it does not include sys/statvfs.h */
++#define statvfs statfs
+-- 
+2.16.1
+
