@@ -1,23 +1,23 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Sat, 28 Nov 2015 06:33:57 -0400
+Date: Fri, 16 Feb 2018 17:13:57 -0400
 Subject: [PATCH] ash history
 
 allows ash history to work on Android
 
 Patch modified by Tias Guns <tias@ulyssis.org> from 'busybox-android.patch' by Alexandre Courbot
 https://github.com/Gnurou/busybox-android
-Rebased for busybox 1.24.1 by Chris Renshaw <osm0sis@outlook.com>
+Rebased for busybox 1.28.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
  include/libbb.h | 4 ++--
  init/init.c     | 2 +-
- shell/ash.c     | 8 +++++++-
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ shell/ash.c     | 8 ++++++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
-index a8ceb44..b78a99a 100644
+index 1dbec3d0f..6287a877f 100644
 --- a/include/libbb.h
 +++ b/include/libbb.h
-@@ -1844,12 +1844,12 @@ extern struct globals *const ptr_to_globals;
+@@ -2038,12 +2038,12 @@ extern struct globals *const ptr_to_globals;
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
@@ -33,10 +33,10 @@ index a8ceb44..b78a99a 100644
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
 diff --git a/init/init.c b/init/init.c
-index 80c5d0f..5299c4f 100644
+index 6f3374eac..77c6d03a6 100644
 --- a/init/init.c
 +++ b/init/init.c
-@@ -1072,7 +1072,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+@@ -1101,7 +1101,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
  	/* Make sure environs is set to something sane */
  	putenv((char *) "HOME=/");
  	putenv((char *) bb_PATH_root_path);
@@ -46,16 +46,19 @@ index 80c5d0f..5299c4f 100644
  
  	if (argv[1])
 diff --git a/shell/ash.c b/shell/ash.c
-index 8a1628e..d69cfff 100644
+index b73a79975..8a7e83df6 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -13154,11 +13154,13 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13743,7 +13743,7 @@ procargs(char **argv)
+ 	int login_sh;
  
- 	if (argv[0] && argv[0][0] == '-')
- 		isloginsh = 1;
-+	else
-+		isloginsh = 1;
- 	if (isloginsh) {
+ 	xargv = argv;
+-	login_sh = xargv[0] && xargv[0][0] == '-';
++	login_sh = 1; /* = xargv[0] && xargv[0][0] == '-'; - make always true for Android */
+ 	arg0 = xargv[0];
+ 	/* if (xargv[0]) - mmm, this is always true! */
+ 		xargv++;
+@@ -13915,7 +13915,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  		const char *hp;
  
  		state = 1;
@@ -64,7 +67,7 @@ index 8a1628e..d69cfff 100644
   state1:
  		state = 2;
  		hp = lookupvar("HOME");
-@@ -13199,6 +13201,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -13953,6 +13953,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  		if (iflag) {
  			const char *hp = lookupvar("HISTFILE");
  			if (!hp) {
@@ -73,9 +76,9 @@ index 8a1628e..d69cfff 100644
 +#else
  				hp = lookupvar("HOME");
  				if (hp) {
- 					hp = concat_path_file(hp, ".ash_history");
-@@ -13206,6 +13211,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
- 					free((char*)hp);
+ 					INT_OFF;
+@@ -13962,6 +13965,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+ 					INT_ON;
  					hp = lookupvar("HISTFILE");
  				}
 +#endif
@@ -83,5 +86,5 @@ index 8a1628e..d69cfff 100644
  			if (hp)
  				line_input_state->hist_file = hp;
 -- 
-2.5.3
+2.16.1
 
