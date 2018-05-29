@@ -1,6 +1,6 @@
 The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
 
-Currently up-to-date as of busybox 1.28.3, with added patches to avoid constant host warnings if compiling in Cygwin.
+Currently up-to-date as of busybox 1.28.4, with added patches to avoid constant host warnings if compiling in Cygwin.
 
 Building busybox with the standard Android NDK
 ==============================================
