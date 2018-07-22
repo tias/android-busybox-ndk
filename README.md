@@ -1,6 +1,6 @@
 The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
 
-Currently up-to-date as of busybox 1.28.4, with added patches to avoid constant host warnings if compiling in Cygwin.
+Currently up-to-date as of busybox 1.29.1, with added patches to avoid constant host warnings if compiling in Cygwin.
 
 Building busybox with the standard Android NDK
 ==============================================
@@ -26,15 +26,11 @@ tias@ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermai
     # build it!
     make ARCH=arm CROSS_COMPILE="$CROSS_COMPILE"
 
-**NOTE:** Currently there is no way to compile busybox on Android NDK API <21 without changes due to a [compatibility issue](https://bugs.busybox.net/show_bug.cgi?id=10791) introduced with the run-init applet, but it can be worked around easily by reverting the run-init commits as follows:
-
-    git revert --no-edit 7d834c9bb436edd594ebacc48d2b9ea7d3364dbd bbc26c6934fac218e19c7897f2dc2e6084e963b0 200bcc851acbe1ba30fe90b5cf918f88370a5d15
-
 These applets are available without any patches:
-> [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, factor, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsfreeze, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, link, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsscsi, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nl, nmeter, nohup, od, openvt, partprobe, paste, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setpriv (without capabilities), setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, shred, slattach, sleep, smemcap, softlimit, sort, split, ssl_client, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, sync, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
+> [, [[, acpid, adjtimex, ar, arp, ash, awk, base64, basename, bbconfig, beep, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, factor, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsfreeze, fsync, ftpget, ftpput, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, link, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsscsi, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nl, nmeter, nohup, od, openvt, partprobe, paste, patch, pidof, ping, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setpriv (without capabilities), setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, shred, slattach, sleep, smemcap, softlimit, sort, split, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, test, tftp, tftpd, timeout, top, touch, tr, traceroute, true, tty, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xxd, xz, xzcat, yes, zcat
 
 By **applying the included patches** to the busybox code-base you additionally get:
-> arping, blkdiscard, conspy, df, eject, ether-wake, fsck, fsck.minix, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, run-init, setfont, swapon, swapoff, switch\_root, syslogd, telnet, telnetd, time, traceroute6, ubi*, udhcpc6, udhcpd, umount, watchdog, zcip
+> arping, blkdiscard, conspy, chrt, df, eject, ether-wake, fsck, fsck.minix, ftpd, hush, ifenslave, ifplugd, ipcrm, ipcs, ipneigh, iproute, iprule, loadfont, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nanddump, nandwrite, nameif, nslookup (with own resolver), pgrep, ping6, rfkill, run-init, setfont, ssl_client, swapon, swapoff, syslogd, tc, telnet, telnetd, time, traceroute6, ubi*, udhcpc6, udhcpd, umount, watchdog, zcip
 
 Also worth noting that while they do build without issue these applets do not work correctly on Android without any patches:
 > poweroff, reboot
@@ -47,25 +43,28 @@ Config options that do not build, code error
 --------------------------------------------
 These errors indicate bugs (usually in the restricted Android libc library, called bionic), and can often be fixed by adding patches to the busybox code.
 
-* All of *Login/Password Management Utilities*, CONFIG\_USE\_BB\_PWD\_GRP  --  error: 'struct passwd' has no member named 'pw_gecos'
+* All of *Login/Password Management Utilities*, CONFIG\_USE\_BB\_PWD\_GRP  --  error: 'struct passwd' has no member named 'pw\_gecos'
   * disables CONFIG\_ADD\_SHELL, CONFIG\_REMOVE\_SHELL, CONFIG\_ADDUSER, CONFIG\_ADDGROUP, CONFIG\_DELUSER, CONFIG\_DELGROUP, CONFIG\_GETTY, CONFIG\_LOGIN, CONFIG\_PASSWD, CONFIG\_CRYPTPW, CONFIG\_CHPASSWD, CONFIG\_MKPASSWD, CONFIG\_SU, CONFIG\_SULOGIN, CONFIG\_VLOCK
 * CONFIG\_ARPING  --  **has patch**  --  networking/arping.c:96: error: invalid use of undefined type 'struct arphdr'
 * CONFIG\_BLKDISCARD  --  **has patch**  --  util-linux/blkdiscard.c:72:26: error: 'BLKSECDISCARD' undeclared (first use in this function)
-* CONFIG\_ETHER\_WAKE  --  **has patch**  --  networking/ether-wake.c:275: error: 'ETH_ALEN' undeclared (first use in this function)
-* CONFIG\_FEATURE\_IP\_ROUTE, CONFIG\_FEATURE\_IP\_RULE, CONFIG\_IP\_ROUTE, CONFIG\_IPRULE  --  **has patch**  --  networking/libiproute/iproute.c:85:9: error: 'RTA_TABLE' undeclared (first use in this function)
-* CONFIG\_FEATURE\_IPV6  --  **has patch**    --  networking/ifconfig.c:82: error: redefinition of 'struct in6_ifreq'
+* CONFIG\_CHRT  --  **has patch**   --  util-linux/chrt.c:95:16: error: 'SCHED\_BATCH' undeclared (first use in this function)
+* CONFIG\_ETHER\_WAKE  --  **has patch**  --  networking/ether-wake.c:275: error: 'ETH\_ALEN' undeclared (first use in this function)
+* CONFIG\_FEATURE\_IP\_ROUTE, CONFIG\_FEATURE\_IP\_RULE, CONFIG\_IP\_ROUTE, CONFIG\_IPRULE  --  **has patch**  --  networking/libiproute/iproute.c:85:9: error: 'RTA\_TABLE' undeclared (first use in this function)
+* CONFIG\_FEATURE\_IPV6  --  **has patch**    --  networking/ifconfig.c:82: error: redefinition of 'struct in6\_ifreq'
   * disables CONFIG\_PING6, CONFIG\_FEATURE\_IFUPDOWN\_IPV6, CONFIG\_TRACEROUTE6
-* CONFIG\_FEATURE\_UTMP, CONFIG\_FEATURE\_WTMP  --  init/halt.c:86: error: 'RUN_LVL' undeclared (first use in this function)
+* CONFIG\_FEATURE\_NSLOOKUP\_BIG, CONFIG\_FEATURE\_NSLOOKUP\_LONG\_OPTIONS  --  networking/nslookup.c:278:4: error: 'ns\_t\_soa' undeclared here (not in a function)
+* CONFIG\_FEATURE\_UTMP, CONFIG\_FEATURE\_WTMP  --  init/halt.c:86: error: 'RUN\_LVL' undeclared (first use in this function)
   * disables CONFIG\_WHO, CONFIG\_USERS, CONFIG\_LAST, CONFIG\_RUNLEVEL, CONFIG\_WALL
-* CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  **has patch**  --  util-linux/fsck\_minix.c:111: error: 'INODE_SIZE1' undeclared here (not in a function)
-* CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  **has patch (experimental)**  --  include/libbb.h:256: error: size of array 'BUG_off_t_size_is_misdetected' is negative
+* CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  **has patch**  --  util-linux/fsck\_minix.c:111: error: 'INODE\_SIZE1' undeclared here (not in a function)
+* CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  **has patch (experimental)**  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
-* CONFIG\_NANDDUMP, CONFIG\_NANDWRITE  --  **has patch**  --  miscutils/nandwrite.c:151:35: error: 'MTD_FILE_MODE_RAW' undeclared (first use in this function)
+* CONFIG\_NANDDUMP, CONFIG\_NANDWRITE  --  **has patch**  --  miscutils/nandwrite.c:151:35: error: 'MTD\_FILE\_MODE\_RAW' undeclared (first use in this function)
 * CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
-* **CONFIG\_PLATFORM\_LINUX**  --  **has patch**  --  libbb/capability.c:94:3: error: '_LINUX_CAPABILITY_U32S_3' undeclared (first use in this function)
-* CONFIG\_RUN\_INIT  --  **has patch**  --  util-linux/switch_root.c:121:14: error: 'PR_CAPBSET_READ' undeclared (first use in this function)
-* CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT_NOAUTO' undeclared (first use in this function)
+* CONFIG\_RUN\_INIT  --  **has patch**  --  libbb/capability.c:95:3: error: '\_LINUX\_CAPABILITY\_U32S\_3' undeclared (first use in this function)
+* CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
+* CONFIG\_TC  --  **has patch**  --  networking/tc.c:291:9: error: 'struct tc\_ratespec' has no member named 'overhead'
 * CONFIG\_TLS  --  **has patch**  --  networking/tls\_pstm\_montgomery\_reduce.c:66:1: error: 'asm' operand has impossible constraints
+  * disables CONFIG\_SSL\_CLIENT, CONFIG\_FEATURE\_WGET\_HTTPS
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
 Config options that do not build, missing library
@@ -88,6 +87,7 @@ arpa/telnet.h  --  **has patch**
 others
 * CONFIG\_DF  --  **has patch**  --  coreutils/df.c:80:25: error: sys/statvfs.h: No such file or directory
 * CONFIG\_EJECT  --  **has patch**  --  miscutils/eject.c:30:21: error: scsi/sg.h: No such file or directory
+* CONFIG\_FEATURE\_FTPD\_AUTHENTICATION, CONFIG\_FTPD  --  **has patch**  --  libbb/pw\_encrypt.c:9:19: fatal error: crypt.h: No such file or directory
 * CONFIG\_FEATURE\_HAVE\_RPC, CONFIG\_FEATURE\_INETD\_RPC  --  networking/inetd.c:176:22: error: rpc/rpc.h: No such file or directory
 * CONFIG\_FEATURE\_IFCONFIG\_SLIP  -- **has patch**  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
 * CONFIG\_FEATURE\_SHADOWPASSWDS  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
