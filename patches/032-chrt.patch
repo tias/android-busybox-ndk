@@ -1,0 +1,25 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Sun, 22 Jul 2018 02:27:18 -0300
+Subject: [PATCH] chrt: fix SCHED_BATCH definition on Android API <21
+
+---
+ util-linux/chrt.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/util-linux/chrt.c b/util-linux/chrt.c
+index 45459d940..b0f7846d9 100644
+--- a/util-linux/chrt.c
++++ b/util-linux/chrt.c
+@@ -35,6 +35,9 @@
+ 
+ #include <sched.h>
+ #include "libbb.h"
++#ifndef SCHED_BATCH
++# define SCHED_BATCH 3
++#endif
+ #ifndef SCHED_IDLE
+ # define SCHED_IDLE 5
+ #endif
+-- 
+2.17.0
+
