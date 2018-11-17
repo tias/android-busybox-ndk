@@ -58,6 +58,7 @@ These errors indicate bugs (usually in the restricted Android libc library, call
 * CONFIG\_NANDDUMP, CONFIG\_NANDWRITE  --  **has patch**  --  miscutils/nandwrite.c:151:35: error: 'MTD\_FILE\_MODE\_RAW' undeclared (first use in this function)
 * CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
 * CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
+* CONFIG\_TLS  --  **has patch**  --  networking/tls\_pstm\_montgomery\_reduce.c:66:1: error: 'asm' operand has impossible constraints
   * disables CONFIG\_SSL\_CLIENT, CONFIG\_FEATURE\_WGET\_HTTPS
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
 
