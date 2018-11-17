@@ -69,7 +69,7 @@ index 68f846a..5ddd07f 100644
 --- a/libbb/semctl.c
 +++ b/libbb/semctl.c
 @@ -27,6 +27,10 @@
- #include <linux/sem.h>
+ #include <sys/sem.h>
  #include "libbb.h"
  
 +#ifndef __NR_semctl
