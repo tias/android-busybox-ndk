@@ -1,6 +1,6 @@
 From: Tias Guns <tias@ulyssis.org>
 Date: Tue, 20 Mar 2012 21:30:10 +0000
-Subject: [PATCH 1/2] fix syslogd, logread: add syslog.h, semop shmdt-at
+Subject: [PATCH] fix syslogd, logread: add syslog.h, semop shmdt-at
 
 patch from 'no-sys-shm,msg,sem' and 'sys-syslog' by Dan Drown
 "sys/syslog.h header for syslogd"
