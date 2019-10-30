@@ -1,5 +1,5 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Tue, 11 Apr 2017 07:50:46 -0300
+Date: Wed, 30 Oct 2019 02:47:24 -0300
 Subject: [PATCH] hack: use dietlibc's resolver to avoid static compiliation
  issues with bionic's getaddrinfo() returning only null instead of opening the
  expected connection to /dev/socket/dnsproxyd
@@ -18,9 +18,9 @@ index 3a0dc26..52e5e19 100644
  #include <sys/un.h>
 +#include <netdb.h>
 +#include "../libres/dietdns.h"
- #include "libbb.h"
- 
- int FAST_FUNC setsockopt_int(int fd, int level, int optname, int optval)
+ #if ENABLE_IFPLUGD || ENABLE_FEATURE_MDEV_DAEMON || ENABLE_UEVENT
+ # include <linux/netlink.h>
+ #endif
 @@ -282,7 +284,7 @@ IF_NOT_FEATURE_IPV6(sa_family_t af = AF_INET;)
  	 * for each possible socket type (tcp,udp,raw...): */
  	hint.ai_socktype = SOCK_STREAM;
