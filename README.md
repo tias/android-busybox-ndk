@@ -1,6 +1,6 @@
 The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
 
-Currently up-to-date as of busybox 1.30.1, with both NDK API 21 Unified and Deprecated headers.
+Currently up-to-date as of busybox 1.31.1, with both NDK API 21 Unified and Deprecated headers.
 
 Building busybox with the standard Android NDK
 ==============================================
