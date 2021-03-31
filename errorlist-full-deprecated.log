@@ -1,4 +1,4 @@
-: invalid numberbox-1.29.3/scripts/gcc-version.sh: line 12: printf: 9
+: invalid numberbox-1.32.1/scripts/gcc-version.sh: line 12: printf: 9
 
 = 000*
 
@@ -92,16 +92,6 @@ include/platform.h:624:12: note: previous declaration of 'issetugid' was here
 make[1]: *** [scripts/Makefile.build:198: libbb/platform.o] Error 1
 
 = 023-b (error only occurs on x86)
-
-
-  CC      libbb/pw_encrypt.o
-libbb/pw_encrypt.c:9:19: fatal error: crypt.h: No such file or directory
- #include <crypt.h>
-                   ^
-compilation terminated.
-make[1]: *** [scripts/Makefile.build:198: libbb/pw_encrypt.o] Error 1
-
-= 031
 
 
   CC      miscutils/nandwrite.o
@@ -674,6 +664,15 @@ collect2.exe: error: ld returned 1 exit status
 make: *** [Makefile:719: busybox_unstripped] Error 1
 
 = 003-a
+
+
+/home/chris/x-tools/arm-linux-androideabi-r15c-api21-deprecated/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld.bfd.exe: cannot find -lrt
+collect2.exe: error: ld returned 1 exit status
+Note: if build needs additional libraries, put them in CONFIG_EXTRA_LDLIBS.
+Example: CONFIG_EXTRA_LDLIBS="pthread dl tirpc audit pam"
+make: *** [Makefile:719: busybox_unstripped] Error 1
+
+= 002
 
 
 + 026 for modinfo/modprobe without uts rel folder fix (no associated error)
