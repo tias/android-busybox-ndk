@@ -1,5 +1,5 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Fri, 27 Nov 2015 09:47:41 -0400
+Date: Sun, 18 Feb 2021 11:34:56 -0300
 Subject: [PATCH] Fix "invalid number" stderr during build despite printf stdout being as expected
 
 ---
@@ -13,9 +13,9 @@ index 3451080..d7bf002 100755
 @@ -9,4 +9,4 @@
  compiler="$*"
  
- MAJ_MIN=$(echo __GNUC__ __GNUC_MINOR__ | $compiler -E -xc - | tail -n 1)
--printf '%02d%02d\n' $MAJ_MIN
-+printf '%02d%02d\n' $MAJ_MIN 2>/dev/null
+-MAJ_MIN=$(echo __GNUC__ __GNUC_MINOR__ | $compiler -E -xc - | tail -n 1)
++MAJ_MIN=$(echo __GNUC__ __GNUC_MINOR__ | $compiler -E -xc - | tr -d '\r' | tail -n 1)
+ printf '%02d%02d\n' $MAJ_MIN
 -- 
-2.5.3
+2.26.2
 
