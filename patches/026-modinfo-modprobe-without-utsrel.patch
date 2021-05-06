@@ -1,6 +1,7 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Tue, 4 May 2021 01:02:12 -0300
-Subject: [PATCH] modinfo/modprobe: use ifdef block for android without-utsrel modules path
+Date: Thu, 6 May 2021 16:30:26 -0300
+Subject: [PATCH] modinfo/modprobe: use ifdef block for android without-utsrel
+ modules path
 
 and fixes the modules.dep requirement, it is now optional...
 
@@ -18,7 +19,7 @@ Rebased for busybox 1.33.1 by Chris Renshaw <osm0sis@outlook.com>
  2 files changed, 46 insertions(+), 5 deletions(-)
 
 diff --git a/modutils/modinfo.c b/modutils/modinfo.c
-index aa641ad..dbc679a 100644
+index d15772f0d..0b6a89329 100644
 --- a/modutils/modinfo.c
 +++ b/modutils/modinfo.c
 @@ -20,6 +20,10 @@
@@ -92,12 +93,12 @@ index aa641ad..dbc679a 100644
  		if (argv[i][0]) {
  			modinfo(argv[i], uts.release, field);
 diff --git a/modutils/modprobe.c b/modutils/modprobe.c
-index 8130c40..585de5c 100644
+index c334186b8..eecccac1b 100644
 --- a/modutils/modprobe.c
 +++ b/modutils/modprobe.c
 @@ -172,6 +172,10 @@ static const char modprobe_longopts[] ALIGN1 =
- #define MODULE_FLAG_FOUND_IN_MODDEP     0x0004
  #define MODULE_FLAG_BLACKLISTED         0x0008
+ #define MODULE_FLAG_BUILTIN             0x0010
  
 +#if defined(ANDROID) || defined(__ANDROID__)
 +#define DONT_USE_UTS_REL_FOLDER
@@ -105,9 +106,9 @@ index 8130c40..585de5c 100644
 +
  struct globals {
  	llist_t *probes; /* MEs of module(s) requested on cmdline */
- 	char *cmdline_mopts; /* module options from cmdline */
+ #if ENABLE_FEATURE_CMDLINE_MODULE_OPTIONS
 @@ -474,10 +478,17 @@ static int do_modprobe(struct module_entry *m)
- 			options = gather_options_str(options, G.cmdline_mopts);
+ #endif
  
  		if (option_mask32 & OPT_SHOW_DEPS) {
 +#ifndef DONT_USE_UTS_REL_FOLDER
