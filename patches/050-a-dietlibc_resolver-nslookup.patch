@@ -1,17 +1,16 @@
-From: Tias Guns <tias@ulyssis.org>
-Date: Tue, 20 Mar 2012 23:10:18 +0000
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Sat, 21 Jul 2018 20:02:13 -0300
 Subject: [PATCH] fix nslookup, add libres, a dietlibc resolver
 
-patches from 'dietlibc-resolver' by Dan Drown
-"""
-use the bionic's resolver functions do not allow changing the dns
-server.  Use
-dietlibc's resolver code instead (see package libres-devel)
-"""
-http://dan.drown.org/android/src/busybox/
+Using bionic's resolver functions does not allow changing the dns
+server. Use dietlibc's resolver code instead (see package libres-devel)
 
-libres from 'libres-0.32-1' also by Dan Drown:
+Patch by Tias Guns <tias@ulyssis.org>, based on 'dietlibc-resolver' and
+'libres-0.32-1' by Dan Drown
+http://dan.drown.org/android/src/busybox/
 http://dan.drown.org/android/src/libres/
+
+Rebased for busybox 1.29.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
  Makefile                  |    1 +
  libres/Kbuild.src         |   11 +++
@@ -31,8 +30,8 @@ http://dan.drown.org/android/src/libres/
  libres/res_mkquery.c      |   85 ++++++++++++++++++++
  libres/res_query.c        |   81 +++++++++++++++++++
  libres/test.c             |  105 +++++++++++++++++++++++++
- networking/nslookup.c     |   25 +++---
- 19 files changed, 1005 insertions(+), 11 deletions(-)
+ networking/nslookup.c     |   27 +++----
+ 19 files changed, 1005 insertions(+), 13 deletions(-)
  create mode 100644 libres/Kbuild.src
  create mode 100644 libres/Makefile
  create mode 100644 libres/README
@@ -55,7 +54,7 @@ diff --git a/Makefile b/Makefile
 index c31ca89..8e0226a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -476,6 +476,7 @@ libs-y		:= \
+@@ -477,6 +477,7 @@ libs-y		:= \
  		init/ \
  		libbb/ \
  		libpwdgrp/ \
@@ -1159,17 +1158,19 @@ diff --git a/networking/nslookup.c b/networking/nslookup.c
 index f4fd407..465f4b4 100644
 --- a/networking/nslookup.c
 +++ b/networking/nslookup.c
-@@ -26,6 +26,9 @@
- //usage:       "Address:    127.0.0.1\n"
+@@ -36,8 +36,9 @@
  
  #include <resolv.h>
+ #include <net/if.h>	/* for IFNAMSIZ */
+-//#include <arpa/inet.h>
+-//#include <netdb.h>
 +#include <netinet/in.h>
 +#include <netdb.h>
 +#include "../libres/dietdns.h"
  #include "libbb.h"
+ #include "common_bufsiz.h"
  
- /*
-@@ -78,7 +81,7 @@ static int print_host(const char *hostname, const char *header)
+@@ -106,7 +109,7 @@ static int print_host(const char *hostname, const char *header)
  	 * for each possible socket type (tcp,udp,raw...): */
  	hint.ai_socktype = SOCK_STREAM;
  	// hint.ai_flags = AI_CANONNAME;
@@ -1178,7 +1179,7 @@ index f4fd407..465f4b4 100644
  
  	if (rc == 0) {
  		struct addrinfo *cur = result;
-@@ -109,7 +112,7 @@ static int print_host(const char *hostname, const char *header)
+@@ -137,7 +140,7 @@ static int print_host(const char *hostname, const char *header)
  #endif
  	}
  	if (ENABLE_FEATURE_CLEAN_UP && result)
@@ -1187,7 +1188,7 @@ index f4fd407..465f4b4 100644
  	return (rc != 0);
  }
  
-@@ -119,11 +122,11 @@ static void server_print(void)
+@@ -147,11 +150,11 @@ static void server_print(void)
  	char *server;
  	struct sockaddr *sa;
  
@@ -1202,7 +1203,7 @@ index f4fd407..465f4b4 100644
  	server = xmalloc_sockaddr2dotted_noport(sa);
  
  	print_host(server, "Server:");
-@@ -142,11 +145,11 @@ static void set_default_dns(const char *server)
+@@ -173,11 +176,11 @@ static void set_default_dns(const char *server)
  	lsa = xhost2sockaddr(server, 53);
  
  	if (lsa->u.sa.sa_family == AF_INET) {
@@ -1217,7 +1218,7 @@ index f4fd407..465f4b4 100644
  	/* Hoped libc can cope with IPv4 address there too.
  	 * No such luck, glibc 2.4 segfaults even with IPv6,
  	 * maybe I misunderstand how to make glibc use IPv6 addr?
-@@ -155,9 +158,9 @@ static void set_default_dns(const char *server)
+@@ -186,9 +189,9 @@ static void set_default_dns(const char *server)
  		// glibc neither SEGVs nor sends any dgrams with this
  		// (strace shows no socket ops):
  		//_res.nscount = 0;
@@ -1229,7 +1230,7 @@ index f4fd407..465f4b4 100644
  		/* must not free(lsa)! */
  	}
  #endif
-@@ -176,7 +179,7 @@ int nslookup_main(int argc, char **argv)
+@@ -207,7 +210,7 @@ int nslookup_main(int argc, char **argv)
  
  	/* initialize DNS structure _res used in printing the default
  	 * name server and in the explicit name server option feature. */
@@ -1239,5 +1240,5 @@ index f4fd407..465f4b4 100644
  	/* (but it also says "may be enabled in /etc/resolv.conf") */
  	/*_res.options |= RES_USE_INET6;*/
 -- 
-1.7.10.4
+2.17.0
 

@@ -1,99 +1,61 @@
-From: Tias Guns <tias@ulyssis.org>
-Date: Mon, 19 Mar 2012 17:58:53 +0000
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Tue, 10 Jan 2017 10:24:29 -0400
 Subject: [PATCH] fix udhcpd and nameif, add ether_ntoa_r and ether_aton_r from glibc
 
-this patch also fixes part of arping and ether-wake, but not
-sufficiently yet
+this patch also fixes part of arping and ether-wake, but not sufficiently yet
 
-patch from 'ether_XtoY-from-glibc' by Dan Drown
+Patch modified by Tias Guns <tias@ulyssis.org> from 'ether_XtoY-from-glibc' by Dan Drown
 http://dan.drown.org/android/src/busybox/
+Rebased for busybox 1.26.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
- networking/Kbuild.src       |    3 ++
- networking/arping.c         |    7 +++-
- networking/ether-wake.c     |    5 ++-
- networking/ether_aton_r.c   |   63 +++++++++++++++++++++++++++++++++++++++++++
- networking/ether_ntoa_r.c   |   33 ++++++++++++++++++++++
- networking/ether_port.h     |   29 +++++++++++++++++++
- networking/udhcp/Kbuild.src |    1 +
- networking/udhcp/files.c    |    3 ++
- 8 files changed, 140 insertions(+), 4 deletions(-)
+ networking/arping.c         |  1 +
+ networking/ether-wake.c     |  6 +++--
+ networking/ether_aton_r.c   | 63 +++++++++++++++++++++++++++++++++++++++++++++
+ networking/ether_ntoa_r.c   | 33 ++++++++++++++++++++++++
+ networking/ether_port.h     | 29 +++++++++++++++++++++
+ networking/nameif.c         |  1 +
+ networking/udhcp/Kbuild.src |  1 +
+ networking/udhcp/dhcpd.c    |  4 +++
+ 8 files changed, 136 insertions(+), 2 deletions(-)
  create mode 100644 networking/ether_aton_r.c
  create mode 100644 networking/ether_ntoa_r.c
  create mode 100644 networking/ether_port.h
 
-diff --git a/networking/Kbuild.src b/networking/Kbuild.src
-index 944f27b..365ae6c 100644
---- a/networking/Kbuild.src
-+++ b/networking/Kbuild.src
-@@ -9,9 +9,11 @@ lib-y:=
- INSERT
- lib-$(CONFIG_ARP)          += arp.o interface.o
- lib-$(CONFIG_ARPING)       += arping.o
-+lib-$(CONFIG_ARPING)       += ether_ntoa_r.o
- lib-$(CONFIG_BRCTL)        += brctl.o
- lib-$(CONFIG_DNSD)         += dnsd.o
- lib-$(CONFIG_ETHER_WAKE)   += ether-wake.o
-+lib-$(CONFIG_ETHER_WAKE)   += ether_aton_r.o ether_ntoa_r.o
- lib-$(CONFIG_FAKEIDENTD)   += isrv_identd.o isrv.o
- lib-$(CONFIG_FTPD)         += ftpd.o
- lib-$(CONFIG_FTPGET)       += ftpgetput.o
-@@ -26,6 +28,7 @@ lib-$(CONFIG_INETD)        += inetd.o
- lib-$(CONFIG_IP)           += ip.o
- lib-$(CONFIG_IPCALC)       += ipcalc.o
- lib-$(CONFIG_NAMEIF)       += nameif.o
-+lib-$(CONFIG_NAMEIF)       += ether_aton_r.o
- lib-$(CONFIG_NC)           += nc.o
- lib-$(CONFIG_NETSTAT)      += netstat.o
- lib-$(CONFIG_NSLOOKUP)     += nslookup.o
 diff --git a/networking/arping.c b/networking/arping.c
-index a4421ed..376d970 100644
+index 5bfeb1b..1980620 100644
 --- a/networking/arping.c
 +++ b/networking/arping.c
-@@ -228,21 +228,24 @@ static bool recv_pack(unsigned char *buf, int len, struct sockaddr_ll *FROM)
- 	}
- 	if (!(option_mask32 & QUIET)) {
- 		int s_printed = 0;
-+        char ether_buf[20];
+@@ -16,6 +16,7 @@
+ //applet:IF_ARPING(APPLET(arping, BB_DIR_USR_SBIN, BB_SUID_DROP))
  
- 		printf("%scast re%s from %s [%s]",
- 			FROM->sll_pkttype == PACKET_HOST ? "Uni" : "Broad",
- 			ah->ar_op == htons(ARPOP_REPLY) ? "ply" : "quest",
- 			inet_ntoa(src_ip),
--			ether_ntoa((struct ether_addr *) p));
-+			ether_ntoa_r((struct ether_addr *) p, ether_buf));
- 		if (dst_ip.s_addr != src.s_addr) {
- 			printf("for %s ", inet_ntoa(dst_ip));
- 			s_printed = 1;
- 		}
- 		if (memcmp(p + ah->ar_hln + 4, me.sll_addr, ah->ar_hln)) {
-+        char ether_buf[20];
-+
- 			if (!s_printed)
- 				printf("for ");
- 			printf("[%s]",
--				ether_ntoa((struct ether_addr *) p + ah->ar_hln + 4));
-+				ether_ntoa_r((struct ether_addr *) p + ah->ar_hln + 4, ether_buf));
- 		}
+ //kbuild:lib-$(CONFIG_ARPING) += arping.o
++//kbuild:lib-$(CONFIG_ARPING) += ether_ntoa_r.o
  
- 		if (last) {
+ //usage:#define arping_trivial_usage
+ //usage:       "[-fqbDUA] [-c CNT] [-w TIMEOUT] [-I IFACE] [-s SRC_IP] DST_IP"
 diff --git a/networking/ether-wake.c b/networking/ether-wake.c
-index 6a88279..c72da32 100644
+index d7d6917..7a1fc45 100644
 --- a/networking/ether-wake.c
 +++ b/networking/ether-wake.c
-@@ -117,16 +117,17 @@ void bb_debug_dump_packet(unsigned char *outpack, int pktsize)
+@@ -73,6 +73,7 @@
+ //applet:IF_ETHER_WAKE(APPLET_ODDNAME(ether-wake, ether_wake, BB_DIR_USR_SBIN, BB_SUID_DROP, ether_wake))
+ 
+ //kbuild:lib-$(CONFIG_ETHER_WAKE) += ether-wake.o
++//kbuild:lib-$(CONFIG_ETHER_WAKE) += ether_aton_r.o ether_ntoa_r.o
+ 
+ //usage:#define ether_wake_trivial_usage
+ //usage:       "[-b] [-i IFACE] [-p aa:bb:cc:dd[:ee:ff]/a.b.c.d] MAC"
+@@ -127,13 +128,14 @@ void bb_debug_dump_packet(unsigned char *outpack, int pktsize)
  static void get_dest_addr(const char *hostid, struct ether_addr *eaddr)
  {
  	struct ether_addr *eap;
-+    char ether_buf[20];
++	char ether_buf[20];
  
  	eap = ether_aton_r(hostid, eaddr);
  	if (eap) {
 -		bb_debug_msg("The target station address is %s\n\n", ether_ntoa(eap));
 +		bb_debug_msg("The target station address is %s\n\n", ether_ntoa_r(eap, ether_buf));
- #if !defined(__UCLIBC_MAJOR__) \
-  || __UCLIBC_MAJOR__ > 0 \
-  || __UCLIBC_MINOR__ > 9 \
-  || (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ >= 30)
+ #if !defined(__UCLIBC__) || UCLIBC_VERSION >= KERNEL_VERSION(0, 9, 30)
  	} else if (ether_hostton(hostid, eaddr) == 0) {
 -		bb_debug_msg("Station address for hostname %s is %s\n\n", hostid, ether_ntoa(eaddr));
 +		bb_debug_msg("Station address for hostname %s is %s\n\n", hostid, ether_ntoa_r(eaddr, ether_buf));
@@ -243,34 +205,47 @@ index 0000000..5e0146b
 +char * ether_ntoa_r (const struct ether_addr *addr, char *buf);
 +
 +#endif /* ETHER_PORT_H */
+diff --git a/networking/nameif.c b/networking/nameif.c
+index cffd5bf..f634375 100644
+--- a/networking/nameif.c
++++ b/networking/nameif.c
+@@ -43,6 +43,7 @@
+ //applet:IF_NAMEIF(APPLET(nameif, BB_DIR_SBIN, BB_SUID_DROP))
+ 
+ //kbuild:lib-$(CONFIG_NAMEIF) += nameif.o
++//kbuild:lib-$(CONFIG_NAMEIF) += ether_aton_r.o
+ 
+ //usage:#define nameif_trivial_usage
+ //usage:	IF_NOT_FEATURE_NAMEIF_EXTENDED(
 diff --git a/networking/udhcp/Kbuild.src b/networking/udhcp/Kbuild.src
-index b8767ba..f6853a4 100644
+index fcb725f..2d5739c 100644
 --- a/networking/udhcp/Kbuild.src
 +++ b/networking/udhcp/Kbuild.src
 @@ -14,6 +14,7 @@ lib-$(CONFIG_UDHCPD)     += common.o packet.o signalpipe.o socket.o
  
  lib-$(CONFIG_UDHCPC)     += dhcpc.o
- lib-$(CONFIG_UDHCPD)     += dhcpd.o arpping.o files.o leases.o static_leases.o
+ lib-$(CONFIG_UDHCPD)     += dhcpd.o arpping.o
 +lib-$(CONFIG_UDHCPD)     += ../ether_aton_r.o ../ether_ntoa_r.o
  lib-$(CONFIG_DUMPLEASES) += dumpleases.o
- lib-$(CONFIG_DHCPRELAY)  += dhcprelay.o
+ lib-$(CONFIG_DHCPRELAY)  += dhcprelay.o common.o socket.o packet.o
  
-diff --git a/networking/udhcp/files.c b/networking/udhcp/files.c
-index 6840f3c..9eb6688 100644
---- a/networking/udhcp/files.c
-+++ b/networking/udhcp/files.c
-@@ -6,8 +6,11 @@
-  *
-  * Licensed under GPLv2, see file LICENSE in this source tree.
-  */
+diff --git a/networking/udhcp/dhcpd.c b/networking/udhcp/dhcpd.c
+index e116ba3..ef5024c 100644
+--- a/networking/udhcp/dhcpd.c
++++ b/networking/udhcp/dhcpd.c
+@@ -38,8 +38,12 @@
+ //usage:     "\n	-P N	Use port N (default 67)"
+ //usage:	)
+ 
 +#include <sys/types.h>
  #include <netinet/ether.h>
- 
+ #include <syslog.h>
++
 +#include "../ether_port.h"
 +
  #include "common.h"
+ #include "dhcpc.h"
  #include "dhcpd.h"
- 
 -- 
-1.7.0.4
+2.8.3
 

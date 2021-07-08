@@ -1,8 +1,9 @@
-From: Tias Guns <tias@ulyssis.org>
-Date: Sun, 5 Aug 2012 15:39:30 +0200
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Mon, 12 Sep 2016 14:48:30 -0300
 Subject: [PATCH] android syscalls: shmdt shmat sembuf
 
-Signed-off-by: Tias Guns <tias@ulyssis.org>
+Patch by Tias Guns <tias@ulyssis.org>
+Rebased for busybox 1.25.0 by Chris Renshaw <osm0sis@outlook.com>
 ---
  libbb/missing_syscalls.c |   16 ++++++++++++++++
  1 file changed, 16 insertions(+)
@@ -38,7 +39,7 @@ index ac75829..474accb 100644
 +{
 +  return syscall(__NR_semop, semid, sops, nsops);
 +}
- #endif
+ 
 -- 
-1.7.10.4
+2.8.3
 

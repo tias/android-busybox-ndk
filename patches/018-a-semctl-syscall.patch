@@ -46,7 +46,7 @@ index 0000000..68f846a
 +
 +#include <sys/syscall.h>   /* For __NR_xxx definitions */
 +#include <stdarg.h>
-+#include <linux/sem.h>
++#include <sys/sem.h>
 +#include "libbb.h"
 +
 +/* code from GLIBC */

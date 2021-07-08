@@ -1,12 +1,10 @@
-From b7b2bd89a6bf231506c97d2c5a901652420646f1 Mon Sep 17 00:00:00 2001
-From: Tias Guns <tias@ulyssis.org>
-Date: Tue, 20 Mar 2012 20:06:23 +0000
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Tue, 30 Mar 2021 22:19:32 -0300
 Subject: [PATCH] fix hush, add glob and sigisemptyset
 
-added sigisemptyset.c
-
-rest of patch from 'glob' by Dan Drown
+Patch by Tias Guns <tias@ulyssis.org>, based on 'glob' by Dan Drown
 http://dan.drown.org/android/src/busybox/
+Rebased for busybox 1.32.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
  shell/glob.c          |  786 +++++++++++++++++++++++++++++++++++++++++++++++++
  shell/glob.h          |  113 +++++++
@@ -929,10 +927,18 @@ index 0000000..e8e6578
 +
 +#endif /* !_GLOB_H_ */
 diff --git a/shell/hush.c b/shell/hush.c
-index e2dc1e2..7f8e0be 100644
+index bc6e601..c910658 100644
 --- a/shell/hush.c
 +++ b/shell/hush.c
-@@ -86,7 +86,7 @@
+@@ -333,6 +333,7 @@
+ //applet:IF_BASH_IS_HUSH(APPLET_ODDNAME(bash, hush, BB_DIR_BIN, BB_SUID_DROP, hush))
+
+ //kbuild:lib-$(CONFIG_SHELL_HUSH) += hush.o match.o shell_common.o
++//kbuild:lib-$(CONFIG_SHELL_HUSH) += glob.o sigisemptyset.o
+ //kbuild:lib-$(CONFIG_HUSH_RANDOM_SUPPORT) += random.o
+
+ /* -i (interactive) and -s (read stdin) are also accepted,
+@@ -350,7 +351,7 @@
      )
  # include <malloc.h>   /* for malloc_trim */
  #endif
@@ -941,14 +947,6 @@ index e2dc1e2..7f8e0be 100644
  /* #include <dmalloc.h> */
  #if ENABLE_HUSH_CASE
  # include <fnmatch.h>
-@@ -248,6 +248,7 @@
- //applet:IF_FEATURE_BASH_IS_HUSH(APPLET_ODDNAME(bash, hush, BB_DIR_BIN, BB_SUID_DROP, bash))
- 
- //kbuild:lib-$(CONFIG_HUSH) += hush.o match.o shell_common.o
-+//kbuild:lib-$(CONFIG_HUSH) += glob.o sigisemptyset.o
- //kbuild:lib-$(CONFIG_HUSH_RANDOM_SUPPORT) += random.o
- 
- /* -i (interactive) and -s (read stdin) are also accepted,
 diff --git a/shell/sigisemptyset.c b/shell/sigisemptyset.c
 new file mode 100644
 index 0000000..8297313

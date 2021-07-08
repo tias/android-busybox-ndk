@@ -1,0 +1,201 @@
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Wed, 31 Mar 2021 16:26:19 -0300
+Subject: [PATCH] Fix various host "warning array subscript has type 'char'"
+
+fixdep split-include docproc conf mconf zconf.tab/confdata applet_tables files all display similar HOSTCC -Wchar-subscripts warnings when compiled in Cygwin
+
+Patch modified from Denys Vlasenko <vda.linux@googlemail.com>
+http://lists.busybox.net/pipermail/busybox/2012-February/077328.html
+Rebased for busybox 1.32.1 by Chris Renshaw <osm0sis@outlook.com>
+---
+ applets/applet_tables.c       |  2 +-
+ scripts/basic/docproc.c       | 18 +++++++++---------
+ scripts/basic/fixdep.c        | 12 ++++++------
+ scripts/basic/split-include.c |  2 +-
+ scripts/kconfig/conf.c        |  6 +++---
+ scripts/kconfig/confdata.c    |  2 +-
+ scripts/kconfig/mconf.c       |  2 +-
+ 7 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/applets/applet_tables.c b/applets/applet_tables.c
+index ce2037440..00515f0bf 100644
+--- a/applets/applet_tables.c
++++ b/applets/applet_tables.c
+@@ -52,7 +52,7 @@ static int cmp_name(const void *a, const void *b)
+ static int str_isalnum_(const char *s)
+ {
+ 	while (*s) {
+-		if (!isalnum(*s) && *s != '_')
++		if (!isalnum((unsigned char)*s) && (unsigned char)*s != '_')
+ 			return 0;
+ 		s++;
+ 	}
+diff --git a/scripts/basic/docproc.c b/scripts/basic/docproc.c
+index 720098a23..4464e1874 100644
+--- a/scripts/basic/docproc.c
++++ b/scripts/basic/docproc.c
+@@ -182,10 +182,10 @@ void find_export_symbols(char * filename)
+ 			perror(real_filename);
+ 		}
+ 		while (fgets(line, MAXLINESZ, fp)) {
+-			char *p;
+-			char *e;
+-			if (((p = strstr(line, "EXPORT_SYMBOL_GPL")) != 0) ||
+-			    ((p = strstr(line, "EXPORT_SYMBOL")) != 0)) {
++			unsigned char *p;
++			unsigned char *e;
++			if (((p = (unsigned char *)strstr(line, "EXPORT_SYMBOL_GPL")) != 0) ||
++			    ((p = (unsigned char *)strstr(line, "EXPORT_SYMBOL")) != 0)) {
+ 				/* Skip EXPORT_SYMBOL{_GPL} */
+ 				while (isalnum(*p) || *p == '_')
+ 					p++;
+@@ -202,7 +202,7 @@ void find_export_symbols(char * filename)
+ 				while (isalnum(*e) || *e == '_')
+ 					e++;
+ 				*e = '\0';
+-				add_new_symbol(sym, p);
++				add_new_symbol(sym, (char*)p);
+ 			}
+ 		}
+ 		fclose(fp);
+@@ -266,7 +266,7 @@ void singfunc(char * filename, char * line)
+ 
+ 	/* Split line up in individual parameters preceded by FUNCTION */
+ 	for (i=0; line[i]; i++) {
+-		if (isspace(line[i])) {
++		if (isspace((unsigned char) line[i])) {
+ 			line[i] = '\0';
+ 			startofsym = 1;
+ 			continue;
+@@ -293,10 +293,10 @@ void singfunc(char * filename, char * line)
+ void parse_file(FILE *infile)
+ {
+ 	char line[MAXLINESZ];
+-	char * s;
++	unsigned char * s;
+ 	while (fgets(line, MAXLINESZ, infile)) {
+ 		if (line[0] == '!') {
+-			s = line + 2;
++			s = (unsigned char *)line + 2;
+ 			switch (line[1]) {
+ 				case 'E':
+ 					while (*s && !isspace(*s)) s++;
+@@ -320,7 +320,7 @@ void parse_file(FILE *infile)
+ 					/* function names */
+ 					while (isspace(*s))
+ 						s++;
+-					singlefunctions(line +2, s);
++					singlefunctions(line +2, (char*)s);
+ 					break;
+ 				default:
+ 					defaultline(line);
+diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
+index 19f82df09..426b4888b 100644
+--- a/scripts/basic/fixdep.c
++++ b/scripts/basic/fixdep.c
+@@ -226,10 +226,10 @@ void use_config(char *m, int slen)
+ void parse_config_file(char *map, size_t len)
+ {
+ 	/* modified for bbox */
+-	char *end_3 = map + len - 3; /* 3 == length of "IF_" */
+-	char *end_7 = map + len - 7;
+-	char *p = map;
+-	char *q;
++	unsigned char *end_3 = (unsigned char *)map + len - 3; /* 3 == length of "IF_" */
++	unsigned char *end_7 = (unsigned char *)map + len - 7;
++	unsigned char *p = (unsigned char *)map;
++	unsigned char *q;
+ 	int off;
+ 
+ 	for (; p <= end_3; p++) {
+@@ -263,7 +263,7 @@ void parse_config_file(char *map, size_t len)
+ 				break;
+ 		}
+ 		if (q != p) {
+-			use_config(p, q-p);
++			use_config((char*)p, q - p);
+ 		}
+ 	}
+ }
+@@ -335,7 +335,7 @@ void parse_dep_file(void *map, size_t len)
+ 		p = m;
+ 		while (p < end && *p != ' ') p++;
+ 		if (p == end) {
+-			do p--; while (!isalnum(*p));
++			do p--; while (!isalnum((unsigned char)*p));
+ 			p++;
+ 		}
+ 		memcpy(s, m, p-m); s[p-m] = 0;
+diff --git a/scripts/basic/split-include.c b/scripts/basic/split-include.c
+index 791d142a8..9938eeb8d 100644
+--- a/scripts/basic/split-include.c
++++ b/scripts/basic/split-include.c
+@@ -116,7 +116,7 @@ int main(int argc, const char * argv [])
+ 	/* We found #define CONFIG_foo or #undef CONFIG_foo.
+ 	 * Make the output file name. */
+ 	str_config += sizeof(" CONFIG_") - 1;
+-	for (itarget = 0; !isspace(str_config[itarget]); itarget++)
++	for (itarget = 0; !isspace((unsigned char) str_config[itarget]); itarget++)
+ 	{
+ 	    int c = (unsigned char) str_config[itarget];
+ 	    if (isupper(c)) c = tolower(c);
+diff --git a/scripts/kconfig/conf.c b/scripts/kconfig/conf.c
+index 866a7c544..39ec1cdb6 100644
+--- a/scripts/kconfig/conf.c
++++ b/scripts/kconfig/conf.c
+@@ -44,7 +44,7 @@ static void strip(char *str)
+ 	char *p = str;
+ 	int l;
+ 
+-	while ((isspace(*p)))
++	while ((isspace((unsigned char)*p)))
+ 		p++;
+ 	l = strlen(p);
+ 	if (p != str)
+@@ -52,7 +52,7 @@ static void strip(char *str)
+ 	if (!l)
+ 		return;
+ 	p = str + l - 1;
+-	while ((isspace(*p)))
++	while ((isspace((unsigned char)*p)))
+ 		*p-- = 0;
+ }
+ 
+@@ -401,7 +401,7 @@ static int conf_choice(struct menu *menu)
+ 			}
+ 			if (!line[0])
+ 				cnt = def;
+-			else if (isdigit(line[0]))
++			else if (isdigit((unsigned char)line[0]))
+ 				cnt = atoi(line);
+ 			else
+ 				continue;
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index b05b96e45..25a020aec 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -54,7 +54,7 @@ static char *conf_expand_value(const char *in)
+ 		strncat(res_value, in, src - in);
+ 		src++;
+ 		dst = name;
+-		while (isalnum(*src) || *src == '_')
++		while (isalnum((unsigned char)*src) || (unsigned char)*src == '_')
+ 			*dst++ = *src++;
+ 		*dst = 0;
+ 		sym = sym_lookup(name, 0);
+diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
+index c3a837a14..ff85fff91 100644
+--- a/scripts/kconfig/mconf.c
++++ b/scripts/kconfig/mconf.c
+@@ -771,7 +771,7 @@ static void conf(struct menu *menu)
+ 		if (!type)
+ 			continue;
+ 
+-		for (i = 0; input_buf[i] && !isspace(input_buf[i]); i++)
++		for (i = 0; (unsigned char)input_buf[i] && !isspace((unsigned char)input_buf[i]); i++)
+ 			;
+ 		if (i >= sizeof(active_entry))
+ 			i = sizeof(active_entry) - 1;
+-- 
+2.26.2
+
