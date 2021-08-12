@@ -1,5 +1,5 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Thu, 6 May 2021 16:44:48 -0300
+Date: Wed, 11 Aug 2021 23:54:04 -0300
 Subject: [PATCH] ash history
 
 allows ash history to work on Android
@@ -8,10 +8,11 @@ Patch modified by Tias Guns <tias@ulyssis.org> from 'busybox-android.patch' by A
 https://github.com/Gnurou/busybox-android
 Rebased for busybox 1.33.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
- include/libbb.h | 4 ++--
- init/init.c     | 2 +-
- shell/ash.c     | 8 ++++++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ include/libbb.h        | 4 ++--
+ init/init.c            | 2 +-
+ libbb/get_shell_name.c | 4 ++++
+ shell/ash.c            | 8 ++++++--
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
 index cae54658b..ae94e921d 100644
@@ -22,13 +23,13 @@ index cae54658b..ae94e921d 100644
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
 -#define LIBBB_DEFAULT_LOGIN_SHELL  "-/bin/sh"
-+#define LIBBB_DEFAULT_LOGIN_SHELL  "-/sbin/sh"
++#define LIBBB_DEFAULT_LOGIN_SHELL  "-/system/bin/sh"
  extern const char bb_default_login_shell[] ALIGN1;
  /* "/bin/sh" */
  #define DEFAULT_SHELL              (bb_default_login_shell+1)
  /* "sh" */
 -#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+6)
-+#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+7)
++#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+13)
  
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
@@ -41,10 +42,25 @@ index efab5dcb4..de9044751 100644
  	putenv((char *) "HOME=/");
  	putenv((char *) bb_PATH_root_path);
 -	putenv((char *) "SHELL=/bin/sh");
-+	putenv((char *) "SHELL=/sbin/sh");
++	putenv((char *) "SHELL=/system/bin/sh");
  	putenv((char *) "USER=root"); /* needed? why? */
  
  	if (argv[1])
+diff --git a/libbb/get_shell_name.c b/libbb/get_shell_name.c
+index 5aebe9cdc..5af53bdda 100644
+--- a/libbb/get_shell_name.c
++++ b/libbb/get_shell_name.c
+@@ -17,6 +17,10 @@ const char* FAST_FUNC get_shell_name(void)
+ 	if (shell && shell[0])
+ 		return shell;
+ 
++#ifdef __ANDROID__
++	return DEFAULT_SHELL_SHORT_NAME;
++#endif
++
+ 	pw = getpwuid(getuid());
+ 	if (pw && pw->pw_shell && pw->pw_shell[0])
+ 		return pw->pw_shell;
 diff --git a/shell/ash.c b/shell/ash.c
 index a33ab0626..ad7978bbe 100644
 --- a/shell/ash.c
