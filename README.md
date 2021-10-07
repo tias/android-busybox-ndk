@@ -115,10 +115,3 @@ others
  * CONFIG\_TIME  -- **has patch**  --  undefined reference to 'wait3'
  * CONFIG\_UDHCPC6  --  **has patch**  --  undefined reference to 'getifaddrs', 'freeifaddrs'
  * CONFIG\_UNSHARE  --  undefined reference to 'unshare'
-
-Linking errors independent of config option
--------------------------------------------
-Android's libc implements some other library functionality itself on older NDK, so attempts to link the external library will fail.
-
-librt  --  **has patch**
- * All builds  --  ld.bfd: cannot find -lrt
