@@ -62,8 +62,6 @@ These errors indicate bugs (usually in the restricted Android libc library, call
 * CONFIG\_ROUTE  --  **has patch**  --  from networking/route.c:46: [...]include/linux/if.h:160:18: error: field 'ifru\_addr' has incomplete type
 * CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:244:35: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
 * CONFIG\_SYSLOGD  --  **has patch**  --  sysklogd/syslogd\_and\_logger.c:53:14: error: unknown type name 'CODE'
-* CONFIG\_TLS  --  **has patch**  --  networking/tls\_pstm\_montgomery\_reduce.c:66:1: error: 'asm' operand has impossible constraints
-  * disables CONFIG\_SSL\_CLIENT, CONFIG\_FEATURE\_WGET\_HTTPS
 * CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:71:19: error: field 'arp' has incomplete type
 
 Config options that do not build, missing header
@@ -112,6 +110,5 @@ others
  * CONFIG\_MDEV  --  undefined reference to 'sigtimedwait'
  * CONFIG\_NPROC  --  undefined reference to 'sched\_getaffinity'
  * CONFIG\_NSENTER  --  undefined reference to 'setns'
- * CONFIG\_TIME  -- **has patch**  --  undefined reference to 'wait3'
  * CONFIG\_UDHCPC6  --  **has patch**  --  undefined reference to 'getifaddrs', 'freeifaddrs'
  * CONFIG\_UNSHARE  --  undefined reference to 'unshare'
