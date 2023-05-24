@@ -1,12 +1,12 @@
 From: Chris Renshaw <osm0sis@outlook.com>
-Date: Wed, 11 Aug 2021 23:54:04 -0300
+Date: Tue, 23 May 2023 18:30:43 -0300
 Subject: [PATCH] ash history
 
 allows ash history to work on Android
 
 Patch modified by Tias Guns <tias@ulyssis.org> from 'busybox-android.patch' by Alexandre Courbot
 https://github.com/Gnurou/busybox-android
-Rebased for busybox 1.33.1 by Chris Renshaw <osm0sis@outlook.com>
+Rebased for busybox 1.36.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
  include/libbb.h        | 4 ++--
  init/init.c            | 2 +-
@@ -15,10 +15,10 @@ Rebased for busybox 1.33.1 by Chris Renshaw <osm0sis@outlook.com>
  4 files changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
-index cae54658b..ae94e921d 100644
+index cca33a177..82e05a645 100644
 --- a/include/libbb.h
 +++ b/include/libbb.h
-@@ -2265,12 +2265,12 @@ static ALWAYS_INLINE void* not_const_pp(const void *p) { return (void*)p; }
+@@ -2341,12 +2341,12 @@ void XZALLOC_CONST_PTR(const void *pptr, size_t size) FAST_FUNC;
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
@@ -34,18 +34,18 @@ index cae54658b..ae94e921d 100644
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
 diff --git a/init/init.c b/init/init.c
-index efab5dcb4..de9044751 100644
+index 1e1ce833d..57129e9c2 100644
 --- a/init/init.c
 +++ b/init/init.c
-@@ -1107,7 +1107,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+@@ -1106,7 +1106,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+ 
  	/* Make sure environs is set to something sane */
- 	putenv((char *) "HOME=/");
  	putenv((char *) bb_PATH_root_path);
 -	putenv((char *) "SHELL=/bin/sh");
 +	putenv((char *) "SHELL=/system/bin/sh");
  	putenv((char *) "USER=root"); /* needed? why? */
- 
- 	if (argv[1])
+ 	/* Linux kernel sets HOME="/" when execing init,
+ 	 * and it can be overridden (but not unset?) on kernel's command line.
 diff --git a/libbb/get_shell_name.c b/libbb/get_shell_name.c
 index 5aebe9cdc..5af53bdda 100644
 --- a/libbb/get_shell_name.c
@@ -62,10 +62,10 @@ index 5aebe9cdc..5af53bdda 100644
  	if (pw && pw->pw_shell && pw->pw_shell[0])
  		return pw->pw_shell;
 diff --git a/shell/ash.c b/shell/ash.c
-index a33ab0626..ad7978bbe 100644
+index 9344e4de1..5dd7f80f1 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -14282,7 +14282,7 @@ procargs(char **argv)
+@@ -14537,7 +14537,7 @@ procargs(char **argv)
  	int login_sh;
  
  	xargv = argv;
@@ -74,7 +74,7 @@ index a33ab0626..ad7978bbe 100644
  #if NUM_SCRIPTS > 0
  	if (minusc)
  		goto setarg0;
-@@ -14458,7 +14458,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -14713,7 +14713,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  		const char *hp;
  
  		state = 1;
@@ -83,7 +83,7 @@ index a33ab0626..ad7978bbe 100644
   state1:
  		state = 2;
  		hp = lookupvar("HOME");
-@@ -14503,6 +14503,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -14758,6 +14758,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  		if (line_input_state) {
  			const char *hp = lookupvar("HISTFILE");
  			if (!hp) {
@@ -93,7 +93,7 @@ index a33ab0626..ad7978bbe 100644
  				hp = lookupvar("HOME");
  				if (hp) {
  					INT_OFF;
-@@ -14512,6 +14515,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+@@ -14767,6 +14770,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
  					INT_ON;
  					hp = lookupvar("HISTFILE");
  				}
@@ -102,5 +102,5 @@ index a33ab0626..ad7978bbe 100644
  			if (hp)
  				line_input_state->hist_file = xstrdup(hp);
 -- 
-2.31.1
+2.34.1
 
