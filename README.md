@@ -9,20 +9,21 @@ tias@ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermai
 
     # get busybox sources
     git clone git://busybox.net/busybox.git
+    cd busybox
     # use default upstream config
     cp configs/android_ndk_defconfig .config
-    
+
     # add the target NDK cross-compiler to your exported PATH and CROSS_COMPILE prefix
     export PATH="/path/to/your/android-ndk/android-ndk-r15c/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/bin:$PATH"
     export CROSS_COMPILE="/path/to/your/android-ndk/android-ndk-r15c/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/bin/arm-linux-androideabi-"
-    
+
     # if android-ndk is not installed in /opt/android-ndk, edit SYSROOT= in .config
     # (alternately make all but CFLAGS blank if using standalone cross-compiler)
     nano .config
-    
+
     # adjust enabled applets/features (optional)
     make menuconfig
-    
+
     # build it!
     make ARCH=arm CROSS_COMPILE="$CROSS_COMPILE"
 
