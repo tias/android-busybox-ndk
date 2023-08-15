@@ -34,7 +34,7 @@ By **applying the included patches** to the busybox code-base you additionally g
 > arping, conspy, eject, ether-wake, flash\_eraseall, flash\_lock, flash\_unlock, fsck.minix, ftpd, hush, ipcrm, ipcs, loadfont, logread, mkfs.minix, nanddump, nandwrite, nslookup (with own resolver), pgrep, ping6, route, setfont, ssl\_client, swapon, swapoff, syslogd, time, traceroute6, ubi*, udhcpc6, unshare, zcip
 
 Also worth noting that while they do build without issue these applets do not entirely work correctly on Android without any patches:
-> df, fsck, ftpget, ftpput, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, nbd-client, nc, ping, poweroff, pscan, reboot, telnet, tftp, traceroute, umount, wget, whois
+> df, fsck, ftpget, ftpput, losetup, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, nbd-client, nc, ping, poweroff, pscan, reboot, telnet, tftp, traceroute, umount, wget, whois
 
 (when applying certain patches you should include all patches with a lower number as well, there are often dependencies between them).
 
