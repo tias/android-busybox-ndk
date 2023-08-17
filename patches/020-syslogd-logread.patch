@@ -7,10 +7,8 @@ patch from 'no-sys-shm,msg,sem' and 'sys-syslog' by Dan Drown
 http://dan.drown.org/android/src/busybox/
 ---
  include/sys/syslog.h          |  138 +++++++++++++++++++++++++++++++++++++++++
- sysklogd/logread.c            |    4 +-
- sysklogd/syslogd.c            |    4 +-
  sysklogd/syslogd_and_logger.c |    1 +
- 4 files changed, 143 insertions(+), 4 deletions(-)
+ 2 files changed, 139 insertions(+), 0 deletions(-)
  create mode 100644 include/sys/syslog.h
 
 diff --git a/include/sys/syslog.h b/include/sys/syslog.h
@@ -157,36 +155,6 @@ index 0000000..3c749a0
 +#define	LOG_PERROR	0x20	/* log to stderr as well */
 +
 +#endif /* sys/syslog.h */
-diff --git a/sysklogd/logread.c b/sysklogd/logread.c
-index 9939569..e978a5d 100644
---- a/sysklogd/logread.c
-+++ b/sysklogd/logread.c
-@@ -17,8 +17,8 @@
- 
- #include "libbb.h"
- #include <sys/ipc.h>
--#include <sys/sem.h>
--#include <sys/shm.h>
-+#include <linux/sem.h>
-+#include <linux/shm.h>
- 
- #define DEBUG 0
- 
-diff --git a/sysklogd/syslogd.c b/sysklogd/syslogd.c
-index fc380d9..1365bb8 100644
---- a/sysklogd/syslogd.c
-+++ b/sysklogd/syslogd.c
-@@ -65,8 +65,8 @@
- 
- #if ENABLE_FEATURE_IPC_SYSLOG
- #include <sys/ipc.h>
--#include <sys/sem.h>
--#include <sys/shm.h>
-+#include <linux/sem.h>
-+#include <linux/shm.h>
- #endif
- 
- 
 diff --git a/sysklogd/syslogd_and_logger.c b/sysklogd/syslogd_and_logger.c
 index 0964f23..81c8909 100644
 --- a/sysklogd/syslogd_and_logger.c

@@ -1,0 +1,645 @@
+  HOSTCC  scripts/kconfig/mconf.o
+In file included from scripts/kconfig/mconf.c:35:0:
+scripts/kconfig/mconf.c: In function ‘main’:
+scripts/kconfig/lkc.h:16:47: warning: statement with no effect [-Wunused-value]
+ # define bindtextdomain(Domainname, Dirname) ((const char *) (Dirname))
+                                              ~^~~~~~~~~~~~~~~~~~~~~~~~~
+scripts/kconfig/mconf.c:1063:2: note: in expansion of macro ‘bindtextdomain’
+  bindtextdomain(PACKAGE, LOCALEDIR);
+  ^~~~~~~~~~~~~~
+scripts/kconfig/lkc.h:15:34: warning: statement with no effect [-Wunused-value]
+ # define textdomain(Domainname) ((const char *) (Domainname))
+                                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scripts/kconfig/mconf.c:1064:2: note: in expansion of macro ‘textdomain’
+  textdomain(PACKAGE);
+  ^~~~~~~~~~
+
+= 001
+
+
+  CC      console-tools/loadfont.o
+console-tools/loadfont.c:61:20: fatal error: sys/kd.h: No such file or directory
+ #include <sys/kd.h>
+                    ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: console-tools/loadfont.o] Error 1
+
+ +
+
+  CC      miscutils/conspy.o
+miscutils/conspy.c:45:20: error: sys/kd.h: No such file or directory
+ #include <sys/kd.h>
+                    ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: miscutils/conspy.o] Error 1
+
+= 013
+
+
+  CC      libbb/missing_syscalls.o
+libbb/missing_syscalls.c: In function 'shmget':
+libbb/missing_syscalls.c:44:18: error: '__NR_shmget' undeclared (first use in this function)
+   return syscall(__NR_shmget, key, size, shmflg);
+                  ^
+libbb/missing_syscalls.c:44:18: note: each undeclared identifier is reported only once for each function it appears in
+libbb/missing_syscalls.c: In function 'shmdt':
+libbb/missing_syscalls.c:49:18: error: '__NR_shmdt' undeclared (first use in this function)
+   return syscall(__NR_shmdt, shmaddr);
+                  ^
+libbb/missing_syscalls.c: In function 'shmat':
+libbb/missing_syscalls.c:54:26: error: '__NR_shmat' undeclared (first use in this function)
+   return (void *)syscall(__NR_shmat, shmid, shmaddr, shmflg);
+                          ^
+libbb/missing_syscalls.c: In function 'msgget':
+libbb/missing_syscalls.c:59:18: error: '__NR_msgget' undeclared (first use in this function)
+   return syscall(__NR_msgget, key, msgflg);
+                  ^
+libbb/missing_syscalls.c: In function 'semget':
+libbb/missing_syscalls.c:64:18: error: '__NR_semget' undeclared (first use in this function)
+   return syscall(__NR_semget, key, nsems, semflg);
+                  ^
+libbb/missing_syscalls.c: In function 'msgctl':
+libbb/missing_syscalls.c:70:18: error: '__NR_msgctl' undeclared (first use in this function)
+   return syscall(__NR_msgctl, msqid, cmd, buf);
+                  ^
+libbb/missing_syscalls.c: In function 'shmctl':
+libbb/missing_syscalls.c:77:18: error: '__NR_shmctl' undeclared (first use in this function)
+   return syscall(__NR_shmctl, shmid, cmd, buf);
+                  ^
+libbb/missing_syscalls.c: In function 'semop':
+libbb/missing_syscalls.c:83:18: error: '__NR_semop' undeclared (first use in this function)
+   return syscall(__NR_semop, semid, sops, nsops);
+                  ^
+make[1]: *** [scripts/Makefile.build:198: libbb/missing_syscalls.o] Error 1
+
+= 018-b (error only occurs on x86 + mips)
+
+
+  CC      libbb/platform.o
+libbb/platform.c:218:5: error: conflicting types for 'issetugid'
+ int issetugid(void)
+     ^
+In file included from include/libbb.h:13:0,
+                 from libbb/platform.c:9:
+include/platform.h:624:12: note: previous declaration of 'issetugid' was here
+ extern int issetugid(void) FAST_FUNC;
+            ^
+make[1]: *** [scripts/Makefile.build:198: libbb/platform.o] Error 1
+
+= 024-a (error only occurs on x86)
+
+
+  CC      miscutils/nandwrite.o
+miscutils/nandwrite.c:54:26: fatal error: mtd/mtd-user.h: No such file or directory
+ #include <mtd/mtd-user.h>
+                          ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: miscutils/nandwrite.o] Error 1
+
+= 014
+
+
+  CC      miscutils/ubi_tools.o
+miscutils/ubi_tools.c:69:26: fatal error: mtd/ubi-user.h: No such file or directory
+ #include <mtd/ubi-user.h>
+                          ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: miscutils/ubi_tools.o] Error 1
+
+= 010
+
+
+  CC      networking/arping.o
+networking/arping.c: In function 'send_pack':
+networking/arping.c:122:4: error: dereferencing pointer to incomplete type
+  ah->ar_hrd = htons(ARPHRD_ETHER);
+    ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:122:21: error: 'ARPHRD_ETHER' undeclared (first use in this function)
+  ah->ar_hrd = htons(ARPHRD_ETHER);
+                     ^
+networking/arping.c:122:21: note: each undeclared identifier is reported only once for each function it appears in
+networking/arping.c:123:4: error: dereferencing pointer to incomplete type
+  ah->ar_pro = htons(ETH_P_IP);
+    ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:123:21: error: 'ETH_P_IP' undeclared (first use in this function)
+  ah->ar_pro = htons(ETH_P_IP);
+                     ^
+networking/arping.c:124:4: error: dereferencing pointer to incomplete type
+  ah->ar_hln = ME->sll_halen;
+    ^
+networking/arping.c:125:4: error: dereferencing pointer to incomplete type
+  ah->ar_pln = 4;
+    ^
+networking/arping.c:126:4: error: dereferencing pointer to incomplete type
+  ah->ar_op = option_mask32 & ADVERT ? htons(ARPOP_REPLY) : htons(ARPOP_REQUEST);
+    ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:126:45: error: 'ARPOP_REPLY' undeclared (first use in this function)
+  ah->ar_op = option_mask32 & ADVERT ? htons(ARPOP_REPLY) : htons(ARPOP_REQUEST);
+                                             ^
+networking/arping.c:126:66: error: 'ARPOP_REQUEST' undeclared (first use in this function)
+  ah->ar_op = option_mask32 & ADVERT ? htons(ARPOP_REPLY) : htons(ARPOP_REQUEST);
+                                                                  ^
+networking/arping.c:128:2: error: invalid use of undefined type 'struct arphdr'
+  p = (unsigned char *) (ah + 1);
+  ^
+networking/arping.c:129:34: error: dereferencing pointer to incomplete type
+  p = mempcpy(p, &ME->sll_addr, ah->ar_hln);
+                                  ^
+networking/arping.c:133:35: error: dereferencing pointer to incomplete type
+   p = mempcpy(p, &ME->sll_addr, ah->ar_hln);
+                                   ^
+networking/arping.c:135:35: error: dereferencing pointer to incomplete type
+   p = mempcpy(p, &HE->sll_addr, ah->ar_hln);
+                                   ^
+networking/arping.c: In function 'recv_pack':
+networking/arping.c:193:2: error: invalid use of undefined type 'struct arphdr'
+  unsigned char *p = (unsigned char *) (ah + 1);
+  ^
+networking/arping.c:207:8: error: dereferencing pointer to incomplete type
+  if (ah->ar_op != htons(ARPOP_REQUEST) && ah->ar_op != htons(ARPOP_REPLY))
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:207:25: error: 'ARPOP_REQUEST' undeclared (first use in this function)
+  if (ah->ar_op != htons(ARPOP_REQUEST) && ah->ar_op != htons(ARPOP_REPLY))
+                         ^
+networking/arping.c:207:45: error: dereferencing pointer to incomplete type
+  if (ah->ar_op != htons(ARPOP_REQUEST) && ah->ar_op != htons(ARPOP_REPLY))
+                                             ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:207:62: error: 'ARPOP_REPLY' undeclared (first use in this function)
+  if (ah->ar_op != htons(ARPOP_REQUEST) && ah->ar_op != htons(ARPOP_REPLY))
+                                                              ^
+networking/arping.c:211:8: error: dereferencing pointer to incomplete type
+  if (ah->ar_hrd != htons(FROM->sll_hatype)
+        ^
+networking/arping.c:212:27: error: 'ARPHRD_FDDI' undeclared (first use in this function)
+   && (FROM->sll_hatype != ARPHRD_FDDI || ah->ar_hrd != htons(ARPHRD_ETHER)))
+                           ^
+networking/arping.c:212:44: error: dereferencing pointer to incomplete type
+   && (FROM->sll_hatype != ARPHRD_FDDI || ah->ar_hrd != htons(ARPHRD_ETHER)))
+                                            ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:212:62: error: 'ARPHRD_ETHER' undeclared (first use in this function)
+   && (FROM->sll_hatype != ARPHRD_FDDI || ah->ar_hrd != htons(ARPHRD_ETHER)))
+                                                              ^
+networking/arping.c:216:8: error: dereferencing pointer to incomplete type
+  if (ah->ar_pro != htons(ETH_P_IP)
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c:216:26: error: 'ETH_P_IP' undeclared (first use in this function)
+  if (ah->ar_pro != htons(ETH_P_IP)
+                          ^
+networking/arping.c:217:9: error: dereferencing pointer to incomplete type
+   || (ah->ar_pln != 4)
+         ^
+networking/arping.c:218:9: error: dereferencing pointer to incomplete type
+   || (ah->ar_hln != me.sll_halen)
+         ^
+networking/arping.c:219:26: error: dereferencing pointer to incomplete type
+   || (len < (int)(sizeof(*ah) + 2 * (4 + ah->ar_hln)))
+                          ^
+networking/arping.c:219:44: error: dereferencing pointer to incomplete type
+   || (len < (int)(sizeof(*ah) + 2 * (4 + ah->ar_hln)))
+                                            ^
+In file included from include/libbb.h:13:0,
+                 from networking/arping.c:41:
+networking/arping.c:224:45: error: dereferencing pointer to incomplete type
+  move_from_unaligned32(src_ip.s_addr, p + ah->ar_hln);
+                                             ^
+include/platform.h:246:56: note: in definition of macro 'move_from_unaligned32'
+ # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
+                                                        ^
+networking/arping.c:225:45: error: dereferencing pointer to incomplete type
+  move_from_unaligned32(dst_ip.s_addr, p + ah->ar_hln + 4 + ah->ar_hln);
+                                             ^
+include/platform.h:246:56: note: in definition of macro 'move_from_unaligned32'
+ # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
+                                                        ^
+networking/arping.c:225:62: error: dereferencing pointer to incomplete type
+  move_from_unaligned32(dst_ip.s_addr, p + ah->ar_hln + 4 + ah->ar_hln);
+                                                              ^
+include/platform.h:246:56: note: in definition of macro 'move_from_unaligned32'
+ # define move_from_unaligned32(v, u32p) (memcpy(&(v), (u32p), 4))
+                                                        ^
+networking/arping.c:231:21: error: dereferencing pointer to incomplete type
+    || (memcmp(p + ah->ar_hln + 4, &me.sll_addr, ah->ar_hln)))
+                     ^
+networking/arping.c:231:51: error: dereferencing pointer to incomplete type
+    || (memcmp(p + ah->ar_hln + 4, &me.sll_addr, ah->ar_hln)))
+                                                   ^
+networking/arping.c:257:6: error: dereferencing pointer to incomplete type
+    ah->ar_op == htons(ARPOP_REPLY) ? "ply" : "quest",
+      ^
+networking/arping.c:265:20: error: dereferencing pointer to incomplete type
+   if (memcmp(p + ah->ar_hln + 4, me.sll_addr, ah->ar_hln)) {
+                    ^
+networking/arping.c:265:49: error: dereferencing pointer to incomplete type
+   if (memcmp(p + ah->ar_hln + 4, me.sll_addr, ah->ar_hln)) {
+                                                 ^
+networking/arping.c:266:30: error: dereferencing pointer to incomplete type
+    unsigned char *pp = p + ah->ar_hln + 4;
+                              ^
+networking/arping.c:285:8: error: dereferencing pointer to incomplete type
+  if (ah->ar_op == htons(ARPOP_REQUEST))
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\endian.h:31:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:31,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from networking/arping.c:36:
+networking/arping.c: In function 'arping_main':
+networking/arping.c:386:26: error: 'ETH_P_ARP' undeclared (first use in this function)
+  me.sll_protocol = htons(ETH_P_ARP);
+                          ^
+make[1]: *** [scripts/Makefile.build:198: networking/arping.o] Error 1
+
+= 012-c
+
+
+  CC      networking/ether-wake.o
+networking/ether-wake.c: In function 'get_dest_addr':
+networking/ether-wake.c:131:6: warning: assignment makes pointer from integer without a cast
+  eap = ether_aton_r(hostid, eaddr);
+      ^
+networking/ether-wake.c: In function 'ether_wake_main':
+networking/ether-wake.c:282:23: error: 'ETH_ALEN' undeclared (first use in this function)
+   whereto.sll_halen = ETH_ALEN;
+                       ^
+networking/ether-wake.c:282:23: note: each undeclared identifier is reported only once for each function it appears in
+make[1]: *** [scripts/Makefile.build:198: networking/ether-wake.o] Error 1
+
+= 012-a, 012-b
+
+
+  CC      networking/ifconfig.o
+networking/ifconfig.c:132:8: error: redefinition of 'struct in6_ifreq'
+ struct in6_ifreq {
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:38:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from include/libbb.h:143,
+                 from networking/ifconfig.c:99:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\ipv6.h:36:8: note: originally defined here
+ struct in6_ifreq {
+        ^
+make[1]: *** [scripts/Makefile.build:198: networking/ifconfig.o] Error 1
+
+= 022-a
+
+
+  CC      networking/interface.o
+networking/interface.c:61:8: error: redefinition of 'struct in6_ifreq'
+ struct in6_ifreq {
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\netinet\in.h:38:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\arpa\inet.h:33,
+                 from include/libbb.h:143,
+                 from networking/interface.c:33:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\ipv6.h:36:8: note: originally defined here
+ struct in6_ifreq {
+        ^
+make[1]: *** [scripts/Makefile.build:198: networking/interface.o] Error 1
+
+ +
+
+  CC      networking/route.o
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\route.h:21:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\net\route.h:1,
+                 from networking/route.c:46:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\if.h:160:18: error: field 'ifru_addr' has incomplete type
+  struct sockaddr ifru_addr;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\if.h:161:18: error: field 'ifru_dstaddr' has incomplete type
+  struct sockaddr ifru_dstaddr;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\if.h:162:18: error: field 'ifru_broadaddr' has incomplete type
+  struct sockaddr ifru_broadaddr;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\if.h:164:18: error: field 'ifru_netmask' has incomplete type
+  struct sockaddr ifru_netmask;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\if.h:165:18: error: field 'ifru_hwaddr' has incomplete type
+  struct sockaddr ifru_hwaddr;
+                  ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\net\route.h:1:0,
+                 from networking/route.c:46:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\route.h:26:18: error: field 'rt_dst' has incomplete type
+  struct sockaddr rt_dst;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\route.h:27:18: error: field 'rt_gateway' has incomplete type
+  struct sockaddr rt_gateway;
+                  ^
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\route.h:29:18: error: field 'rt_genmask' has incomplete type
+  struct sockaddr rt_genmask;
+                  ^
+make[1]: *** [scripts/Makefile.build:198: networking/route.o] Error 1
+
+= 022-b
+
+
+  CC      networking/nslookup.o
+In file included from networking/nslookup.c:37:0:
+networking/nslookup.c: In function 'server_print':
+networking/nslookup.c:154:27: error: dereferencing pointer to incomplete type
+   sa = (struct sockaddr*)&_res.nsaddr_list[0];
+                           ^
+networking/nslookup.c: In function 'set_default_dns':
+networking/nslookup.c:176:3: error: dereferencing pointer to incomplete type
+   _res.nscount = 1;
+   ^
+networking/nslookup.c:178:3: error: dereferencing pointer to incomplete type
+   _res.nsaddr_list[0] = lsa->u.sin;
+   ^
+make[1]: *** [scripts/Makefile.build:198: networking/nslookup.o] Error 1
+
+= 050*
+
+
+  CC      networking/zcip.o
+networking/zcip.c:71:19: error: field 'arp' has incomplete type
+  struct ether_arp arp;
+                   ^
+make[1]: *** [scripts/Makefile.build:198: networking/zcip.o] Error 1
+
+= 015
+
+
+  CC      networking/udhcp/d6_socket.o
+networking/udhcp/d6_socket.c:10:21: fatal error: ifaddrs.h: No such file or directory
+ #include <ifaddrs.h>
+                     ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: networking/udhcp/d6_socket.o] Error 1
+
+= 022-c
+
+
+  CC      shell/hush.o
+shell/hush.c:342:18: fatal error: glob.h: No such file or directory
+ #include <glob.h>
+                  ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: shell/hush.o] Error 1
+
+= 024-b
+
+
+  CC      sysklogd/logread.o
+sysklogd/logread.c: In function 'logread_main':
+sysklogd/logread.c:124:8: warning: assignment makes pointer from integer without a cast
+  shbuf = shmat(log_shmid, NULL, SHM_RDONLY);
+        ^
+  CC      sysklogd/syslogd_and_logger.o
+sysklogd/syslogd_and_logger.c:53:14: error: unknown type name 'CODE'
+ static const CODE *const bb_prioritynames = prioritynames;
+              ^
+sysklogd/syslogd_and_logger.c:53:45: error: 'prioritynames' undeclared here (not in a function)
+ static const CODE *const bb_prioritynames = prioritynames;
+                                             ^
+sysklogd/syslogd_and_logger.c:54:14: error: unknown type name 'CODE'
+ static const CODE *const bb_facilitynames = facilitynames;
+              ^
+sysklogd/syslogd_and_logger.c:54:45: error: 'facilitynames' undeclared here (not in a function)
+ static const CODE *const bb_facilitynames = facilitynames;
+                                             ^
+In file included from sysklogd/syslogd_and_logger.c:58:0:
+sysklogd/syslogd.c:223:35: error: 'LOG_NFACILITIES' undeclared here (not in a function)
+  uint8_t enabled_facility_priomap[LOG_NFACILITIES];
+                                   ^
+sysklogd/syslogd.c:365:14: error: unknown type name 'CODE'
+ static const CODE* find_by_name(char *name, const CODE* c_set)
+              ^
+sysklogd/syslogd.c:365:51: error: unknown type name 'CODE'
+ static const CODE* find_by_name(char *name, const CODE* c_set)
+                                                   ^
+sysklogd/syslogd.c: In function 'find_by_name':
+sysklogd/syslogd.c:367:14: error: request for member 'c_name' in something not a structure or union
+  for (; c_set->c_name; c_set++) {
+              ^
+sysklogd/syslogd.c:368:25: error: request for member 'c_name' in something not a structure or union
+   if (strcmp(name, c_set->c_name) == 0)
+                         ^
+sysklogd/syslogd.c: At top level:
+sysklogd/syslogd.c:374:14: error: unknown type name 'CODE'
+ static const CODE* find_by_val(int val, const CODE* c_set)
+              ^
+sysklogd/syslogd.c:374:47: error: unknown type name 'CODE'
+ static const CODE* find_by_val(int val, const CODE* c_set)
+                                               ^
+sysklogd/syslogd.c: In function 'find_by_val':
+sysklogd/syslogd.c:376:14: error: request for member 'c_name' in something not a structure or union
+  for (; c_set->c_name; c_set++) {
+              ^
+sysklogd/syslogd.c:377:12: error: request for member 'c_val' in something not a structure or union
+   if (c_set->c_val == val)
+            ^
+sysklogd/syslogd.c: In function 'parse_syslogdcfg':
+sysklogd/syslogd.c:417:10: error: unknown type name 'CODE'
+    const CODE *code;
+          ^
+sysklogd/syslogd.c:454:20: error: request for member 'c_val' in something not a structure or union
+     priority = code->c_val;
+                    ^
+sysklogd/syslogd.c:455:21: error: 'INTERNAL_NOPRI' undeclared (first use in this function)
+     if (priority == INTERNAL_NOPRI) {
+                     ^
+sysklogd/syslogd.c:455:21: note: each undeclared identifier is reported only once for each function it appears in
+sysklogd/syslogd.c:487:14: error: request for member 'c_val' in something not a structure or union
+      if (code->c_val != INTERNAL_MARK)
+              ^
+sysklogd/syslogd.c:487:25: error: 'INTERNAL_MARK' undeclared (first use in this function)
+      if (code->c_val != INTERNAL_MARK)
+                         ^
+In file included from sysklogd/syslogd_and_logger.c:13:0:
+sysklogd/syslogd.c:488:33: error: request for member 'c_val' in something not a structure or union
+       facmap |= 1<<(LOG_FAC(code->c_val));
+                                 ^
+In file included from sysklogd/syslogd_and_logger.c:58:0:
+sysklogd/syslogd.c: In function 'ipcsyslog_init':
+sysklogd/syslogd.c:575:10: warning: assignment makes pointer from integer without a cast
+  G.shbuf = shmat(G.shmid, NULL, 0);
+          ^
+sysklogd/syslogd.c: In function 'parse_fac_prio_20':
+sysklogd/syslogd.c:798:8: error: unknown type name 'CODE'
+  const CODE *c_pri, *c_fac;
+        ^
+sysklogd/syslogd.c:804:38: error: request for member 'c_name' in something not a structure or union
+    snprintf(res20, 20, "%s.%s", c_fac->c_name, c_pri->c_name);
+                                      ^
+sysklogd/syslogd.c:804:53: error: request for member 'c_name' in something not a structure or union
+    snprintf(res20, 20, "%s.%s", c_fac->c_name, c_pri->c_name);
+                                                     ^
+make[1]: *** [scripts/Makefile.build:198: sysklogd/syslogd_and_logger.o] Error 1
+
+= 020
+
+
+  CC      util-linux/eject.o
+util-linux/eject.c:49:22: fatal error: scsi/sg.h: No such file or directory
+ # include <scsi/sg.h>
+                      ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: util-linux/eject.o] Error 1
+
+= 006
+
+
+  CC      util-linux/ipcrm.o
+util-linux/ipcrm.c:35:7: error: redefinition of 'union semun'
+ union semun {
+       ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\sys\sem.h:32:0,
+                 from util-linux/ipcrm.c:29:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\sem.h:55:7: note: originally defined here
+ union semun {
+       ^
+make[1]: *** [scripts/Makefile.build:198: util-linux/ipcrm.o] Error 1
+
+ +
+
+  CC      util-linux/ipcs.o
+util-linux/ipcs.c:79:7: error: redefinition of 'union semun'
+ union semun {
+       ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\sys\sem.h:32:0,
+                 from util-linux/ipcs.c:27:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-deprecated\sysroot\usr\include\linux\sem.h:55:7: note: originally defined here
+ union semun {
+       ^
+make[1]: *** [scripts/Makefile.build:198: util-linux/ipcs.o] Error 1
+
+= 019
+
+
+  CC      util-linux/swaponoff.o
+util-linux/swaponoff.c: In function 'do_em_all_in_fstab':
+util-linux/swaponoff.c:244:35: error: 'MNTOPT_NOAUTO' undeclared (first use in this function)
+    if (do_swapoff || hasmntopt(m, MNTOPT_NOAUTO) == NULL) {
+                                   ^
+util-linux/swaponoff.c:244:35: note: each undeclared identifier is reported only once for each function it appears in
+util-linux/swaponoff.c:249:16: warning: initialization makes pointer from integer without a cast
+      char *p = hasmntopt(m, "discard");
+                ^
+util-linux/swaponoff.c:257:16: warning: initialization makes pointer from integer without a cast
+      char *p = hasmntopt(m, "pri");
+                ^
+make[1]: *** [scripts/Makefile.build:198: util-linux/swaponoff.o] Error 1
+
+= 003-b
+
+
+sysklogd/lib.a(logread.o): In function `logread_main':
+logread.c:(.text+0x4c): undefined reference to `shmget'
+logread.c:(.text+0x70): undefined reference to `shmat'
+logread.c:(.text+0xb8): undefined reference to `semget'
+logread.c:(.text+0x114): undefined reference to `semop'
+logread.c:(.text+0x1ac): undefined reference to `semop'
+logread.c:(.text+0x24c): undefined reference to `semop'
+sysklogd/lib.a(syslogd_and_logger.o): In function `timestamp_and_log':
+syslogd_and_logger.c:(.text+0x54c): undefined reference to `semop'
+syslogd_and_logger.c:(.text+0x5ac): undefined reference to `semop'
+sysklogd/lib.a(syslogd_and_logger.o): In function `syslogd_main':
+syslogd_and_logger.c:(.text+0xb8c): undefined reference to `shmget'
+syslogd_and_logger.c:(.text+0xbac): undefined reference to `shmat'
+syslogd_and_logger.c:(.text+0xbf0): undefined reference to `semget'
+syslogd_and_logger.c:(.text+0xc28): undefined reference to `semget'
+syslogd_and_logger.c:(.text+0xfec): undefined reference to `shmdt'
+syslogd_and_logger.c:(.text+0x1004): undefined reference to `shmctl'
+syslogd_and_logger.c:(.text+0x1020): undefined reference to `semctl'
+util-linux/lib.a(ipcrm.o): In function `ipcrm_main':
+ipcrm.c:(.text+0x10c): undefined reference to `semctl'
+ipcrm.c:(.text+0x124): undefined reference to `msgctl'
+ipcrm.c:(.text+0x140): undefined reference to `shmctl'
+ipcrm.c:(.text+0x21c): undefined reference to `msgget'
+ipcrm.c:(.text+0x270): undefined reference to `shmget'
+ipcrm.c:(.text+0x280): undefined reference to `semget'
+ipcrm.c:(.text+0x2cc): undefined reference to `msgctl'
+ipcrm.c:(.text+0x2e4): undefined reference to `shmctl'
+ipcrm.c:(.text+0x2f8): undefined reference to `semctl'
+util-linux/lib.a(ipcs.o): In function `do_msg':
+ipcs.c:(.text+0x10c): undefined reference to `msgctl'
+ipcs.c:(.text+0x160): undefined reference to `msgctl'
+ipcs.c:(.text+0x354): undefined reference to `msgctl'
+util-linux/lib.a(ipcs.o): In function `do_shm':
+ipcs.c:(.text+0x5dc): undefined reference to `shmctl'
+ipcs.c:(.text+0x644): undefined reference to `shmctl'
+ipcs.c:(.text+0x858): undefined reference to `shmctl'
+util-linux/lib.a(ipcs.o): In function `do_sem':
+ipcs.c:(.text+0xb2c): undefined reference to `semctl'
+ipcs.c:(.text+0xb98): undefined reference to `semctl'
+ipcs.c:(.text+0xd30): undefined reference to `semctl'
+util-linux/lib.a(ipcs.o): In function `ipcs_main':
+ipcs.c:(.text+0xf68): undefined reference to `shmctl'
+ipcs.c:(.text+0x1064): undefined reference to `semctl'
+ipcs.c:(.text+0x1168): undefined reference to `semctl'
+ipcs.c:(.text+0x1180): undefined reference to `semctl'
+ipcs.c:(.text+0x1198): undefined reference to `semctl'
+ipcs.c:(.text+0x11b0): undefined reference to `semctl'
+ipcs.c:(.text+0x1204): undefined reference to `msgctl'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:719: busybox_unstripped] Error 1
+
+= 017*, 018-a
+
+
+util-linux/lib.a(fsck_minix.o): In function `get_inode_common':
+fsck_minix.c:(.text+0x448): undefined reference to `setbit'
+util-linux/lib.a(fsck_minix.o): In function `add_zone_common.part.2':
+fsck_minix.c:(.text+0xa6c): undefined reference to `setbit'
+util-linux/lib.a(fsck_minix.o): In function `fsck_minix_main':
+fsck_minix.c:(.text+0x1a88): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1acc): undefined reference to `setbit'
+fsck_minix.c:(.text+0x1bfc): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1dac): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1df0): undefined reference to `setbit'
+fsck_minix.c:(.text+0x1eec): undefined reference to `clrbit'
+util-linux/lib.a(mkfs_minix.o): In function `mkfs_minix_main':
+mkfs_minix.c:(.text+0x518): undefined reference to `clrbit'
+mkfs_minix.c:(.text+0x53c): undefined reference to `clrbit'
+mkfs_minix.c:(.text+0x710): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x798): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x7d8): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x850): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x9dc): undefined reference to `setbit'
+util-linux/lib.a(mkfs_minix.o):mkfs_minix.c:(.text+0xa48): more undefined references to `setbit' follow
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:718: busybox_unstripped] Error 1
+
+= 021
+
+
+util-linux/lib.a(swaponoff.o): In function `swap_on_off_main':
+swaponoff.c:(.text+0x319): undefined reference to `hasmntopt'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:719: busybox_unstripped] Error 1
+
+= 003-a
+
+
++ 026 for modinfo/modprobe without uts rel folder fix (no associated error)
++ 027 for depmod syntax fix (no associated error)
++ 028 for android poweroff/reboot support (no associated error)
++ 051 for ash history support (no associated error)

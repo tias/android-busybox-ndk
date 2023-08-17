@@ -1,81 +1,106 @@
-From: Tias Guns <tias@ulyssis.org>
-Date: Sun, 5 Aug 2012 16:13:55 +0200
+From: Chris Renshaw <osm0sis@outlook.com>
+Date: Tue, 23 May 2023 18:30:43 -0300
 Subject: [PATCH] ash history
 
 allows ash history to work on Android
 
-Patch modified from 'busybox-android.patch' by Alexandre Courbot
+Patch modified by Tias Guns <tias@ulyssis.org> from 'busybox-android.patch' by Alexandre Courbot
 https://github.com/Gnurou/busybox-android
+Rebased for busybox 1.36.1 by Chris Renshaw <osm0sis@outlook.com>
 ---
- include/libbb.h |    4 ++--
- init/init.c     |    2 +-
- shell/ash.c     |    8 +++++++-
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ include/libbb.h        | 4 ++--
+ init/init.c            | 2 +-
+ libbb/get_shell_name.c | 4 ++++
+ shell/ash.c            | 8 ++++++--
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/include/libbb.h b/include/libbb.h
-index e520060..f91d635 100644
+index cca33a177..82e05a645 100644
 --- a/include/libbb.h
 +++ b/include/libbb.h
-@@ -1764,12 +1764,12 @@ extern struct globals *const ptr_to_globals;
+@@ -2341,12 +2341,12 @@ void XZALLOC_CONST_PTR(const void *pptr, size_t size) FAST_FUNC;
   * use bb_default_login_shell and following defines.
   * If you change LIBBB_DEFAULT_LOGIN_SHELL,
   * don't forget to change increment constant. */
 -#define LIBBB_DEFAULT_LOGIN_SHELL  "-/bin/sh"
-+#define LIBBB_DEFAULT_LOGIN_SHELL  "-/sbin/sh"
++#define LIBBB_DEFAULT_LOGIN_SHELL  "-/system/bin/sh"
  extern const char bb_default_login_shell[] ALIGN1;
  /* "/bin/sh" */
  #define DEFAULT_SHELL              (bb_default_login_shell+1)
  /* "sh" */
 -#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+6)
-+#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+7)
++#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+13)
  
  /* The following devices are the same on all systems.  */
  #define CURRENT_TTY "/dev/tty"
 diff --git a/init/init.c b/init/init.c
-index b84bdcc..b805a79 100644
+index 1e1ce833d..57129e9c2 100644
 --- a/init/init.c
 +++ b/init/init.c
-@@ -1047,7 +1047,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+@@ -1106,7 +1106,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
+ 
  	/* Make sure environs is set to something sane */
- 	putenv((char *) "HOME=/");
  	putenv((char *) bb_PATH_root_path);
 -	putenv((char *) "SHELL=/bin/sh");
-+	putenv((char *) "SHELL=/sbin/sh");
++	putenv((char *) "SHELL=/system/bin/sh");
  	putenv((char *) "USER=root"); /* needed? why? */
+ 	/* Linux kernel sets HOME="/" when execing init,
+ 	 * and it can be overridden (but not unset?) on kernel's command line.
+diff --git a/libbb/get_shell_name.c b/libbb/get_shell_name.c
+index 5aebe9cdc..5af53bdda 100644
+--- a/libbb/get_shell_name.c
++++ b/libbb/get_shell_name.c
+@@ -17,6 +17,10 @@ const char* FAST_FUNC get_shell_name(void)
+ 	if (shell && shell[0])
+ 		return shell;
  
- 	if (argv[1])
++#ifdef __ANDROID__
++	return DEFAULT_SHELL_SHORT_NAME;
++#endif
++
+ 	pw = getpwuid(getuid());
+ 	if (pw && pw->pw_shell && pw->pw_shell[0])
+ 		return pw->pw_shell;
 diff --git a/shell/ash.c b/shell/ash.c
-index 31fbc55..f9dad6a 100644
+index 9344e4de1..5dd7f80f1 100644
 --- a/shell/ash.c
 +++ b/shell/ash.c
-@@ -13213,20 +13213,26 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
- 	if (iflag) {
- 		const char *hp = lookupvar("HISTFILE");
- 		if (!hp) {
-+#ifdef __ANDROID__
-+			setvar("HISTFILE", "/mnt/sdcard/ash_history", 0);
-+#else
- 			hp = lookupvar("HOME");
- 			if (hp) {
- 				char *defhp = concat_path_file(hp, ".ash_history");
- 				setvar("HISTFILE", defhp, 0);
- 				free(defhp);
- 			}
-+#endif
- 		}
- 	}
- #endif
- 	if (argv[0] && argv[0][0] == '-')
- 		isloginsh = 1;
-+	else
-+		isloginsh = 1;
- 	if (isloginsh) {
+@@ -14537,7 +14537,7 @@ procargs(char **argv)
+ 	int login_sh;
+ 
+ 	xargv = argv;
+-	login_sh = xargv[0] && xargv[0][0] == '-';
++	login_sh = 1; /* = xargv[0] && xargv[0][0] == '-'; - make always true for Android */
+ #if NUM_SCRIPTS > 0
+ 	if (minusc)
+ 		goto setarg0;
+@@ -14713,7 +14713,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+ 		const char *hp;
+ 
  		state = 1;
 -		read_profile("/etc/profile");
 +		read_profile("/system/etc/profile");
   state1:
  		state = 2;
- 		read_profile(".profile");
+ 		hp = lookupvar("HOME");
+@@ -14758,6 +14758,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+ 		if (line_input_state) {
+ 			const char *hp = lookupvar("HISTFILE");
+ 			if (!hp) {
++#ifdef __ANDROID__
++				setvar("HISTFILE", "/mnt/sdcard/ash_history", 0);
++#else
+ 				hp = lookupvar("HOME");
+ 				if (hp) {
+ 					INT_OFF;
+@@ -14767,6 +14770,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
+ 					INT_ON;
+ 					hp = lookupvar("HISTFILE");
+ 				}
++#endif
+ 			}
+ 			if (hp)
+ 				line_input_state->hist_file = xstrdup(hp);
 -- 
-1.7.10.4
+2.34.1
 

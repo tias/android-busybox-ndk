@@ -1,4 +1,3 @@
-From c04d001c962e756d152abc1dbd58edfdbfee45a1 Mon Sep 17 00:00:00 2001
 From: Tias Guns <tias@ulyssis.org>
 Date: Mon, 19 Mar 2012 18:24:29 +0000
 Subject: [PATCH] fix ipv6, add ipv6_route.h

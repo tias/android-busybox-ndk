@@ -1,123 +1,118 @@
-The aim is to gather information and patches on how to build busybox using the compiler shipped with the android NDK.
+The aim is to gather information and patches on how to build busybox using the compilers shipped with the Android NDK.
 
-Patches and relevant pointers more than welcome, fork me or mail me: tias-@-ulyssis.org
+Currently up-to-date as of busybox 1.36.1, with both NDK API 21 Unified and Deprecated headers.
 
-Building busybox with the standard android NDK
+Building busybox with the standard Android NDK
 ==============================================
 
-I recently discovered that a number [[1](http://lists.busybox.net/pipermail/busybox/2012-March/077486.html),[2](http://lists.busybox.net/pipermail/busybox/2012-March/077505.html)] of upstream changes make it possible to build the latest git version of busybox, __without requiring any patches__:
+tias@ulyssis.org discovered that a number [[1](http://lists.busybox.net/pipermail/busybox/2012-March/077486.html),[2](http://lists.busybox.net/pipermail/busybox/2012-March/077505.html)] of upstream changes make it possible to build the latest git version of busybox, **without requiring any patches**:
 
     # get busybox sources
     git clone git://busybox.net/busybox.git
+    cd busybox
     # use default upstream config
     cp configs/android_ndk_defconfig .config
-    
-    # add arm-linux-androideabi-* to your PATH
-    export PATH="$PATH:/path/to/your/android-ndk/android-ndk-r7b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/"
+
+    # add the target NDK cross-compiler to your exported PATH and CROSS_COMPILE prefix
+    export PATH="/path/to/your/android-ndk/android-ndk-r15c/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/bin:$PATH"
+    export CROSS_COMPILE="/path/to/your/android-ndk/android-ndk-r15c/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/bin/arm-linux-androideabi-"
+
     # if android-ndk is not installed in /opt/android-ndk, edit SYSROOT= in .config
-    xdg-open .config
-    
+    # (alternately make all but CFLAGS blank if using standalone cross-compiler)
+    nano .config
+
+    # adjust enabled applets/features (optional)
+    make menuconfig
+
     # build it!
-    make
+    make ARCH=arm CROSS_COMPILE="$CROSS_COMPILE"
 
-This creates a busybox with the following applets:
-> [, [[, ar, arp, awk, base64, basename, beep, blkid, blockdev, bootchartd, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crond, crontab, cttyhack, cut, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flash\_lock, flash\_unlock, flashcp, flock, fold, free, freeramdisk, fsync, ftpd, ftpget, ftpput, fuser, getopt, grep, gunzip, gzip, halt, hd, hdparm, head, hexdump, httpd, hwclock, ifconfig, ifdown, ifup, init, inotifyd, insmod, install, iostat, ip, ipaddr, ipcalc, iplink, iproute, iprule, iptunnel, klogd, less, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mdev, mesg, mkdir, mkfifo, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nbd-client, nc, netstat, nice, nmeter, nohup, od, openvt, patch, pidof, ping, pipe\_progress, pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rm, rmdir, rmmod, route, rpm, rpm2cpio, rtcwake, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setserial, setsid, setuidgid, sha1sum, sha256sum, sha512sum, showkey, sleep, smemcap, softlimit, sort, split, start-stop-daemon, strings, stty, sum, sv, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tcpsvd, tee, telnet, telnetd, test, tftp, tftpd, time, timeout, top, touch, tr, traceroute, true, ttysize, tunctl, tune2fs, udhcpc, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, wc, wget, which, whoami, whois, xargs, xz, xzcat, yes, zcat
+These applets are available without any patches:
+> [, [[, acpid, adjtimex, ar, arp, ascii, ash, awk, base32, base64, basename, bbconfig, beep, blkdiscard, blkid, blockdev, bootchartd, brctl, bunzip2, bzcat, bzip2, cal, cat, catv, chat, chattr, chgrp, chmod, chown, chpst, chroot, chrt, chvt, cksum, clear, cmp, comm, cp, cpio, crc32, crond, crontab, cttyhack, cut, date, dc, dd, deallocvt, depmod, devmem, diff, dirname, dmesg, dnsd, dnsdomainname, dos2unix, dpkg, dpkg-deb, du, dumpkmap, echo, ed, egrep, env, envdir, envuidgid, expand, expr, factor, fakeidentd, false, fbset, fbsplash, fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs, flashcp, flock, fold, free, freeramdisk, fsfreeze, fsync, fuser, getopt, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump, hostname, httpd, hwclock, id, ifconfig, ifdown, ifenslave, ifplugd, ifup, inetd, init, inotifyd, insmod, install, ionice, iostat, ip, ipaddr, ipcalc, iplink, ipneigh, iproute, iprule, iptunnel, kbd\_mode, kill, killall, killall5, klogd, less, link, linuxrc, ln, loadkmap, losetup, lpd, lpq, lpr, ls, lsattr, lsmod, lspci, lsscsi, lsusb, lzcat, lzma, lzop, lzopcat, makedevs, makemime, man, md5sum, mesg, microcom, mim, mkdir, mkdosfs, mkfifo, mkfs.vfat, mknod, mkswap, mktemp, modinfo, modprobe, more, mpstat, mv, nameif, netstat, nice, nl, nmeter, nohup, nologin, od, openvt, partprobe, paste, patch, pidof, pipe\_progress, pivot\_root, pkill, pmap, popmaildir, poweroff, printenv, printf, ps, pstree, pwd, pwdx, raidautorun, rdate, rdev, readlink, readprofile, realpath, reboot, reformime, renice, reset, resize, rev, rfkill, rm, rmdir, rmmod, rpm, rpm2cpio, rtcwake, run-init, run-parts, runsv, runsvdir, rx, script, scriptreplay, sed, sendmail, seq, setconsole, setkeycodes, setlogcons, setpriv (without capabilities), setserial, setsid, setuidgid, sh, sha1sum, sha256sum, sha512sum, showkey, shred, slattach, sleep, smemcap, softlimit, sort, split, start-stop-daemon, stat, strings, stty, sum, sv, svc, svlogd, switch\_root, sync, sysctl, tac, tail, tar, tc, tcpsvd, tee, telnetd, test, tftpd, timeout, top, touch, tr, tree, true, tsort, tty, ttysize, tunctl, tune2fs, udhcpc, udhcpd, udpsvd, uname, uncompress, unexpand, uniq, unix2dos, unlzma, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vconfig, vi, volname, watch, watchdog, wc, which, whoami, xargs, xxd, xz, xzcat, yes, zcat
 
-Using file *android\_ndk\_defconfigPlus* you additionally get following applets that are by default enabled for 'make defconfig':
-> acpid, ash, groups, id, mkdosfs, mkfs.vfat, nandump, nandwrite, sh, slattach, tty
+By **applying the included patches** to the busybox code-base you additionally get:
+> arping, conspy, eject, ether-wake, flash\_eraseall, flash\_lock, flash\_unlock, fsck.minix, ftpd, hush, ipcrm, ipcs, loadfont, logread, mkfs.minix, nanddump, nandwrite, nslookup (with own resolver), pgrep, ping6, route, setfont, ssl\_client, swapon, swapoff, syslogd, time, traceroute6, ubi*, udhcpc6, unshare, zcip
 
-By **applying the included patches** to the busybox code-base (and config *android\_ndk\_config-w-patches*), you additionally get:
-> adjtimex, arping, bbconfig, brctl, date, df, ether-wake, fsck, fsck.minix, hostname, hush, inetd, ionice, ipcrm, ipcs, kbd\_mode, kill, killall, killall5, logread, microcom, mke2fs, mkfs.ext2, mkfs.minix, mkfs.reiser, mount, mountpoint, nameif, nslookup (with own resolver), pgrep, ping6, pivot_root, pkill, rdate, stat, swapon, swapoff, syslogd, traceroute6, ubi*, udhcpd, umount, watchdog, zcip
+Also worth noting that while they do build without issue these applets do not entirely work correctly on Android without any patches:
+> df, fsck, ftpget, ftpput, losetup, mke2fs, mkfs.ext2, mkfs.reiser, mount, mountpoint, nbd-client, nc, ping, poweroff, pscan, reboot, telnet, tftp, traceroute, umount, wget, whois
 
-(when cherry-picking certain patches you have to include all patches with a lower number as well, there are dependencies between them except for 050 and 051).
-
+(when applying certain patches you should include all patches with a lower number as well, there are often dependencies between them).
 
 The **remaining config options** of 'make defconfig' do not build properly. See below for the list of config options and corresponding error.
 
-The config *android\_ndk\_stericson-like* is a config similar to the one shipped by android-busybox (by stericson). You can download a [binary](https://github.com/downloads/tias/android-busybox-ndk/busybox-ndk-cc1bb603e) built with this config (md5sum ab9f5cd5032af9fa7c20c2e9d0ec047d).
-
 Config options that do not build, code error
 --------------------------------------------
-These errors indicate bugs (usually in the restricted android libc library, called bionic), and can often be fixed by adding patches to the busybox code.
+These errors indicate bugs (usually in the restricted Android libc library, called bionic), and can often be fixed by adding patches to the busybox code.
 
-* All of *Login/Password Management Utilities*  --  error: 'struct passwd' has no member named 'pw\_gecos'
- * disables CONFIG\_ADD\_SHELL, CONFIG\_REMOVE\_SHELL, CONFIG\_ADDUSER, CONFIG\_ADDGROUP, CONFIG\_DELUSER, CONFIG\_DELGROUP, CONFIG\_GETTY, CONFIG\_LOGIN, CONFIG\_PASSWD, CONFIG\_CRYPTPW, CONFIG\_CHPASSWD, CONFIG\_SU, CONFIG\_SULOGIN, CONFIG\_VLOCK
-* CONFIG\_ARPING  --  **has patch**  --  networking/arping.c:96: error: invalid use of undefined type 'struct arphdr'
-* CONFIG\_BRCTL  --  **has patch**  --  networking/brctl.c:70: error: conflicting types for 'strtotimeval'
-* CONFIG\_ETHER\_WAKE  --  **has patch**  --  networking/ether-wake.c:275: error: 'ETH_ALEN' undeclared (first use in this function)
-* CONFIG\_FEATURE\_IPV6  --  **has patch**    --  networking/ifconfig.c:82: error: redefinition of 'struct in6\_ifreq'
- * disables CONFIG\_PING6, CONFIG\_FEATURE\_IFUPDOWN\_IPV6, CONFIG\_TRACEROUTE6
-* CONFIG\_FEATURE\_UTMP, CONFIG\_FEATURE\_WTMP  --  init/halt.c:86: error: 'RUN_LVL' undeclared (first use in this function)
- * disables CONFIG\_WHO, CONFIG\_USERS, CONFIG\_LAST, CONFIG\_RUNLEVEL, CONFIG\_WALL
-* CONFIG\_FSCK\_MINIX, CONFIG\_MKFS\_MINIX  --  **has patch**  --  util-linux/fsck\_minix.c:111: error: 'INODE\_SIZE1' undeclared here (not in a function)
-* CONFIG\_INETD  --  **has patch**  --  /opt/android-ndk/platforms/android-9/arch-arm/usr/include/linux/un.h:18: error: expected specifier-qualifier-list before 'sa\_family\_t' and networking/inetd.c:562: error: 'struct sockaddr\_un' has no member named 'sun\_path'
-* CONFIG\_IONICE  --  **has patch** -- miscutils/ionice.c:23: error: 'SYS\_ioprio\_set' undeclared (first use in this function)
-* CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
+* All of *Login/Password Management Utilities*, CONFIG\_USE\_BB\_PWD\_GRP  --  error: 'struct passwd' has no member named 'pw\_gecos'
+  * disables CONFIG\_ADD\_SHELL, CONFIG\_ADDGROUP, CONFIG\_ADDUSER, CONFIG\_CHPASSWD, CONFIG\_CRYPTPW, CONFIG\_DELGROUP, CONFIG\_DELUSER, CONFIG\_GETTY, CONFIG\_LOGIN, CONFIG\_MKPASSWD, CONFIG\_PASSWD, CONFIG\_REMOVE\_SHELL, CONFIG\_SU, CONFIG\_SULOGIN, CONFIG\_VLOCK
+* CONFIG\_ARPING  --  **has patch**  --  networking/arping.c:122:4: error: dereferencing pointer to incomplete type
+* CONFIG\_BC  --  miscutils/bc.c:224:18: error: expected ':', ',', ';', '}' or '\_\_attribute\_\_' before 'num'
+* CONFIG\_ETHER\_WAKE  --  **has patch**  --  networking/ether-wake.c:131:6: warning: assignment makes pointer from integer without a cast
+* CONFIG\_FEATURE\_IPV6  --  **has patch**  --  networking/ifconfig.c:132:8 error: redefinition of 'struct in6\_ifreq'
+  * disables CONFIG\_FEATURE\_IFUPDOWN\_IPV6, CONFIG\_FEATURE\_PREFER\_IPV4\_ADDRESS, CONFIG\_PING6, CONFIG\_TRACEROUTE6, CONFIG\_UDHCPC6, CONFIG\_FEATURE\_UDHCPC6\_RFC*
+* CONFIG\_FEATURE\_NSLOOKUP\_BIG, CONFIG\_FEATURE\_NSLOOKUP\_LONG\_OPTIONS  --  networking/nslookup.c:278:4: error: 'ns\_t\_soa' undeclared here (not in a function)
+* CONFIG\_FEATURE\_UTMP, CONFIG\_FEATURE\_WTMP  --  init/halt.c:86: error: 'RUN\_LVL' undeclared (first use in this function)
+  * disables CONFIG\_LAST, CONFIG\_RUNLEVEL, CONFIG\_USERS, CONFIG\_WALL, CONFIG\_WHO
+* CONFIG\_IPCS  --  **has patch**  --  util-linux/ipcs.c:79:7: error: redefinition of 'union semun'
+* CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:35:7: error: redefinition of 'union semun'
+* CONFIG\_LFS  --  **[on purpose?](http://lists.busybox.net/pipermail/busybox-cvs/2011-November/033019.html)**  --  **has patch (experimental)**  --  include/libbb.h:256: error: size of array 'BUG\_off\_t\_size\_is\_misdetected' is negative
 * CONFIG\_LOGGER  --  sysklogd/logger.c:36: error: expected ';', ',' or ')' before '*' token
-* CONFIG\_NSLOOKUP  -- **has patch (with own resolver)**  --  networking/nslookup.c:126: error: dereferencing pointer to incomplete type
-* CONFIG\_SWAPONOFF  --  **has patch**  --  util-linux/swaponoff.c:96: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
-* CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:51: error: field 'arp' has incomplete type
+* CONFIG\_LOGREAD  --  **has patch**  --  sysklogd/logread.c:124:8: warning: assignment makes pointer from integer without a cast
+* CONFIG\_NSLOOKUP  --  **has patch (with own resolver)**  --  networking/nslookup.c:154:27: error: dereferencing pointer to incomplete type
+* CONFIG\_POWERTOP  --  procps/powertop.c:508:2: error: inconsistent operand constraints in an 'asm'
+* CONFIG\_ROUTE  --  **has patch**  --  from networking/route.c:46: [...]include/linux/if.h:160:18: error: field 'ifru\_addr' has incomplete type
+* CONFIG\_SHA1\_HWACCEL, CONFIG\_SHA256\_HWACCEL  --  ibbb/hash\_md5\_sha.c:20:2: error: inconsistent operand constraints in an 'asm'
+* CONFIG\_SWAPOFF, CONFIG\_SWAPON  --  **has patch**  --  util-linux/swaponoff.c:244:35: error: 'MNTOPT\_NOAUTO' undeclared (first use in this function)
+* CONFIG\_SYSLOGD  --  **has patch**  --  sysklogd/syslogd\_and\_logger.c:53:14: error: unknown type name 'CODE'
+* CONFIG\_ZCIP  --  **has patch**  --  networking/zcip.c:71:19: error: field 'arp' has incomplete type
 
-Config options that do not build, missing library
--------------------------------------------------
-These errors indicate that the library is missing from androids libc implementation
+Config options that do not build, missing header
+------------------------------------------------
+These errors indicate that the header is missing from Android's libc implementation.
 
-* sys/sem.h  **has patch**
- * CONFIG\_IPCS  --  util-linux/ipcs.c:32:21: error: sys/sem.h: No such file or directory
- * CONFIG\_LOGREAD  --  sysklogd/logread.c:20:21: error: sys/sem.h: No such file or directory
- * CONFIG\_SYSLOGD  --  sysklogd/syslogd.c:68:21: error: sys/sem.h: No such file or directory
+sys/kd.h  --  **has patch**
+* CONFIG\_CONSPY  --  miscutils/conspy.c:45:20: error: sys/kd.h: No such file or directory
+* CONFIG\_LOADFONT, CONFIG\_SETFONT  --  console-tools/loadfont.c:61:20: error: sys/kd.h: No such file or directory
 
-* sys/kd.h
- * CONFIG\_CONSPY  --  miscutils/conspy.c:45:20: error: sys/kd.h: No such file or directory
- * CONFIG\_LOADFONT, CONFIG\_SETFONT  --  console-tools/loadfont.c:33:20: error: sys/kd.h: No such file or directory
-
-* others
- * CONFIG\_EJECT  --  miscutils/eject.c:30:21: error: scsi/sg.h: No such file or directory
- * CONFIG\_FEATURE\_HAVE\_RPC, CONFIG\_FEATURE\_INETD\_RPC  --  networking/inetd.c:176:22: error: rpc/rpc.h: No such file or directory
- * CONFIG\_FEATURE\_IFCONFIG\_SLIP  --  networking/ifconfig.c:59:26: error: net/if\_slip.h: No such file or directory
- * CONFIG\_FEATURE\_SHADOWPASSWDS, CONFIG\_USE\_BB\_SHADOW  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
- * CONFIG\_HUSH  --  **has patch**  --  shell/hush.c:89:18: error: glob.h: No such file or directory
- * CONFIG\_IFENSLAVE  --  networking/ifenslave.c:132:30: error: linux/if\_bonding.h: No such file or directory
- * CONFIG\_IFPLUGD  --  networking/ifplugd.c:38:23: error: linux/mii.h: No such file or directory
- * CONFIG\_IPCRM  --  **has patch**  --  util-linux/ipcrm.c:25:21: error: sys/shm.h: No such file or directory
- * CONFIG\_MT  --  miscutils/mt.c:19:22: error: sys/mtio.h: No such file or directory
- * CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
- * CONFIG\_SETARCH  --  util-linux/setarch.c:23:29: error: sys/personality.h: No such file or directory
- * CONFIG\_WATCHDOG  --  **has patch**  --  miscutils/watchdog.c:24:28: error: linux/watchdog.h: No such file or directory
- * CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:67:26: error: mtd/ubi-user.h: No such file or directory
-  * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL
+others
+* CONFIG\_EJECT  --  **has patch**  --  util-linux/eject.c:49:22: error: scsi/sg.h: No such file or directory
+* CONFIG\_FEATURE\_INETD\_RPC  --  networking/inetd.c:176:22: error: rpc/rpc.h: No such file or directory
+* CONFIG\_FEATURE\_SHADOWPASSWDS  --  include/libbb.h:61:22: error: shadow.h: No such file or directory
+  * CONFIG\_USE\_BB\_PWD\_GRP, CONFIG\_USE\_BB\_SHADOW would potentially work around, but there is a code error as listed above
+* CONFIG\_HUSH  --  **has patch**  --  shell/hush.c:342:18: error: glob.h: No such file or directory
+* CONFIG\_I2C*  --  miscutils/i2c\_tools.c:65:27: error: linux/i2c-dev.h: No such file or directory
+  * disables CONFIG\_I2CDETECT, CONFIG\_I2CDUMP, CONFIG\_I2CGET, CONFIG\_I2CSET
+* CONFIG\_LINUX32, CONFIG_LINUX64, CONFIG\_SETARCH  --  util-linux/setarch.c:23:29: error: sys/personality.h: No such file or directory
+* CONFIG\_MT  --  miscutils/mt.c:19:22: error: sys/mtio.h: No such file or directory
+* CONFIG\_NANDDUMP, CONFIG\_NANDWRITE  --  **has patch**  --  miscutils/nandwrite.c:54:26: error: mtd/mtd-user.h: No such file or directory
+* CONFIG\_NTPD  --  networking/ntpd.c:49:23: error: sys/timex.h: No such file or directory
+* CONFIG\_SEEDRNG  --  miscutils/seedrng.c:45:24: error: sys/random.h: No such file or directory
+* CONFIG\_UDHCPC6  --  **has patch**  --  networking/udhcp/d6\_socket.c:10:21: error: ifaddrs.h: No such file or directory
+* CONFIG\_UBI*  --  **has patch**  --  miscutils/ubi\_tools.c:69:26: error: mtd/ubi-user.h: No such file or directory
+  * disables CONFIG\_UBIATTACH, CONFIG\_UBIDETACH, CONFIG\_UBIMKVOL, CONFIG\_UBIRENAME, CONFIG\_UBIRMVOL, CONFIG\_UBIRSVOL, CONFIG\_UBIUPDATEVOL
 
 Config options that give a linking error
 ----------------------------------------
-Androids libc implementation claims to implement the methods in the error, but surprisingly does not.
+Android's libc implementation claims to implement the methods in the error, but surprisingly does not.
 
-* mntent -- **has patch**
- * CONFIG\_DF  --  undefined reference to 'setmntent', 'endmntent'
- * CONFIG\_FSCK  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
- * CONFIG\_MKFS\_EXT2  --  undefined reference to 'setmntent', 'endmntent'
- * CONFIG\_MOUNTPOINT  --  undefined reference to 'setmntent', 'endmntent'
- * CONFIG\_MOUNT  --  undefined reference to 'setmntent', 'getmntent\_r'
- * CONFIG\_UMOUNT  --  undefined reference to 'setmntent', 'getmntent\_r', 'endmntent'
+bit  --  **has patch**
+ * CONFIG\_FSCK\_MINIX  --  undefined reference to 'setbit', 'clrbit'
+ * CONFIG\_MKFS\_MINIX  --  undefined reference to 'setbit', 'clrbit'
 
-* getsid -- **has patch**
- * CONFIG\_KILL  --  undefined reference to 'getsid'
- * CONFIG\_KILLALL  --  undefined reference to 'getsid'
- * CONFIG\_KILLALL5  --  undefined reference to 'getsid'
- * CONFIG\_PGREP  --  undefined reference to 'getsid'
- * CONFIG\_PKILL  --  undefined reference to 'getsid'
+mntopt  --  **has patch**
+ * CONFIG\_SWAPOFF  --  undefined reference to 'hasmntopt'
+ * CONFIG\_SWAPON  --  undefined reference to 'hasmntopt'
 
-* stime -- **has patch**
- * CONFIG\_DATE  --  undefined reference to 'stime'
- * CONFIG\_RDATE  --  undefined reference to 'stime'
-
-* others
- * CONFIG\_ADJTIMEX  --  **has patch**  --  undefined reference to 'adjtimex'
+others
+ * CONFIG\_ETHER\_WAKE  --  **has patch**  --  undefined reference to 'ether\_hostton'
+ * CONFIG\_FALLOCATE  --  undefined reference to 'posix\_fallocate'
  * CONFIG\_FEATURE\_HTTPD\_AUTH\_MD5  --  undefined reference to 'crypt'
+ * CONFIG\_FEATURE\_SYNC\_FANCY  --  undefined reference to 'syncfs'
  * CONFIG\_HOSTID  --  undefined reference to 'gethostid'
- * CONFIG\_HOSTNAME  --  **has patch**  --  undefined reference to 'sethostname'
  * CONFIG\_LOGNAME  --  undefined reference to 'getlogin\_r'
- * CONFIG\_MICROCOM  --  **has patch**  --  undefined reference to 'cfsetspeed'
- * CONFIG\_NAMEIF  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
- * CONFIG\_PIVOT\_ROOT  --  **has patch**  --  undefined reference to 'pivot\_root'
- * CONFIG\_STAT  --  **has patch** -- undefined reference to 'S\_TYPEISMQ', 'S\_TYPEISSEM', 'S\_TYPEISSHM'
- * CONFIG\_UDHCPD  --  **has patch**  --  undefined reference to 'ether\_aton\_r'
+ * CONFIG\_MDEV  --  undefined reference to 'sigtimedwait'
+ * CONFIG\_NPROC  --  undefined reference to 'sched\_getaffinity'
+ * CONFIG\_NSENTER  --  undefined reference to 'setns'
+ * CONFIG\_UDHCPC6  --  **has patch**  --  undefined reference to 'getifaddrs', 'freeifaddrs'
+ * CONFIG\_UNSHARE  --  undefined reference to 'unshare'

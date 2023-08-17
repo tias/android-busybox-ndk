@@ -1,0 +1,441 @@
+  HOSTCC  scripts/kconfig/mconf.o
+In file included from scripts/kconfig/mconf.c:35:0:
+scripts/kconfig/mconf.c: In function ‘main’:
+scripts/kconfig/lkc.h:16:47: warning: statement with no effect [-Wunused-value]
+ # define bindtextdomain(Domainname, Dirname) ((const char *) (Dirname))
+                                              ~^~~~~~~~~~~~~~~~~~~~~~~~~
+scripts/kconfig/mconf.c:1063:2: note: in expansion of macro ‘bindtextdomain’
+  bindtextdomain(PACKAGE, LOCALEDIR);
+  ^~~~~~~~~~~~~~
+scripts/kconfig/lkc.h:15:34: warning: statement with no effect [-Wunused-value]
+ # define textdomain(Domainname) ((const char *) (Domainname))
+                                 ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scripts/kconfig/mconf.c:1064:2: note: in expansion of macro ‘textdomain’
+  textdomain(PACKAGE);
+  ^~~~~~~~~~
+
+= 001
+
+
+  CC      console-tools/loadfont.o
+console-tools/loadfont.c:61:20: fatal error: sys/kd.h: No such file or directory
+ #include <sys/kd.h>
+                    ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: console-tools/loadfont.o] Error 1
+
+ +
+
+  CC      miscutils/conspy.o
+miscutils/conspy.c:45:20: error: sys/kd.h: No such file or directory
+ #include <sys/kd.h>
+                    ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: miscutils/conspy.o] Error 1
+
+= 013
+
+
+  CC      libbb/missing_syscalls.o
+libbb/missing_syscalls.c: In function 'shmget':
+libbb/missing_syscalls.c:44:18: error: '__NR_shmget' undeclared (first use in this function)
+   return syscall(__NR_shmget, key, size, shmflg);
+                  ^
+libbb/missing_syscalls.c:44:18: note: each undeclared identifier is reported only once for each function it appears in
+libbb/missing_syscalls.c: In function 'shmdt':
+libbb/missing_syscalls.c:49:18: error: '__NR_shmdt' undeclared (first use in this function)
+   return syscall(__NR_shmdt, shmaddr);
+                  ^
+libbb/missing_syscalls.c: In function 'shmat':
+libbb/missing_syscalls.c:54:26: error: '__NR_shmat' undeclared (first use in this function)
+   return (void *)syscall(__NR_shmat, shmid, shmaddr, shmflg);
+                          ^
+libbb/missing_syscalls.c: In function 'msgget':
+libbb/missing_syscalls.c:59:18: error: '__NR_msgget' undeclared (first use in this function)
+   return syscall(__NR_msgget, key, msgflg);
+                  ^
+libbb/missing_syscalls.c: In function 'semget':
+libbb/missing_syscalls.c:64:18: error: '__NR_semget' undeclared (first use in this function)
+   return syscall(__NR_semget, key, nsems, semflg);
+                  ^
+libbb/missing_syscalls.c: In function 'msgctl':
+libbb/missing_syscalls.c:70:18: error: '__NR_msgctl' undeclared (first use in this function)
+   return syscall(__NR_msgctl, msqid, cmd, buf);
+                  ^
+libbb/missing_syscalls.c: In function 'shmctl':
+libbb/missing_syscalls.c:77:18: error: '__NR_shmctl' undeclared (first use in this function)
+   return syscall(__NR_shmctl, shmid, cmd, buf);
+                  ^
+libbb/missing_syscalls.c: In function 'semop':
+libbb/missing_syscalls.c:83:18: error: '__NR_semop' undeclared (first use in this function)
+   return syscall(__NR_semop, semid, sops, nsops);
+                  ^
+make[1]: *** [scripts/Makefile.build:198: libbb/missing_syscalls.o] Error 1
+make: *** [Makefile:744: libbb] Error 2
+
+= 018-b (error only occurs on x86 + mips)
+
+
+  CC      libbb/platform.o
+libbb/platform.c:218:5: error: conflicting types for 'issetugid'
+ int issetugid(void)
+     ^
+In file included from include/libbb.h:13:0,
+                 from libbb/platform.c:9:
+include/platform.h:624:12: note: previous declaration of 'issetugid' was here
+ extern int issetugid(void) FAST_FUNC;
+            ^
+make[1]: *** [scripts/Makefile.build:198: libbb/platform.o] Error 1
+
+= 024-a (error only occurs on x86)
+
+
+  CC      networking/ifconfig.o
+networking/ifconfig.c:132:8: error: redefinition of 'struct in6_ifreq'
+ struct in6_ifreq {
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\netinet\in.h:39:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\arpa\inet.h:32,
+                 from include/libbb.h:143,
+                 from networking/ifconfig.c:99:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\linux\ipv6.h:42:8: note: originally defined here
+ struct in6_ifreq {
+        ^
+make[1]: *** [scripts/Makefile.build:198: networking/ifconfig.o] Error 1
+
+= 022-a
+
+
+  CC      networking/interface.o
+networking/interface.c:61:8: error: redefinition of 'struct in6_ifreq'
+ struct in6_ifreq {
+        ^
+In file included from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\netinet\in.h:39:0,
+                 from g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\arpa\inet.h:32,
+                 from include/libbb.h:143,
+                 from networking/interface.c:33:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\linux\ipv6.h:42:8: note: originally defined here
+ struct in6_ifreq {
+        ^
+make[1]: *** [scripts/Makefile.build:198: networking/interface.o] Error 1
+
+= 022-b
+
+
+  CC      networking/nslookup.o
+networking/nslookup.c: In function 'server_print':
+networking/nslookup.c:154:27: error: '_res' undeclared (first use in this function)
+   sa = (struct sockaddr*)&_res.nsaddr_list[0];
+                           ^
+networking/nslookup.c:154:27: note: each undeclared identifier is reported only once for each function it appears in
+networking/nslookup.c: In function 'set_default_dns':
+networking/nslookup.c:176:3: error: '_res' undeclared (first use in this function)
+   _res.nscount = 1;
+   ^
+make[1]: *** [scripts/Makefile.build:198: networking/nslookup.o] Error 1
+
+= 050*
+
+
+  CC      shell/hush.o
+shell/hush.c:342:18: fatal error: glob.h: No such file or directory
+ #include <glob.h>
+                  ^
+compilation terminated.
+make[1]: *** [scripts/Makefile.build:198: shell/hush.o] Error 1
+
+= 024-b
+
+
+  CC      shell/glob.o
+shell/glob.c: In function 'glob':
+shell/glob.c:154:16: error: 'GLOB_APPEND' undeclared (first use in this function)
+  if (!(flags & GLOB_APPEND)) {
+                ^
+shell/glob.c:154:16: note: each undeclared identifier is reported only once for each function it appears in
+shell/glob.c:157:17: error: 'GLOB_DOOFFS' undeclared (first use in this function)
+   if (!(flags & GLOB_DOOFFS))
+                 ^
+shell/glob.c:160:14: error: 'GLOB_LIMIT' undeclared (first use in this function)
+  if (flags & GLOB_LIMIT) {
+              ^
+shell/glob.c:166:29: error: 'GLOB_MAGCHAR' undeclared (first use in this function)
+  pglob->gl_flags = flags & ~GLOB_MAGCHAR;
+                             ^
+shell/glob.c:172:14: error: 'GLOB_NOESCAPE' undeclared (first use in this function)
+  if (flags & GLOB_NOESCAPE) {
+              ^
+shell/glob.c:191:14: error: 'GLOB_BRACE' undeclared (first use in this function)
+  if (flags & GLOB_BRACE)
+              ^
+shell/glob.c: In function 'globtilde':
+shell/glob.c:334:47: error: 'GLOB_TILDE' undeclared (first use in this function)
+  if (*pattern != TILDE || !(pglob->gl_flags & GLOB_TILDE))
+                                               ^
+shell/glob.c: In function 'glob0':
+shell/glob.c:433:23: error: 'GLOB_MAGCHAR' undeclared (first use in this function)
+    pglob->gl_flags |= GLOB_MAGCHAR;
+                       ^
+shell/glob.c:465:27: error: 'GLOB_NOCHECK' undeclared (first use in this function)
+   if (((pglob->gl_flags & GLOB_NOCHECK) ||
+                           ^
+shell/glob.c:466:27: error: 'GLOB_NOMAGIC' undeclared (first use in this function)
+       ((pglob->gl_flags & GLOB_NOMAGIC) &&
+                           ^
+shell/glob.c:470:11: error: 'GLOB_NOMATCH' undeclared (first use in this function)
+    return(GLOB_NOMATCH);
+           ^
+shell/glob.c:472:26: error: 'GLOB_NOSORT' undeclared (first use in this function)
+  if (!(pglob->gl_flags & GLOB_NOSORT))
+                          ^
+shell/glob.c: In function 'glob2':
+shell/glob.c:519:28: error: 'GLOB_MARK' undeclared (first use in this function)
+    if (((pglob->gl_flags & GLOB_MARK) &&
+                            ^
+shell/glob.c:525:14: error: 'GLOB_ABORTED' undeclared (first use in this function)
+      return (GLOB_ABORTED);
+              ^
+shell/glob.c: In function 'glob3':
+shell/glob.c:578:11: error: 'GLOB_ABORTED' undeclared (first use in this function)
+   return (GLOB_ABORTED);
+           ^
+shell/glob.c:586:26: error: 'GLOB_ERR' undeclared (first use in this function)
+        pglob->gl_flags & GLOB_ERR)
+                          ^
+shell/glob.c:595:24: error: 'GLOB_ALTDIRFUNC' undeclared (first use in this function)
+  if (pglob->gl_flags & GLOB_ALTDIRFUNC)
+                        ^
+shell/glob.c: In function 'globextend':
+shell/glob.c:655:11: error: 'GLOB_NOSPACE' undeclared (first use in this function)
+   return (GLOB_NOSPACE);
+           ^
+shell/glob.c: In function 'g_stat':
+shell/glob.c:766:24: error: 'GLOB_ALTDIRFUNC' undeclared (first use in this function)
+  if (pglob->gl_flags & GLOB_ALTDIRFUNC)
+                        ^
+shell/glob.c: In function 'g_opendir':
+shell/glob.c:774:24: error: 'GLOB_ALTDIRFUNC' undeclared (first use in this function)
+  if (pglob->gl_flags & GLOB_ALTDIRFUNC)
+                        ^
+shell/glob.c: In function 'g_lstat':
+shell/glob.c:783:24: error: 'GLOB_ALTDIRFUNC' undeclared (first use in this function)
+  if (pglob->gl_flags & GLOB_ALTDIRFUNC)
+                        ^
+make[1]: *** [scripts/Makefile.build:198: shell/glob.o] Error 1
+
+= 024-c
+
+
+  CC      sysklogd/syslogd_and_logger.o
+sysklogd/syslogd_and_logger.c:53:14: error: unknown type name 'CODE'
+ static const CODE *const bb_prioritynames = prioritynames;
+              ^
+sysklogd/syslogd_and_logger.c:53:45: error: 'prioritynames' undeclared here (not in a function)
+ static const CODE *const bb_prioritynames = prioritynames;
+                                             ^
+sysklogd/syslogd_and_logger.c:54:14: error: unknown type name 'CODE'
+ static const CODE *const bb_facilitynames = facilitynames;
+              ^
+sysklogd/syslogd_and_logger.c:54:45: error: 'facilitynames' undeclared here (not in a function)
+ static const CODE *const bb_facilitynames = facilitynames;
+                                             ^
+In file included from sysklogd/syslogd_and_logger.c:58:0:
+sysklogd/syslogd.c:365:14: error: unknown type name 'CODE'
+ static const CODE* find_by_name(char *name, const CODE* c_set)
+              ^
+sysklogd/syslogd.c:365:51: error: unknown type name 'CODE'
+ static const CODE* find_by_name(char *name, const CODE* c_set)
+                                                   ^
+sysklogd/syslogd.c: In function 'find_by_name':
+sysklogd/syslogd.c:367:14: error: request for member 'c_name' in something not a structure or union
+  for (; c_set->c_name; c_set++) {
+              ^
+sysklogd/syslogd.c:368:25: error: request for member 'c_name' in something not a structure or union
+   if (strcmp(name, c_set->c_name) == 0)
+                         ^
+sysklogd/syslogd.c: At top level:
+sysklogd/syslogd.c:374:14: error: unknown type name 'CODE'
+ static const CODE* find_by_val(int val, const CODE* c_set)
+              ^
+sysklogd/syslogd.c:374:47: error: unknown type name 'CODE'
+ static const CODE* find_by_val(int val, const CODE* c_set)
+                                               ^
+sysklogd/syslogd.c: In function 'find_by_val':
+sysklogd/syslogd.c:376:14: error: request for member 'c_name' in something not a structure or union
+  for (; c_set->c_name; c_set++) {
+              ^
+sysklogd/syslogd.c:377:12: error: request for member 'c_val' in something not a structure or union
+   if (c_set->c_val == val)
+            ^
+sysklogd/syslogd.c: In function 'parse_syslogdcfg':
+sysklogd/syslogd.c:417:10: error: unknown type name 'CODE'
+    const CODE *code;
+          ^
+sysklogd/syslogd.c:454:20: error: request for member 'c_val' in something not a structure or union
+     priority = code->c_val;
+                    ^
+sysklogd/syslogd.c:455:21: error: 'INTERNAL_NOPRI' undeclared (first use in this function)
+     if (priority == INTERNAL_NOPRI) {
+                     ^
+sysklogd/syslogd.c:455:21: note: each undeclared identifier is reported only once for each function it appears in
+sysklogd/syslogd.c:487:14: error: request for member 'c_val' in something not a structure or union
+      if (code->c_val != INTERNAL_MARK)
+              ^
+sysklogd/syslogd.c:487:25: error: 'INTERNAL_MARK' undeclared (first use in this function)
+      if (code->c_val != INTERNAL_MARK)
+                         ^
+In file included from sysklogd/syslogd_and_logger.c:13:0:
+sysklogd/syslogd.c:488:33: error: request for member 'c_val' in something not a structure or union
+       facmap |= 1<<(LOG_FAC(code->c_val));
+                                 ^
+In file included from sysklogd/syslogd_and_logger.c:58:0:
+sysklogd/syslogd.c: In function 'parse_fac_prio_20':
+sysklogd/syslogd.c:798:8: error: unknown type name 'CODE'
+  const CODE *c_pri, *c_fac;
+        ^
+sysklogd/syslogd.c:804:38: error: request for member 'c_name' in something not a structure or union
+    snprintf(res20, 20, "%s.%s", c_fac->c_name, c_pri->c_name);
+                                      ^
+sysklogd/syslogd.c:804:53: error: request for member 'c_name' in something not a structure or union
+    snprintf(res20, 20, "%s.%s", c_fac->c_name, c_pri->c_name);
+                                                     ^
+make[1]: *** [scripts/Makefile.build:198: sysklogd/syslogd_and_logger.o] Error 1
+
+= 020
+
+
+  CC      util-linux/ipcrm.o
+util-linux/ipcrm.c:35:7: error: redefinition of 'union semun'
+ union semun {
+       ^
+In file included from util-linux/ipcrm.c:29:0:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\sys\sem.h:46:7: note: originally defined here
+ union semun {
+       ^
+make[1]: *** [scripts/Makefile.build:198: util-linux/ipcrm.o] Error 1
+
+ +
+
+  CC      util-linux/ipcs.o
+util-linux/ipcs.c:79:7: error: redefinition of 'union semun'
+ union semun {
+       ^
+In file included from util-linux/ipcs.c:27:0:
+g:\cygwin\home\chris\x-tools\arm-linux-androideabi-r15c-api21-unified\sysroot\usr\include\sys\sem.h:46:7: note: originally defined here
+ union semun {
+       ^
+make[1]: *** [scripts/Makefile.build:198: util-linux/ipcs.o] Error 1
+
+= 019
+
+
+networking/lib.a(ether-wake.o): In function `ether_wake_main':
+ether-wake.c:(.text+0x134): undefined reference to `ether_hostton'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:718: busybox_unstripped] Error 1
+
+= 012-a, 012-b
+
+
+networking/udhcp/lib.a(d6_socket.o): In function `d6_read_interface':
+d6_socket.c:(.text+0x20): undefined reference to `getifaddrs'
+d6_socket.c:(.text+0x1c4): undefined reference to `freeifaddrs'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:718: busybox_unstripped] Error 1
+
+= 022-c
+
+
+sysklogd/lib.a(logread.o): In function `logread_main':
+logread.c:(.text+0x4c): undefined reference to `shmget'
+logread.c:(.text+0x70): undefined reference to `shmat'
+logread.c:(.text+0xb8): undefined reference to `semget'
+logread.c:(.text+0x114): undefined reference to `semop'
+logread.c:(.text+0x1ac): undefined reference to `semop'
+logread.c:(.text+0x24c): undefined reference to `semop'
+sysklogd/lib.a(syslogd_and_logger.o): In function `timestamp_and_log':
+syslogd_and_logger.c:(.text+0x54c): undefined reference to `semop'
+syslogd_and_logger.c:(.text+0x5ac): undefined reference to `semop'
+sysklogd/lib.a(syslogd_and_logger.o): In function `syslogd_main':
+syslogd_and_logger.c:(.text+0xb8c): undefined reference to `shmget'
+syslogd_and_logger.c:(.text+0xbac): undefined reference to `shmat'
+syslogd_and_logger.c:(.text+0xbf0): undefined reference to `semget'
+syslogd_and_logger.c:(.text+0xc28): undefined reference to `semget'
+syslogd_and_logger.c:(.text+0xfec): undefined reference to `shmdt'
+syslogd_and_logger.c:(.text+0x1004): undefined reference to `shmctl'
+syslogd_and_logger.c:(.text+0x1020): undefined reference to `semctl'
+util-linux/lib.a(ipcrm.o): In function `ipcrm_main':
+ipcrm.c:(.text+0x10c): undefined reference to `semctl'
+ipcrm.c:(.text+0x124): undefined reference to `msgctl'
+ipcrm.c:(.text+0x140): undefined reference to `shmctl'
+ipcrm.c:(.text+0x21c): undefined reference to `msgget'
+ipcrm.c:(.text+0x270): undefined reference to `shmget'
+ipcrm.c:(.text+0x280): undefined reference to `semget'
+ipcrm.c:(.text+0x2cc): undefined reference to `msgctl'
+ipcrm.c:(.text+0x2e4): undefined reference to `shmctl'
+ipcrm.c:(.text+0x2f8): undefined reference to `semctl'
+util-linux/lib.a(ipcs.o): In function `do_msg':
+ipcs.c:(.text+0x10c): undefined reference to `msgctl'
+ipcs.c:(.text+0x160): undefined reference to `msgctl'
+ipcs.c:(.text+0x354): undefined reference to `msgctl'
+util-linux/lib.a(ipcs.o): In function `do_shm':
+ipcs.c:(.text+0x5dc): undefined reference to `shmctl'
+ipcs.c:(.text+0x644): undefined reference to `shmctl'
+ipcs.c:(.text+0x858): undefined reference to `shmctl'
+util-linux/lib.a(ipcs.o): In function `do_sem':
+ipcs.c:(.text+0xb2c): undefined reference to `semctl'
+ipcs.c:(.text+0xb98): undefined reference to `semctl'
+ipcs.c:(.text+0xd30): undefined reference to `semctl'
+util-linux/lib.a(ipcs.o): In function `ipcs_main':
+ipcs.c:(.text+0xf68): undefined reference to `shmctl'
+ipcs.c:(.text+0x1064): undefined reference to `semctl'
+ipcs.c:(.text+0x1168): undefined reference to `semctl'
+ipcs.c:(.text+0x1180): undefined reference to `semctl'
+ipcs.c:(.text+0x1198): undefined reference to `semctl'
+ipcs.c:(.text+0x11b0): undefined reference to `semctl'
+ipcs.c:(.text+0x1204): undefined reference to `msgctl'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:719: busybox_unstripped] Error 1
+
+= 017*, 018-a
+
+
+util-linux/lib.a(fsck_minix.o): In function `get_inode_common':
+fsck_minix.c:(.text+0x448): undefined reference to `setbit'
+util-linux/lib.a(fsck_minix.o): In function `add_zone_common.part.2':
+fsck_minix.c:(.text+0xa6c): undefined reference to `setbit'
+util-linux/lib.a(fsck_minix.o): In function `fsck_minix_main':
+fsck_minix.c:(.text+0x1a88): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1acc): undefined reference to `setbit'
+fsck_minix.c:(.text+0x1bfc): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1dac): undefined reference to `clrbit'
+fsck_minix.c:(.text+0x1df0): undefined reference to `setbit'
+fsck_minix.c:(.text+0x1eec): undefined reference to `clrbit'
+util-linux/lib.a(mkfs_minix.o): In function `mkfs_minix_main':
+mkfs_minix.c:(.text+0x518): undefined reference to `clrbit'
+mkfs_minix.c:(.text+0x53c): undefined reference to `clrbit'
+mkfs_minix.c:(.text+0x710): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x798): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x7d8): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x850): undefined reference to `setbit'
+mkfs_minix.c:(.text+0x9dc): undefined reference to `setbit'
+util-linux/lib.a(mkfs_minix.o):mkfs_minix.c:(.text+0xa48): more undefined references to `setbit' follow
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:718: busybox_unstripped] Error 1
+
+= 021
+
+
+util-linux/lib.a(swaponoff.o): In function `swap_on_off_main':
+swaponoff.c:(.text+0x440): undefined reference to `hasmntopt'
+swaponoff.c:(.text+0x464): undefined reference to `hasmntopt'
+collect2.exe: error: ld returned 1 exit status
+make: *** [Makefile:718: busybox_unstripped] Error 1
+
+= 003-a
+
+
++ 026 for modinfo/modprobe without uts rel folder fix (no associated error)
++ 027 for depmod syntax fix (no associated error)
++ 028 for android poweroff/reboot support (no associated error)
++ 051 for ash history support (no associated error)
